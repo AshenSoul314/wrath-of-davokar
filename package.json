@@ -1,0 +1,18 @@
+{
+  "name": "wrath-of-davokar",
+  "version": "2.0.0",
+  "description": "CSS compiler for the WrathOfDavokar system",
+  "scripts": {
+    "build": "sass src/scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --no-source-map",
+    "watch": "sass src/scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --source-map --watch"
+  },
+  "browserslist": [
+    "last 3 versions"
+  ],
+  "author": "Asacolips",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "sass": "^1.53.0"
+  }
+}
