@@ -30,9 +30,97 @@ export class WrathOfDavokarItem extends Item {
   }
 
   /**
+   * Handle creating a card that is sent to chat describing the item.
+   */
+  async buildChatCard() {
+    let content = "";
+    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+    const actor = game.actors.get(speaker);
+    let enrichedDescription = await TextEditor.enrichHTML(
+      this.system.description,
+      {
+        // Necessary in v11, can be removed in v12
+        async: true,
+        // Data to fill in for inline rolls
+        rollData: this.getRollData(),
+        // Relative UUID resolution
+        relativeTo: this,
+      }
+    );
+
+    const data = {
+      _id: this._id,
+      actorId: this.actor?.id || null,
+      img: this.img,
+      name: this.name,
+      enrichedDescription: enrichedDescription,
+      system: this.system
+    };
+    
+    content = await renderTemplate('systems/wrath-of-davokar/templates/chat/item-card.hbs', data);
+
+    ChatMessage.create({
+      // token: token,
+      speaker: ChatMessage.getSpeaker(),
+      user: game.user.id,
+      rollMode: game.settings.get("core", "rollMode"),
+      content: content
+    });
+  }
+
+  /**
+   * Handle creating a card that is sent to chat describing one of the item's powers.
+   * @param {number} powerID   The originating click event
+   */
+  async buildChatCardArtifactPower(powerID) {
+    let content = "";
+    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+    const actor = game.actors.get(speaker);
+    let power = this.system.powers[powerID];
+    let enrichedDescription = await TextEditor.enrichHTML(
+      power.description,
+      {
+        // Necessary in v11, can be removed in v12
+        async: true,
+        // Data to fill in for inline rolls
+        rollData: this.getRollData(),
+        // Relative UUID resolution
+        relativeTo: this,
+      }
+    );
+    
+    const data = {
+      _id: this._id,
+      actorId: this.actor?.id || null,
+      img: power.img,
+      name: `${this.name}: ${power.name}`,
+      enrichedDescription: enrichedDescription,
+      system: {
+        action: power.action,
+        corruption: power.corruption,
+        description: power.description
+      }
+    };
+
+    if ("effectData" in this.system) {
+      data.system.effectData = this.system.effectData
+    }
+    
+    
+    content = await renderTemplate('systems/wrath-of-davokar/templates/chat/item-card.hbs', data);
+
+    ChatMessage.create({
+      // token: token,
+      speaker: ChatMessage.getSpeaker(),
+      user: game.user.id,
+      rollMode: game.settings.get("core", "rollMode"),
+      content: content
+    });
+  }
+
+  /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
-   * @private
    */
   async roll() {
     const item = this;
@@ -40,16 +128,11 @@ export class WrathOfDavokarItem extends Item {
     // Initialize chat data.
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
     const rollMode = game.settings.get('core', 'rollMode');
-    const label = `[${item.type}] ${item.name}`;
+    const label = `${item.name}`;
 
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
-      ChatMessage.create({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-        content: item.system.description ?? '',
-      });
+      this.buildChatCard()
     }
     // Otherwise, create a roll and send a chat message from it.
     else {

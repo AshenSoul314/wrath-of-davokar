@@ -1,0 +1,23 @@
+@use '../utils' as utils;
+
+.window-app {
+  font-family: utils.$font-primary;
+}
+
+.max-width {
+  width: 100%;
+}
+
+.indent {
+  padding-left: 10%;
+}
+
+
+// .rollable {
+//   &:hover,
+//   &:focus {
+//     color: #000;
+//     text-shadow: 0 0 10px red;
+//     cursor: pointer;
+//   }
+// }

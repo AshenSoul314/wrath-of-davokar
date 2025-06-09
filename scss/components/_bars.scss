@@ -1,0 +1,68 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+  .progress-bar {
+    border-width: 1px;
+    border-style: solid;
+    border-color: utils.$c-border;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.01);
+    width: 100%; 
+    height:20px; 
+    display:flex;
+    overflow-x: clip;
+    overflow-y: clip;
+    position: relative;
+    
+
+    .bar-toughness {
+      border: none;
+      background-color:utils.$c-toughness;
+      height:20px;
+    }
+
+    .bar-corruption-threshold {
+      border-width: 0px 1px;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.7); 
+      background-color: black;
+      width:3px; 
+      position:absolute; 
+      height: 20px;
+    }
+
+    .bar-corruption-permanent {
+      border: none;
+      background-color: utils.$c-corruption;
+      height:20px;
+    }
+
+    .bar-corruption-temporary {
+      border: none;
+      background-color: utils.$c-corruption-light;
+      height:20px;
+    }
+  }
+
+  .bar-willpower {
+    margin-top: 0;
+    margin-bottom: 0;
+    column-gap: 3px;
+
+    .bar-willpower-empty {
+      border-width: 1px;
+      border-color: utils.$c-border;
+      border-style: solid;
+      background-color: rgba(0, 0, 0, 0.01);
+      height:20px;
+    }
+
+    .bar-willpower-filled {
+      border-width: 1px;
+      border-color: utils.$c-border;
+      border-style: solid; 
+      background-color: utils.$c-willpower;
+      height:20px;
+    }
+  }
+}

@@ -43,14 +43,30 @@ export class WrathOfDavokarActor extends Actor {
    */
   _prepareCharacterData(actorData) {
     if (actorData.type !== 'character') return;
-
-    // Make modifications to data here. For example:
     const systemData = actorData.system;
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
-    for (let [key, ability] of Object.entries(systemData.abilities)) {
-      // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
+    // Set temp corruption
+    systemData.corruption.temporary = systemData.corruption.value - systemData.corruption.min
+
+    // Set Attribute Totals
+    for (let [key, attribute] of Object.entries(systemData.attributes)) {
+      attribute.total = attribute.value + attribute.bonus;
+    }
+
+    // Set Skill Totals
+    for (let [key, skill] of Object.entries(systemData.skills)) {
+      if (key !== 'spellcasting') {
+        skill.total = skill.value + skill.bonus;
+      }
+    }
+  
+    // Set Spellcasting Total
+    if (systemData.skills.spellcasting.skill == 'corruption') {
+      systemData.skills.spellcasting.total = systemData.corruption.value + 
+        systemData.attributes[systemData.skills.spellcasting.attribute].total;
+    } else {
+      systemData.skills.spellcasting.total = systemData.skills[systemData.skills.spellcasting.skill].total + 
+        systemData.attributes[systemData.skills.spellcasting.attribute].total;
     }
   }
 
@@ -59,10 +75,24 @@ export class WrathOfDavokarActor extends Actor {
    */
   _prepareNpcData(actorData) {
     if (actorData.type !== 'npc') return;
-
-    // Make modifications to data here. For example:
     const systemData = actorData.system;
-    systemData.xp = systemData.cr * systemData.cr * 100;
+
+    // Set Corruption Value
+    systemData.corruption.value = systemData.corruption.permanent + systemData.corruption.temporary
+
+    // Set Attribute Totals
+    for (let [key, attribute] of Object.entries(systemData.attributes)) {
+      // Calculate the modifier using d20 rules.
+      if (key !== 'spellcasting') {
+        attribute.total = attribute.value + attribute.bonus;
+      } else {
+        if (attribute.attribute === 'corruption') {
+          attribute.total = systemData.corruption.value + systemData.skills[attribute.skill].total;
+        } else {
+          attribute.total = systemData.attributes[attribute.attribute].total + systemData.skills[attribute.skill].total;
+        }
+      }
+    }
   }
 
   /**
@@ -74,7 +104,6 @@ export class WrathOfDavokarActor extends Actor {
 
     // Prepare character roll data.
     this._getCharacterRollData(data);
-    this._getNpcRollData(data);
 
     return data;
   }
@@ -87,24 +116,22 @@ export class WrathOfDavokarActor extends Actor {
 
     // Copy the ability scores to the top level, so that rolls can use
     // formulas like `@str.mod + 4`.
-    if (data.abilities) {
-      for (let [k, v] of Object.entries(data.abilities)) {
-        data[k] = foundry.utils.deepClone(v);
+
+    // Attributes
+    if (data.attributes) {
+      for (let [k, v] of Object.entries(data.attributes)) {
+        let label = game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[k])
+        data[k] = `${foundry.utils.deepClone(v.total)}ds[${label}]`;
       }
     }
 
-    // Add level for easier access, or fall back to 0.
-    if (data.attributes.level) {
-      data.lvl = data.attributes.level.value ?? 0;
+    // Skills
+    if (data.skills) {
+      for (let [k, v] of Object.entries(data.skills)) {
+        let label = game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[k])
+        data[k] = `${foundry.utils.deepClone(v.total)}ds[${label}]`;
+      }
     }
   }
 
-  /**
-   * Prepare NPC roll data.
-   */
-  _getNpcRollData(data) {
-    if (this.type !== 'npc') return;
-
-    // Process additional NPC data here.
-  }
 }

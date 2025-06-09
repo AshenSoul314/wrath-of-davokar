@@ -1,0 +1,18 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+  .effects .item {
+    .effect-source,
+    .effect-duration,
+    .effect-controls {
+      text-align: center;
+      border-left: 1px solid utils.$c-light-text;
+      border-right: 1px solid utils.$c-light-text;
+      font-size: 12px;
+    }
+
+    .effect-controls {
+      border: none;
+    }
+  }
+}

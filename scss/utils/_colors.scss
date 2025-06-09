@@ -1,0 +1,39 @@
+$c-white: #fff;
+$c-black: #000;
+$c-dark: #191813;
+$c-beige: #b5b3a4;
+$c-tan: #444;
+$c-brown: #5a3b28;
+$c-brown-dark: #2e2a26;
+$c-brown-light: #4c3c29;
+$c-gold: #7a5e3a;
+$c-gold-light: #cfa97e;
+
+$c-corruption: #363b4e;
+$c-corruption-light: #927fbf;
+$c-toughness: #9f1e49;
+$c-willpower: #005792;
+
+$c-border: #7a7971;
+$c-light-text: #ddd;
+
+:root {
+  --wod-color-white: #{$c-white};
+  --wod-color-black: #{$c-black};
+  --wod-color-dark: #{$c-dark};
+  --wod-color-beige: #{$c-beige};
+  --wod-color-tan: #{$c-tan};
+  --wod-color-brown: #{$c-brown};
+  --wod-color-brown-dark: #{$c-brown-dark};
+  --wod-color-brown-light: #{$c-brown-light};
+  --wod-color-gold: #{$c-gold};
+  --wod-color-gold-light: #{$c-gold-light};
+
+  --wod-color-corruption: #{$c-corruption};
+  --wod-color-corruption-light: #{$c-corruption-light};
+  --wod-color-toughness: #{$c-toughness};
+  --wod-color-willpower: #{$c-willpower};
+
+  --wod-color-border: #{$c-border};
+  --wod-color-light-text: #{$c-light-text};
+}

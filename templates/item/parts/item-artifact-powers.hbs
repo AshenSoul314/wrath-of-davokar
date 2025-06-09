@@ -1,0 +1,50 @@
+<div class='flex-column flex-group-center flex-align-stretch flex-gap'>
+
+  {{#each system.powers}}
+    <div class="panel artifact-power flex-group-left" data-artifact-power-id="{{@key}}">
+      <div class="panel-header flex-row flex-group-center flex-gap">
+        <div class='item-image'>
+          <a class='rollable interactive' data-roll-type='item'>
+            <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
+          </a>
+        </div>
+        <input type='text' name='system.powers.{{@key}}.name' value='{{this.name}}'/>
+        <a class='item-control artifact-power-delete' data-artifact-power-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.artifactPower")}}'>
+          <i class='fas fa-trash'></i>
+        </a>
+      </div>
+
+      <div class="panel-content">
+
+        <div class="resource-grid  align-left">
+
+          {{!-- Icon --}}
+          <label class='resource-label'>{{localize 'TOKEN.ImagePath'}}:</label>
+          <file-picker type="image" name='system.powers.{{@key}}.img' noupload="true" value="{{this.img}}"></file-picker>
+
+          {{!-- Action --}}
+          <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</span>
+          <input type='text' name='system.powers.{{@key}}.action' value='{{this.action}}'/>
+          
+          {{!-- Corruption --}}
+          <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}</span>
+          <input type='text' name='system.powers.{{@key}}.corruption' value='{{this.corruption}}'/>
+        </div>
+        {{! Editors must receive enriched text data from getData to properly handle rolls }}
+        {{editor
+          this.enrichedDescription
+          target=(concat 'system.powers.' @key '.description')
+          engine='prosemirror'
+          button=true
+          editable=true
+        }}
+      </div>
+    </div>
+  {{/each}}
+
+  <div class="item-controls">
+      <a class="artifact-power-create" data-action="create" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.artifactPower")}}">
+      <i class="fas fa-plus"></i> {{localize "DOCUMENT.Create" type=(localize "TYPES.Item.artifactPower")}}
+    </a>
+  </div>
+</div>

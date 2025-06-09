@@ -1,0 +1,40 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+  .resource-label,
+  .resource-title {
+    font-weight: bold;
+  }
+
+  .resource-title,
+  .resource-title-small {
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .resource-title-small {
+    font-weight: normal;
+  }
+
+  .resource-text {
+    font-weight: normal;
+    white-space: nowrap;
+  }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: min-content auto;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 0;
+    align-items: center;
+  }
+  .resource-grid-2{
+    display: grid;
+    grid-template-columns: min-content auto min-content auto;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 0;
+    align-items: center;
+  }
+}

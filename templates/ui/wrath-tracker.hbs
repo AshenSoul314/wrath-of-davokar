@@ -1,0 +1,10 @@
+<div class="wrath-of-davokar flexrow flex-group-right">
+    <div id="wrath-tracker" class="wrath-tracker-container flexshrink">
+    <div class="wrath-tracker-header">Wrath Points</div>
+    <div class="wrath-tracker-display">
+        <button class="wp-decrease" {{#unless isGM}}disabled{{/unless}}>-</button>
+        <span id="wrath-points-display" class="wrath-points">{{points}}</span>
+        <button class="wp-increase" {{#unless isGM}}disabled{{/unless}}>+</button>
+    </div>
+    </div>
+</div>

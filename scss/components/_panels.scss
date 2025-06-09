@@ -1,0 +1,31 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+
+  .panel,
+  .panel-no-flex {
+    border: 1px solid utils.$c-border;
+    margin: 5px;
+    min-width: 200px;
+
+    .panel-header {
+      background-color: utils.$c-dark;
+      color: utils.$c-light-text;
+      font-weight: bold;
+      padding: 5px;
+      text-align: center;
+
+      input {
+        color: utils.$c-light-text;
+      }
+    }
+
+    .panel-content{
+      margin: 10px;
+    }
+  }
+
+  .panel {
+    flex: 1;
+  }
+}

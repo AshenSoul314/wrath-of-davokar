@@ -1,0 +1,72 @@
+<form class='{{cssClass}}' autocomplete='off'>
+  <header class='sheet-header'>
+    <img
+      class='profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      title='{{item.name}}'
+    />
+    <div class='header-fields'>
+      <div class="flexrow flex-gap flex-group-left">
+        <h1 class='charname flexgrow'><input
+            name='name'
+            type='text'
+            value='{{item.name}}'
+            placeholder='Name'
+          /></h1>
+          <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
+            <i class='fas fa-message'></i>
+          </a>
+      </div>
+      <div class='grid grid-3col flex-align-center'>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Type'}}</label>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}</label>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}</label>
+        <label>{{localize 'TYPES.Item.trap'}}</label>
+        <select name="system.rank.monsterTrait">
+          <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Trait'}}</option>
+          <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Trait'}}</option>
+          <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Trait'}}</option>
+        </select>
+        <input type='number' step="5" name='system.xpCost' value='{{system.xpCost}}' data-dtype='Number'/>
+      </div>
+    </div>
+  </header>
+
+  {{! Sheet Tab Navigation }}
+  <nav class='sheet-tabs tabs' data-group='primary'>
+    <a class='item' data-tab='main'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Main'}}</a>
+    <a class='item' data-tab='effects'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Effects'}}</a>
+    <a class='item' data-tab='settings'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Settings'}}</a>
+  </nav>
+
+  {{! Sheet Body }}
+  <section class='sheet-body tab-body'>
+    {{! Description Tab }}
+    <div class='tab' data-group='primary' data-tab='main'>
+      <div class="flex-row flex-gap flex-align-stretch flex-align-start talent-action">
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+        <input type='text' name='system.action' value='{{system.action}}'/>
+      </div>
+      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+        {{editor
+          enrichedDescription
+          target='system.description'
+          engine='prosemirror'
+          button=true
+          editable=editable
+        }}
+    </div>
+
+    {{!-- Effects Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-effects.hbs"}}
+    </div>
+
+    {{!-- Settings Tab --}}
+    <div class="tab settings" data-group="primary" data-tab="settings">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-settings.hbs"}}
+    </div>
+    
+  </section>
+</form>

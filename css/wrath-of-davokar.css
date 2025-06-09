@@ -1,13 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+:root {
+  --wod-color-white: #fff;
+  --wod-color-black: #000;
+  --wod-color-dark: #191813;
+  --wod-color-beige: #b5b3a4;
+  --wod-color-tan: #444;
+  --wod-color-brown: #5a3b28;
+  --wod-color-brown-dark: #2e2a26;
+  --wod-color-brown-light: #4c3c29;
+  --wod-color-gold: #7a5e3a;
+  --wod-color-gold-light: #cfa97e;
+  --wod-color-corruption: #363b4e;
+  --wod-color-corruption-light: #927fbf;
+  --wod-color-toughness: #9f1e49;
+  --wod-color-willpower: #005792;
+  --wod-color-border: #7a7971;
+  --wod-color-light-text: #ddd;
+}
+
 /* Global styles */
 .window-app {
   font-family: "Roboto", sans-serif;
 }
 
-.rollable:hover, .rollable:focus {
-  color: #000;
-  text-shadow: 0 0 10px red;
-  cursor: pointer;
+.max-width {
+  width: 100%;
+}
+
+.indent {
+  padding-left: 10%;
 }
 
 .grid,
@@ -158,6 +179,24 @@
   grid-column-end: span 12;
 }
 
+.flex-row,
+.flex-column {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
 .flex-group-center,
 .flex-group-left,
 .flex-group-right {
@@ -176,16 +215,36 @@
   text-align: right;
 }
 
-.flexshrink {
-  flex: 0;
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-stretch {
+  align-items: stretch;
+}
+
+.flex-align-center {
+  align-items: center;
 }
 
 .flex-between {
   justify-content: space-between;
 }
 
+.flexshrink {
+  flex: 0;
+}
+
+.flexgrow {
+  flex: 1;
+}
+
 .flexlarge {
   flex: 2;
+}
+
+.flex-gap {
+  gap: 10px;
 }
 
 .align-left {
@@ -204,6 +263,119 @@
 }
 
 /* Styles limited to wrath-of-davokar sheets */
+.wrath-of-davokar .attributes-grid {
+  grid-template-rows: max-content;
+}
+.wrath-of-davokar .attributes-grid .text-attribute {
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #7a7971;
+  text-align: left;
+  width: 80%;
+}
+.wrath-of-davokar .attributes-grid .text-skill {
+  text-align: left;
+  padding-left: 10px;
+  width: 80%;
+}
+.wrath-of-davokar .attributes-grid .input-attribute,
+.wrath-of-davokar .attributes-grid .input-skill {
+  max-width: 3em;
+}
+.wrath-of-davokar .attributes-grid .input-attribute {
+  font-weight: bold;
+}
+.wrath-of-davokar .attributes-grid .skill-bonus {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30px;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-row {
+  justify-content: space-around;
+  align-content: center;
+  text-align: center;
+  gap: 10px;
+  border-top: 1px solid #7a7971;
+  padding-top: 10px;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-row .spellcasting-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  min-width: 20%;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-row .spellcasting-total {
+  font-weight: bold;
+}
+
+.wrath-of-davokar .progress-bar {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #7a7971;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.01);
+  width: 100%;
+  height: 20px;
+  display: flex;
+  overflow-x: clip;
+  overflow-y: clip;
+  position: relative;
+}
+.wrath-of-davokar .progress-bar .bar-toughness {
+  border: none;
+  background-color: #9f1e49;
+  height: 20px;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-threshold {
+  border-width: 0px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.7);
+  background-color: black;
+  width: 3px;
+  position: absolute;
+  height: 20px;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-permanent {
+  border: none;
+  background-color: #363b4e;
+  height: 20px;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-temporary {
+  border: none;
+  background-color: #927fbf;
+  height: 20px;
+}
+.wrath-of-davokar .bar-willpower {
+  margin-top: 0;
+  margin-bottom: 0;
+  column-gap: 3px;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-empty {
+  border-width: 1px;
+  border-color: #7a7971;
+  border-style: solid;
+  background-color: rgba(0, 0, 0, 0.01);
+  height: 20px;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-filled {
+  border-width: 1px;
+  border-color: #7a7971;
+  border-style: solid;
+  background-color: #005792;
+  height: 20px;
+}
+
+.wrath-of-davokar .effects .item .effect-source,
+.wrath-of-davokar .effects .item .effect-duration,
+.wrath-of-davokar .effects .item .effect-controls {
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  font-size: 12px;
+}
+.wrath-of-davokar .effects .item .effect-controls {
+  border: none;
+}
+
 .wrath-of-davokar .item-form {
   font-family: "Roboto", sans-serif;
 }
@@ -242,6 +414,7 @@
 .wrath-of-davokar .sheet-body .tab,
 .wrath-of-davokar .sheet-body .tab .editor {
   height: 100%;
+  min-height: 10em;
 }
 .wrath-of-davokar .tox .tox-editor-container {
   background: #fff;
@@ -249,11 +422,42 @@
 .wrath-of-davokar .tox .tox-edit-area {
   padding: 0 8px;
 }
-.wrath-of-davokar .resource-label {
+
+.wrath-of-davokar .die-roll {
+  border: 1px solid #191813;
+  border-radius: 20px;
+  padding: 5px;
+  width: fit-content;
+  background: #191813;
+  color: #ddd;
+}
+.wrath-of-davokar .die-roll:hover, .wrath-of-davokar .die-roll:focus, .wrath-of-davokar .interactive:hover, .wrath-of-davokar .interactive:focus {
+  cursor: pointer;
+  box-shadow: 0 0 8px 0 rgba(255, 0, 0, 0.2), 0 0 20px 0 rgba(255, 0, 0, 0.19);
   font-weight: bold;
 }
+
+.wrath-of-davokar .quality {
+  text-align: center;
+  background-color: var(--color-dark);
+  color: var(--color-light-text);
+  border-radius: 20px;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 5px;
+}
+.wrath-of-davokar .item-send-to-chat {
+  flex: 0;
+  font-size: 1.5em;
+  aspect-ratio: 1/1;
+  margin-right: 5px;
+}
+.wrath-of-davokar .items-title {
+  font-size: 1.25em;
+  margin-top: 15px;
+}
 .wrath-of-davokar .items-header {
-  height: 28px;
+  height: fit-content;
   margin: 2px 0;
   padding: 0;
   align-items: center;
@@ -311,7 +515,7 @@
 .wrath-of-davokar .items-list .item {
   align-items: center;
   padding: 0 2px;
-  border-bottom: 1px solid #c9c7b8;
+  border-bottom: 1px solid #ddd;
 }
 .wrath-of-davokar .items-list .item:last-child {
   border-bottom: none;
@@ -326,41 +530,221 @@
   border: none;
   margin-right: 5px;
 }
-.wrath-of-davokar .items-list .item-prop {
+.wrath-of-davokar .items-list .item .item-attribute {
+  flex: 0 0 120px;
+  padding: 0 8px;
   text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
-  font-size: 12px;
 }
-.wrath-of-davokar .items-list .items-header {
-  height: 28px;
-  margin: 2px 0;
-  padding: 0;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border: 2px groove #eeede0;
+.wrath-of-davokar .items-list .item .item-armor-rating {
+  width: 2em;
+}
+.wrath-of-davokar .items-list .item .quality-list-row {
+  width: 100%;
+  justify-content: start;
+  gap: 10px;
+  padding-left: 30px;
+  padding-bottom: 10px;
+}
+
+.wrath-of-davokar hr {
+  border: 1px solid #7a7971;
+}
+.wrath-of-davokar img.icon {
+  border: none;
+}
+
+.wrath-of-davokar .panel,
+.wrath-of-davokar .panel-no-flex {
+  border: 1px solid #7a7971;
+  margin: 5px;
+  min-width: 200px;
+}
+.wrath-of-davokar .panel .panel-header,
+.wrath-of-davokar .panel-no-flex .panel-header {
+  background-color: #191813;
+  color: #ddd;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+.wrath-of-davokar .panel .panel-header input,
+.wrath-of-davokar .panel-no-flex .panel-header input {
+  color: #ddd;
+}
+.wrath-of-davokar .panel .panel-content,
+.wrath-of-davokar .panel-no-flex .panel-content {
+  margin: 10px;
+}
+.wrath-of-davokar .panel {
+  flex: 1;
+}
+
+.wrath-of-davokar .resource-label,
+.wrath-of-davokar .resource-title {
   font-weight: bold;
 }
-.wrath-of-davokar .items-list .items-header > * {
-  font-size: 12px;
-  text-align: center;
-}
-.wrath-of-davokar .items-list .items-header .item-name {
-  padding-left: 5px;
+.wrath-of-davokar .resource-title,
+.wrath-of-davokar .resource-title-small {
+  text-transform: uppercase;
   text-align: left;
 }
-.wrath-of-davokar .item-formula {
-  flex: 0 0 200px;
-  padding: 0 8px;
+.wrath-of-davokar .resource-title-small {
+  font-weight: normal;
 }
-.wrath-of-davokar .effects .item .effect-source,
-.wrath-of-davokar .effects .item .effect-duration,
-.wrath-of-davokar .effects .item .effect-controls {
+.wrath-of-davokar .resource-text {
+  font-weight: normal;
+  white-space: nowrap;
+}
+.wrath-of-davokar .resource-grid {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+  align-items: center;
+}
+.wrath-of-davokar .resource-grid-2 {
+  display: grid;
+  grid-template-columns: min-content auto min-content auto;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+  align-items: center;
+}
+
+.wrath-of-davokar .talent-card {
+  border: 1px solid #7a7971;
+  max-width: 300px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+.wrath-of-davokar .talent-card .talent-header {
+  background-color: #191813;
+  color: #ddd;
+  font-weight: bold;
+  padding: 5px;
   text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
-  font-size: 12px;
 }
-.wrath-of-davokar .effects .item .effect-controls {
-  border: none;
+.wrath-of-davokar .talent-card .talent-text {
+  overflow-y: scroll;
+  max-height: 200px;
+  text-align: justify;
+  flex: 1;
+}
+.wrath-of-davokar .talent-card .talent-content {
+  margin: 10px;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.wrath-of-davokar .talent-card .talent-bottom-row {
+  text-align: left;
+  border-top: 1px solid #7a7971;
+}
+
+.wrath-of-davokar .wrath-tracker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "IM Fell English", serif;
+  font-size: 16px;
+  color: #ddd;
+  background: #2e2a26;
+  border: 2px solid #4c3c29;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6666666667) inset;
+  padding: 0.5em 1em;
+  width: fit-content;
+  margin-left: 10px;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-header {
+  font-size: 1.2em;
+  color: #cfa97e;
+  text-shadow: 0 0 3px #000;
+  margin-bottom: 4px;
+  text-align: center;
+  text-wrap: nowrap;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display .wrath-points {
+  font-size: 18px;
+  color: #ddd;
+  text-shadow: 1px 1px 2px #000;
+  min-width: 1em;
+  text-align: center;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button {
+  background: #5a3b28;
+  color: #fff;
+  border: 1px solid #7a5e3a;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+  cursor: pointer;
+  pointer-events: all;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button:hover:enabled {
+  background: #7a5e3a;
+}
+.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Hud Styles */
+.wp-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-shadow: 0 0 4px black;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 2px 4px;
+  transition: all 0.2s ease;
+}
+.wp-hud .wp-count {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Chat Message Styles */
+.chat-message {
+  padding: 0px;
+}
+.chat-message .message-header {
+  padding: 5px;
+  border-radius: 3px 3px 0 0;
+}
+.chat-message .message-header .message-sender {
+  align-items: center;
+  gap: 6px;
+  flex: 2;
+}
+.chat-message .message-header .message-sender .message-speaker {
+  font-weight: bold;
+}
+.chat-message .message-header .message-sender .message-user {
+  font-size: 0.75em;
+}
+.chat-message .message-content {
+  padding: 5px;
+}
+.chat-message .message-content .item-card-header {
+  align-content: end;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid #7a7971;
 }

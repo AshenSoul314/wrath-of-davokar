@@ -1,0 +1,76 @@
+<form class='{{cssClass}}' autocomplete='off'>
+  <header class='sheet-header'>
+    <img
+      class='profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      title='{{item.name}}'
+    />
+    <div class='header-fields'>
+      <div class="flexrow flex-gap flex-group-left">
+        <h1 class='charname flexgrow'><input
+            name='name'
+            type='text'
+            value='{{item.name}}'
+            placeholder='Name'
+          /></h1>
+          <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
+            <i class='fas fa-message'></i>
+          </a>
+      </div>
+      <div class='grid grid-2col flex-align-center'>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Type'}}</label>
+        <div>{{localize 'TYPES.Item.criticalInjury'}}</div>
+      </div>
+    </div>
+  </header>
+
+  {{! Sheet Tab Navigation }}
+  <nav class='sheet-tabs tabs' data-group='primary'>
+    <a class='item' data-tab='main'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Main'}}</a>
+    <a class='item' data-tab='effects'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Effects'}}</a>
+    <a class='item' data-tab='settings'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Settings'}}</a>
+  </nav>
+
+  {{! Sheet Body }}
+  <section class='sheet-body tab-body'>
+    {{! Description Tab }}
+    <div class='tab' data-group='primary' data-tab='main'>
+      <div class="resource-grid ">
+        {{!-- Death Mod --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.DeathMod'}}:</label>
+        <input type='number' step="1" name='system.deathMod' value='{{system.deathMod}}' data-dtype='Number'/>
+
+        {{!-- Healing Time Formula --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Formula'}}:</label>
+        <input class='flexshrink' type='text' name='system.healingTime.formula' value='{{system.healingTime.formula}}'/>
+
+        {{!-- Healing Time --}}
+        {{#if system.healingTime.value includeZero=true}}
+          <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Label'}}:</label>
+          <input class='flexshrink' type='text' name='system.healingTime.value' value='{{system.healingTime.value}}'/>
+        {{/if}}
+      </div>
+      <hr>
+      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+      {{editor
+        enrichedDescription
+        target='system.description'
+        engine='prosemirror'
+        button=true
+        editable=editable
+      }}
+    </div>
+
+    {{!-- Effects Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-effects.hbs"}}
+    </div>
+
+    {{!-- Settings Tab --}}
+    <div class="tab settings" data-group="primary" data-tab="settings">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-settings.hbs"}}
+    </div>
+    
+  </section>
+</form>

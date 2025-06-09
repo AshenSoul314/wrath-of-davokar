@@ -1,0 +1,40 @@
+@use "../utils" as utils;
+
+.chat-message {
+  padding: 0px;
+
+  .message-header {
+    padding: 5px;
+    border-radius: 3px 3px 0 0;
+
+    .message-sender {
+      align-items: center; 
+      gap: 6px; 
+      flex:2;
+      .message-speaker {
+        font-weight: bold;
+      }
+      .message-user {
+        font-size: 0.75em;
+      }
+    }
+  }
+
+  .message-content {
+    padding: 5px;
+
+    .item-card-header {
+      align-content: end;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      padding-bottom: 5px;
+      padding-top: 5px;
+      border-bottom: 1px solid utils.$c-border;
+    }
+
+  }
+
+}
+
+

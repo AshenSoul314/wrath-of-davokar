@@ -1,0 +1,19 @@
+@use "../utils" as utils;
+
+.wp-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-shadow: 0 0 4px black;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 2px 4px;
+  transition: all 0.2s ease;
+  
+  .wp-count {
+  font-size: 14px;
+  line-height: 1;
+  }
+}

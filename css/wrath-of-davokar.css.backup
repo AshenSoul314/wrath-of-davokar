@@ -1,0 +1,741 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+:root {
+  --color-border: #7a7971;
+  --color-corruption: #363b4e;
+  --color-corruption-light: #927fbf;
+  --color-toughness: #9f1e49;
+  --color-willpower: #005792;
+  --color-dark:  #3B3B3B;
+  --color-light-text: #f7f7f7;
+}
+
+/* Global styles */
+.window-app {
+  font-family: "Roboto", sans-serif;
+}
+
+.grid,
+.grid-2col {
+  display: grid;
+  grid-column: span 2/span 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.grid-3col {
+  grid-column: span 3/span 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4col {
+  grid-column: span 4/span 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-5col {
+  grid-column: span 5/span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-6col {
+  grid-column: span 6/span 6;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-7col {
+  grid-column: span 7/span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-8col {
+  grid-column: span 8/span 8;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-9col {
+  grid-column: span 9/span 9;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-10col {
+  grid-column: span 10/span 10;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-11col {
+  grid-column: span 11/span 11;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-12col {
+  grid-column: span 12/span 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-start-2 {
+  grid-column-start: 2;
+}
+
+.grid-start-3 {
+  grid-column-start: 3;
+}
+
+.grid-start-4 {
+  grid-column-start: 4;
+}
+
+.grid-start-5 {
+  grid-column-start: 5;
+}
+
+.grid-start-6 {
+  grid-column-start: 6;
+}
+
+.grid-start-7 {
+  grid-column-start: 7;
+}
+
+.grid-start-8 {
+  grid-column-start: 8;
+}
+
+.grid-start-9 {
+  grid-column-start: 9;
+}
+
+.grid-start-10 {
+  grid-column-start: 10;
+}
+
+.grid-start-11 {
+  grid-column-start: 11;
+}
+
+.grid-start-12 {
+  grid-column-start: 12;
+}
+
+.grid-span-2 {
+  grid-column-end: span 2;
+}
+
+.grid-span-3 {
+  grid-column-end: span 3;
+}
+
+.grid-span-4 {
+  grid-column-end: span 4;
+}
+
+.grid-span-5 {
+  grid-column-end: span 5;
+}
+
+.grid-span-6 {
+  grid-column-end: span 6;
+}
+
+.grid-span-7 {
+  grid-column-end: span 7;
+}
+
+.grid-span-8 {
+  grid-column-end: span 8;
+}
+
+.grid-span-9 {
+  grid-column-end: span 9;
+}
+
+.grid-span-10 {
+  grid-column-end: span 10;
+}
+
+.grid-span-11 {
+  grid-column-end: span 11;
+}
+
+.grid-span-12 {
+  grid-column-end: span 12;
+}
+
+.grid-no-margin {
+  margin: 0;
+}
+
+.flex-row,
+.flex-column {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-group-center,
+.flex-group-left,
+.flex-group-right {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.flex-group-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-group-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-stretch {
+  align-items: stretch;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flexshrink {
+  flex: 0;
+}
+
+.flexgrow {
+  flex: 1;
+}
+
+.flexlarge {
+  flex: 2;
+}
+.flex-gap {
+  gap: 10px;
+}
+.align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+.max-width {
+  width: 100%;
+}
+
+
+/* Chat Styles */
+.chat-card-header {
+  align-content: end;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Styles limited to wrath-of-davokar sheets */
+.wrath-of-davokar .item-form {
+  font-family: "Roboto", sans-serif;
+}
+.wrath-of-davokar .sheet-header {
+  flex: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.wrath-of-davokar .sheet-header .profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+.wrath-of-davokar .sheet-header .header-fields {
+  flex: 1;
+}
+.wrath-of-davokar .sheet-header h1.charname {
+  height: 50px;
+  padding: 0px;
+  margin: 5px 0;
+  border-bottom: 0;
+}
+.wrath-of-davokar .sheet-header h1.charname input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.wrath-of-davokar .sheet-body,
+.wrath-of-davokar .sheet-body .tab,
+.wrath-of-davokar .sheet-body .tab .editor {
+  height: 100%;
+}
+
+.wrath-of-davokar .sheet-tabs {
+  max-height: 50px;
+}
+.wrath-of-davokar .tox .tox-editor-container {
+  background: #fff;
+}
+.wrath-of-davokar .tox .tox-edit-area {
+  padding: 0 8px;
+}
+.wrath-of-davokar .resource-label {
+  font-weight: bold;
+}
+
+.wrath-of-davokar .items-title{
+  font-size: 1.25em;
+  margin-top: 15px;
+}
+.wrath-of-davokar .items-header {
+  height: fit-content;
+  margin: 2px 0;
+  padding: 2px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove #eeede0;
+  font-weight: bold;
+}
+.wrath-of-davokar .items-header > * {
+  font-size: 14px;
+  text-align: center;
+}
+.wrath-of-davokar .items-header .item-name {
+  font-weight: bold;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+}
+.wrath-of-davokar .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  color: #444;
+}
+.wrath-of-davokar .items-list .item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wrath-of-davokar .items-list .item-name {
+  flex: 2;
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  text-align: left;
+  align-items: center;
+  display: flex;
+}
+.wrath-of-davokar .items-list .item-name h3, .wrath-of-davokar .items-list .item-name h4 {
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+.wrath-of-davokar .items-list .item-controls {
+  display: flex;
+  flex: 0 0 100px;
+  justify-content: flex-end;
+}
+.wrath-of-davokar .items-list .item-controls a {
+  font-size: 12px;
+  text-align: center;
+  margin: 0 6px;
+}
+.wrath-of-davokar .items-list .item {
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 1px solid #c9c7b8;
+}
+.wrath-of-davokar .items-list .item:last-child {
+  border-bottom: none;
+}
+.wrath-of-davokar .items-list .item .item-name {
+  color: #191813;
+}
+.wrath-of-davokar .items-list .item .item-name .item-image {
+  flex: 0 0 30px;
+  height: 30px;
+  background-size: 30px;
+  border: none;
+  margin-right: 5px;
+}
+.wrath-of-davokar .items-list .item-prop {
+  text-align: center;
+  border-left: 1px solid #c9c7b8;
+  border-right: 1px solid #c9c7b8;
+  font-size: 12px;
+}
+.wrath-of-davokar .items-list .items-header {
+  height: fit-content;
+  margin: 2px 0;
+  padding: 2px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove #eeede0;
+  font-weight: bold;
+}
+.wrath-of-davokar .items-list .items-header > * {
+  font-size: 12px;
+  text-align: center;
+}
+.wrath-of-davokar .items-list .items-header .item-name {
+  padding-left: 5px;
+  text-align: left;
+}
+
+.wrath-of-davokar .item-attribute {
+  flex: 0 0 120px;
+  padding: 0 8px;
+  text-align: center;
+}
+.wrath-of-davokar .effects .item .effect-source,
+.wrath-of-davokar .effects .item .effect-duration,
+.wrath-of-davokar .effects .item .effect-controls {
+  text-align: center;
+  border-left: 1px solid #c9c7b8;
+  border-right: 1px solid #c9c7b8;
+  font-size: 12px;
+}
+.wrath-of-davokar .effects .item .effect-controls {
+  border: none;
+}
+.wrath-of-davokar .progress-bar {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.01);
+  width: 100%; 
+  height:20px; 
+  display:flex;
+  overflow-x: clip;
+  overflow-y: clip;
+  position: relative
+}
+
+.wrath-of-davokar .bar-toughness {
+  border: none;
+  background-color:var(--color-toughness);
+  height:20px;
+}
+
+.wrath-of-davokar .bar-corruption-threshold {
+  border-width: 0px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.7); 
+  background-color: black;
+  width:3px; 
+  position:absolute; 
+  height: 20px;
+}
+.wrath-of-davokar .bar-corruption-permanent {
+  border: none;
+  background-color:var(--color-corruption);
+  height:20px;
+}
+.wrath-of-davokar .bar-corruption-temporary {
+  border: none;
+  background-color:var(--color-corruption-light);
+  height:20px;
+}
+.wrath-of-davokar .bar-willpower-empty {
+  border-width: 1px;
+  border-color: var(--color-border);
+  border-style: solid;
+  background-color: rgba(0, 0, 0, 0.01);
+  height:20px;
+}
+.wrath-of-davokar .bar-willpower-filled {
+  border-width: 1px;
+  border-color: var(--color-border);
+  border-style: solid; 
+  background-color: var(--color-willpower);
+  height:20px;
+}
+.wrath-of-davokar .bar-willpower {
+  margin-top: 0;
+  margin-bottom: 0;
+  column-gap: 3px;
+}
+
+.wrath-of-davokar .panel,
+.wrath-of-davokar .panel-no-flex {
+  border-width: 1px;
+  border-style: solid;
+  margin: 5px;
+}
+.wrath-of-davokar .panel{
+  flex: 1;
+}
+
+.wrath-of-davokar .panel-header {
+  background-color: var(--color-dark);
+  color: var(--color-light-text);
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+.wrath-of-davokar .panel-content{
+  margin: 10px;
+}
+
+.wrath-of-davokar .text-attribute {
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  width: 80%;
+}
+.wrath-of-davokar .input-attribute {
+  font-weight: bold;
+  max-width: 3em;
+}
+.wrath-of-davokar .text-skill {
+  text-align: left;
+  padding-left: 10px;
+  width: 80%;
+}
+
+.wrath-of-davokar .skill-bonus {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30px;
+}
+
+.wrath-of-davokar .input-skill {
+  max-width: 3em;
+}
+
+.wrath-of-davokar .spellcasting-row {
+  justify-content: space-around;
+  align-content: center;
+  text-align: center;
+  gap: 10px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 10px;
+}
+
+.wrath-of-davokar .spellcasting-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  min-width: 20%;
+  
+}
+
+.wrath-of-davokar .spellcasting-total {
+  font-weight: bold;
+}
+
+.wrath-of-davokar .quality-list-row {
+  width: 100%;
+  justify-content: start;
+  gap: 10px;
+  padding-left: 30px;
+  padding-bottom: 10px;
+}
+
+.wrath-of-davokar .resource-title,
+.resource-title-small {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: left;
+}
+.wrath-of-davokar .resource-title-small {
+  font-weight: normal;
+}
+
+.wrath-of-davokar .quality{
+  text-align: center;
+  background-color: var(--color-dark);
+  color: var(--color-light-text);
+  border-radius: 20px;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 5px;
+}
+.wrath-of-davokar .indent {
+  padding-left: 10%;
+}
+
+.wrath-of-davokar .resource-grid  {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+  align-items: center;
+}
+
+.wrath-of-davokar .die-roll {
+  border: 1px solid var(--color-dark);
+  border-radius: 20px;
+  padding: 5px;
+  width: fit-content;
+  background: var(--color-dark);
+  color: var(--color-light-text);
+}
+
+.wrath-of-davokar .die-roll:hover, .wrath-of-davokar .die-roll:focus,
+.wrath-of-davokar .interactive:hover, .wrath-of-davokar .interactive:focus  {
+  cursor: pointer;
+  box-shadow: 0 0 8px 0 rgba(255, 0, 0, 0.2), 0 0 20px 0 rgba(255, 0, 0, 0.19);
+  font-weight: bold;
+  
+}
+
+
+
+.wrath-of-davokar .talent-card {
+  border: 1px solid var(--color-border);
+  max-width: 300px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+.wrath-of-davokar .talent-header {
+  background-color: var(--color-dark);
+  color: var(--color-light-text);
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+
+.wrath-of-davokar .talent-text{
+  overflow-y: scroll;
+  max-height: 200px;
+  text-align: justify;
+  flex: 1;
+}
+
+.wrath-of-davokar .talent-content{
+  margin: 10px;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.wrath-of-davokar .talent-bottom-row{
+  text-align: left;
+  border-top: 1px solid var(--color-border);
+}
+
+.wrath-of-davokar .attributes-grid {
+  grid-template-rows: max-content;
+}
+
+.wrath-of-davokar hr {
+  border: 1px solid var(--color-border);
+}
+
+.wrath-of-davokar img.icon {
+  border: none;
+}
+
+.wrath-of-davokar .wrath-tracker-container {display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "IM Fell English", serif;
+  font-size: 16px;
+  color: #ddd;
+  background: linear-gradient(to bottom, #2e2a26, #1c1b1a);
+  border: 2px solid #4c3c29;
+  border-radius: 4px;
+  box-shadow: 0 0 6px #000000aa inset;
+  padding: 0.5em 1em;
+  width: fit-content;
+  margin-left: 10px;
+}
+
+.wrath-of-davokar .wrath-tracker-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.wrath-of-davokar .wrath-tracker-display button {
+  background: #5a3b28;
+  color: #fff;
+  border: 1px solid #7a5e3a;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.wrath-of-davokar .wrath-tracker-display button:hover:enabled {
+  background: #7a5e3a;
+}
+
+.wrath-of-davokar .wrath-tracker-display button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wrath-of-davokar .wrath-points {
+  font-size: 18px;
+  color: #f4e2c8;
+  text-shadow: 1px 1px 2px #000;
+  min-width: 1em;
+  text-align: center;
+}
+
+/* Willpower Hud Styles */
+
+.wp-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #ddbdfc; /* light purple */
+  text-shadow: 0 0 4px black;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 2px 4px;
+  transition: all 0.2s ease;
+}
+
+.wp-count {
+  font-size: 14px;
+  line-height: 1;
+}

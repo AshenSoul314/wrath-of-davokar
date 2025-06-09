@@ -1,0 +1,19 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+
+  .die-roll {
+    border: 1px solid utils.$c-dark;
+    border-radius: 20px;
+    padding: 5px;
+    width: fit-content;
+    background: utils.$c-dark;
+    color: utils.$c-light-text;
+  }
+
+  .die-roll:hover, .die-roll:focus, .interactive:hover, .interactive:focus  {
+    cursor: pointer;
+    box-shadow: 0 0 8px 0 rgba(255, 0, 0, 0.2), 0 0 20px 0 rgba(255, 0, 0, 0.19);
+    font-weight: bold;
+  }
+}

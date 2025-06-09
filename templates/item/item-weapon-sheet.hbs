@@ -1,0 +1,124 @@
+<form class='{{cssClass}}' autocomplete='off'>
+  <header class='sheet-header'>
+    <img
+      class='profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      title='{{item.name}}'
+    />
+    <div class='header-fields'>
+      <div class="flexrow flex-gap flex-group-left">
+        <h1 class='charname flexgrow'><input
+            name='name'
+            type='text'
+            value='{{item.name}}'
+            placeholder='Name'
+          /></h1>
+          <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
+            <i class='fas fa-message'></i>
+          </a>
+      </div>
+      <div class='grid grid-2col flex-align-center'>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Type'}}</label>
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Weight'}}</label>
+        <div>{{localize 'Types.Item.weapon'}}</div>
+        <input type='number' step="0.5" name='system.weight' value='{{system.weight}}' data-dtype='Number'/>
+      </div>
+    </div>
+  </header>
+
+  {{! Sheet Tab Navigation }}
+  <nav class='sheet-tabs tabs' data-group='primary'>
+    <a class='item' data-tab='main'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Main'}}</a>
+    {{#if system.isArtifact}}
+      <a class='item' data-tab='powers'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.ArtifactPowers'}}</a>
+    {{/if}}
+    <a class='item' data-tab='effects'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Effects'}}</a>
+    <a class='item' data-tab='settings'>{{localize 'WRATH_OF_DAVOKAR.Base.Tabs.Settings'}}</a>
+  </nav>
+
+  {{! Sheet Body }}
+  <section class='sheet-body tab-body'>
+    {{! Description Tab }}
+    <div class='tab' data-group='primary' data-tab='main'>
+      <div class="resource-grid ">
+        
+        {{!-- Grip --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.Label'}}:</label>
+        <select class="flexshrink" name="system.grip">
+          <option value="oneHand" {{#if (eq 'oneHand' system.grip)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long'}}</option>
+          <option value="twoHand" {{#if (eq 'twoHand' system.grip)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.TwoHand.long'}}</option>
+        </select>
+
+        {{!-- Base Damage --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Weapon.BaseDamage.long'}}:</label>
+        <input class='flexshrink' type='number' step="1" min="0" name='system.damage' value='{{system.damage}}' data-dtype='Number'/>
+
+        {{!-- Range --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Range.Label'}}:</label>
+        <div class='align-left flex-column flexshrink'>
+          <select name="system.range">
+            <option value="engaged" {{#if (eq 'engaged' system.range)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Range.Engaged'}}</option>
+            <option value="1" {{#if (eq '1' system.range)}}selected{{/if}}>1 {{localize 'WRATH_OF_DAVOKAR.Action.Move.long'}}</option>
+            <option value="2" {{#if (eq '2' system.range)}}selected{{/if}}>2 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value="2" {{#if (eq '3' system.range)}}selected{{/if}}>3 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value="2" {{#if (eq '4' system.range)}}selected{{/if}}>4 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value="2" {{#if (eq '5' system.range)}}selected{{/if}}>5 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+          </select>
+
+          {{!-- Area --}}
+          {{radioBoxes 'system.area.type' system.area.radio checked=system.area.type localize=true}}
+
+        </div>
+
+        {{!-- Qualities --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}:</label>
+        <div class='flex-row flex-align-center flex-wrap flex-gap'>
+          {{#if system.qualities.noQuality}}
+            <label class='class=flexshrink'>{{localize 'WRATH_OF_DAVOKAR.Qualities.NoQuality'}}</label>
+          {{else}}
+            {{#each system.qualities}}
+              {{#if this.value}} <label class='quality flexshrink'>{{this.label}}</label>{{/if}}
+            {{/each}}
+          {{/if}}
+        </div>
+
+        {{!-- Cost --}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Cost'}}:</label>
+        <div class='indent grid grid-2col'>
+            <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Thaler'}}:</label>
+            <input class='flexshrink' type='number' step='1' min='0' name='system.cost.thaler' data-dtype='Number' value='{{system.cost.thaler}}'/>
+            <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Shilling'}}:</label>
+            <input class='flexshrink' type='number' step='1' min='0' name='system.cost.shilling' data-dtype='Number' value='{{system.cost.shilling}}'/>
+            <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Orteg'}}:</label>
+            <input class='flexshrink' type='number' step='1' min='0' name='system.cost.orteg' data-dtype='Number' value='{{system.cost.orteg}}'/>
+        </div>
+      </div>
+      <hr>
+      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+      {{editor
+        enrichedDescription
+        target='system.description'
+        engine='prosemirror'
+        button=true
+        editable=editable
+      }}
+    </div>
+
+    {{!-- Artifact Powers Tab --}}
+    <div class="tab powers" data-group="primary" data-tab="powers">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-artifact-powers.hbs"}}
+    </div>
+
+    {{!-- Effects Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-effects.hbs"}}
+    </div>
+
+    {{!-- Settings Tab --}}
+    <div class="tab settings" data-group="primary" data-tab="settings">
+      {{> "systems/wrath-of-davokar/templates/item/parts/item-settings.hbs"}}
+    </div>
+    
+  </section>
+</form>

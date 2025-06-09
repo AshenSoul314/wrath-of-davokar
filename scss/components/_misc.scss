@@ -1,0 +1,12 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+  hr {
+    border: 1px solid utils.$c-border;
+  }
+
+  img.icon {
+    border: none;
+  }
+
+}

@@ -1,0 +1,54 @@
+@use "../utils" as utils;
+
+.wrath-of-davokar {
+  .attributes-grid {
+    grid-template-rows: max-content;
+
+    .text-attribute {
+      font-weight: bold;
+      text-transform: uppercase;
+      border-bottom: 1px solid utils.$c-border;
+      text-align: left;
+      width: 80%;
+    }
+
+    .text-skill {
+      text-align: left;
+      padding-left: 10px;
+      width: 80%;
+    }
+
+    .input-attribute,
+    .input-skill {
+      max-width: 3em;
+    }
+    
+    .input-attribute {
+      font-weight: bold;
+    }
+    .skill-bonus {
+      margin-left: 10px;
+      margin-right: 10px;
+      width: 30px;
+    }
+
+    .spellcasting-row {
+      justify-content: space-around;
+      align-content: center;
+      text-align: center;
+      gap: 10px;
+      border-top: 1px solid utils.$c-border;
+      padding-top: 10px;
+      
+      .spellcasting-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        min-width: 20%;
+      }
+      
+      .spellcasting-total {
+        font-weight: bold;
+      }
+    }
+  }
+}

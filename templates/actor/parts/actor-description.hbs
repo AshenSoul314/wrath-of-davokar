@@ -1,0 +1,69 @@
+
+
+<div class="grid grid-2col">
+
+  {{!-- Column One --}}
+  {{!-- Bio --}}
+  <div class="panel">
+    <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Bio.Description'}}</div>
+    {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+    {{editor enrichedDescription target="system.bio.description" engine="prosemirror" button=true editable=editable}}
+  </div>
+
+  {{!-- Column Two --}}
+  <div class="flex-column flex-group-center flex-align-stretch">
+    {{!-- Languages --}}
+    <div class="panel">
+      <div class="panel-header">Languages</div>
+      <div class="panel-content grid grid-3col">
+        {{#each system.languages}}
+          <input class="grid-span-2" type="text" name="system.languages.{{@key}}.name" value="{{this.name}}"/>
+          <select name="system.languages.{{@key}}.rank">
+            <option value="" {{#if (eq '' this.rank)}}selected{{/if}}>----</option>
+            <option value="unknown" {{#if (eq 'unknown' this.rank)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Language.Unknown'}}</option>
+            <option value="smattering" {{#if (eq 'smattering' this.rank)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Language.Smattering'}}</option>
+            <option value="knowledgeable" {{#if (eq 'knowledgeable' this.rank)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Language.Knowledgeable'}}</option>
+            <option value="fluent" {{#if (eq 'fluent' this.rank)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Language.Fluent'}}</option>
+          </select>
+        {{/each}}
+      </div>
+    </div>
+
+    {{!-- Traits --}}
+    <div class="panel">
+      <div class="panel-header">Traits</div>
+      <div class="panel-content grid grid-3col">
+
+        {{!-- Row One --}}
+        <div class="resource-title-small">{{localize 'WRATH_OF_DAVOKAR.Bio.Age'}}</div>
+        <div class="resource-title-small">{{localize 'WRATH_OF_DAVOKAR.Bio.Height'}}</div>
+        <div class="resource-title-small">{{localize 'WRATH_OF_DAVOKAR.Bio.Weight'}}</div>
+
+        {{!-- Row Two --}}
+        <input class="trait-text" type="text" name="system.bio.age" value="{{system.bio.age}}"/>
+        <input class="trait-text" type="text" name="system.bio.height" value="{{system.bio.height}}"/>
+        <input class="trait-text" type="text" name="system.bio.weight" value="{{system.bio.weight}}"/>
+
+        {{!-- Row Three --}}
+        <div class="grid-span-3 resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Appearance'}}</div>
+        <textarea class="grid-span-3 trait-text" name="system.bio.appearance" rows="5">{{system.bio.appearance}}</textarea>
+
+        {{!-- Row Four --}}
+        <div class="grid-span-3 resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Quote'}}</div>
+        <textarea class="grid-span-3 trait-text" name="system.bio.quote" rows="5">{{system.bio.quote}}</textarea>
+
+        {{!-- Row Five --}}
+        <div class="grid-span-3 resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Shadow'}}</div>
+        <textarea class="grid-span-3 trait-text" name="system.bio.shadow" rows="5">{{system.bio.shadow}}</textarea>
+
+        {{!-- Row Six --}}
+        <div class="grid-span-3 resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Ambition'}}</div>
+        <textarea class="grid-span-3 trait-text" name="system.bio.ambition" rows="5">{{system.bio.ambition}}</textarea>
+
+        {{!-- Row Seven --}}
+        <div class="grid-span-3 resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Weakness'}}</div>
+        <textarea class="grid-span-3 trait-text" name="system.bio.weakness" rows="5">{{system.bio.weakness}}</textarea>
+      </div>
+    </div>
+  </div>
+</div>

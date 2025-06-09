@@ -1,0 +1,159 @@
+
+<div class='item-card-header flex-row flex-gap'>
+  <img src={{img}} width=50 height=50/>
+  <div class='flex-grow align-center'>{{name}}</div>
+</div>
+<div class='item-card-body'>
+  
+  {{editor
+    enrichedDescription
+    target='system.description'
+    engine='prosemirror'
+    button=false
+    editable=false
+  }}
+  
+  {{#if system.rank}}
+    <div>
+      <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}: </b>
+      {{#if (isIn type "boon" "burden" "monsterTrait" "condition")}}
+        {{ localizeRankTrait system.rank.value }}
+      {{else}}
+        {{ localizeRankTalent system.rank.value  }}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if system.component}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Power.Component" }}:</b> {{system.component}}</div>
+  {{/if}}
+
+  {{#if system.tradition}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Power.Tradition.Label" }}:</b> {{localizeTraditions system.tradition}}</div>
+  {{/if}}
+
+  {{#if bite includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Trap.Bite" }}:</b> {{system.bite}}</div>
+  {{/if}}
+
+  {{#if system.damage includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Weapon.BaseDamage.long" }}:</b> {{system.damage}}</div>
+  {{/if}}
+
+  {{#if system.range}}
+    <div>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Range.Label" }}:</b> {{localizeRange system.range}}
+  {{/if}}
+
+  {{#if system.grip}}
+    <div>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Grip.Label" }}:</b>
+      {{#if (eq system.grip "oneHanded")}}
+        {{localize "WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long"}}
+      {{else}}
+        {{localize "WRATH_OF_DAVOKAR.Weapon.Grip.TwoHand.long"}}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if system.rating}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Armor.Rating.long" }}:</b> {{system.rating.value}}/{{system.rating.max}}</div>
+  {{/if}}
+
+  {{#if system.armorCategory}}
+    <div>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Armor.ArmorCategory.Label" }}:</b>
+      {{#if (eq system.armorCategory "light")}}{{ localize "WRATH_OF_DAVOKAR.Armor.ArmorCategory.Light" }}{{/if}}
+      {{#if (eq system.armorCategory "medium")}}{{ localize "WRATH_OF_DAVOKAR.Armor.ArmorCategory.Medium" }}{{/if}}
+      {{#if (eq system.armorCategory "heavy")}}{{ localize "WRATH_OF_DAVOKAR.Armor.ArmorCategory.Heavy" }}{{/if}}
+      {{armorCategory}}
+    </div>
+  {{/if}}
+
+  {{#if system.impeding includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Armor.Impeding.long" }}:</b> {{system.impeding}}</div>
+  {{/if}}
+
+  {{#if system.visionPenalty includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Armor.VisionPenalty.long" }}:</b> {{system.visionPenalty}}</div>
+  {{/if}}
+
+  {{#if system.parryBonus includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Armor.ParryBonus.long" }}:</b> {{system.parryBonus}}</div>
+  {{/if}}
+
+  {{#if system.deathMod includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.CriticalInjury.DeathMod" }}:</b> {{system.deathMod}}</div>
+  {{/if}}
+
+  {{#if system.healingTime}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Formula" }}:</b> {{system.healingTime.formula}}</div>
+    {{#if system.healingTime.value}}
+      <div><b>{{ localize "WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Label" }}:</b> {{system.healingTime.value}}</div>
+    {{/if}}
+  {{/if}}
+
+  {{#if system.qualities }}
+    <div>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Qualities.Label" }}:</b>
+      {{#if system.qualities.noQuality}}
+        <label class='class=flexshrink'>{{localize 'WRATH_OF_DAVOKAR.Qualities.NoQuality'}}</label>
+      {{else}}
+        {{#each system.qualities}}
+          {{#if this.value}} <label class='quality flexshrink'>{{localize this.localize}}</label>{{/if}}
+        {{/each}}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if system.cost}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Money.Cost" }}:</b></div>
+    {{#if system.cost.thaler}}
+      <div class="indent"><b>{{ localize "WRATH_OF_DAVOKAR.Money.Thaler"}}:</b> {{system.cost.thaler}}</div>
+    {{/if}}
+    {{#if system.cost.shilling}}
+      <div class="indent"><b>{{ localize "WRATH_OF_DAVOKAR.Money.Shilling"}}:</b> {{system.cost.shilling}}</div>
+    {{/if}}
+    {{#if system.cost.orteg}}
+      <div class="indent"><b>{{ localize "WRATH_OF_DAVOKAR.Money.Orteg"}}:</b> {{system.cost.orteg}}</div>
+    {{/if}}
+  {{/if}}
+
+  {{#if system.weight includeZero=true}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Item.Weight" }}:</b> {{system.weight}}</div>
+  {{/if}}
+
+  {{#if system.action}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Action.Label" }}:</b> {{system.action}}</div>
+  {{/if}}
+
+  {{#if system.corruption}}
+    <div><b>{{ localize "WRATH_OF_DAVOKAR.Corruption.Label" }}:</b> [[/roll {{system.corruption}} #{{localize "WRATH_OF_DAVOKAR.Corruption.Temporary.long"}}]]</div>
+  {{/if}}
+
+  <hr>
+
+  {{#if system.effectData}}
+    {{#each system.effectData}}
+      <div class="flex-row">
+        <button 
+          class="applyItemEffectButton flexgrow" 
+          type="button" data-item-id="{{../_id}}" 
+          {{#if ../actorID}} data-actor-id="{{../actorID}}" {{/if}} 
+          data-item-power-id="{{@key}}" 
+          title="{{localize 'EFFECT.Transfer'}}">
+            <i class="fa-solid fa-share"></i> {{this.name}}
+        </button>
+        <button 
+          class="removeItemEffectButton flexshrink" 
+          type="button" 
+          data-item-id="{{../_id}}"
+          {{#if ../actorID}} data-actor-id="{{../actorID}}" {{/if}} 
+          data-item-effect-id="{{@key}}"
+          title="'{{localize "DOCUMENT.Delete" type=(localize "Types.Item.itemEffect")}}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    {{/each}}
+  {{/if}}
+</div>

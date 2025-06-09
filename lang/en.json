@@ -1,21 +1,27 @@
 {
   "WRATH_OF_DAVOKAR": {
-    "Ability": {
-      "Str": { "long": "Strength", "abbr": "str" },
-      "Con": { "long": "Constitution", "abbr": "con" },
-      "Dex": { "long": "Dexterity", "abbr": "dex" },
-      "Int": { "long": "Intelligence", "abbr": "int" },
-      "Wis": { "long": "Wisdom", "abbr": "wis" },
-      "Cha": { "long": "Charisma", "abbr": "cha" }
-    },
-    "SheetLabels": {
-      "Actor": "WrathOfDavokar Actor Sheet",
-      "Item": "WrathOfDavokar Item Sheet"
-    },
-    "Item": {
-      "Spell": {
-        "SpellLVL": "Level {level} Spells",
-        "AddLVL": "Add LVL {level}"
+    "Base": {
+      "Name": "Name",
+      "Icon": "Icon",
+      "Color": "Color",
+      "Tabs": {
+        "Main": "Main",
+        "Settings": "Settings",
+        "PowersAndRituals": "Powers & Rituals",
+        "Talents": "Talents",
+        "Description": "Description",
+        "Items": "Items",
+        "Effects": "Effects",
+        "Powers": "Mystical Powers",
+        "Rituals": "Rituals",
+        "Boons": "Boons",
+        "Burdens": "Burdens",
+        "MonstrousTraits": "Monstrous Traits",
+        "ArtifactPowers": "Artifact Powers"
+      },
+      "ToolTips": {
+        "SkillBonus": "Item, Talent, and Effect Modifiers",
+        "SendToChat": "Send to Chat"
       }
     },
     "Effect": {
@@ -23,19 +29,449 @@
       "Toggle": "Toggle Effect",
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
-      "Inactive": "Inactive Effects"
+      "Inactive": "Inactive Effects",
+      "Broken": "Broken",
+      "Pain": "In Pain",
+      "BlightMarked": "Blight Marked",
+      "Acid": {
+        "1": "Acid: 1",
+        "2": "Acid: 2",
+        "3": "Acid: 3",
+        "4": "Acid: 4",
+        "5": "Acid: 5",
+        "6": "Acid: 6",
+        "7": "Acid: 7",
+        "8": "Acid: 8",
+        "9": "Acid: 9"
+      },
+      "Fire": {
+        "1": "Burning: 1",
+        "2": "Burning: 2",
+        "3": "Burning: 3",
+        "4": "Burning: 4",
+        "5": "Burning: 5",
+        "6": "Burning: 6",
+        "7": "Burning: 7",
+        "8": "Burning: 8",
+        "9": "Burning: 9"
+      },
+      "Poison": {
+        "1": "Poisoned: 1",
+        "2": "Poisoned: 2",
+        "3": "Poisoned: 3",
+        "4": "Poisoned: 4",
+        "5": "Poisoned: 5",
+        "6": "Poisoned: 6",
+        "7": "Poisoned: 7",
+        "8": "Poisoned: 8",
+        "9": "Poisoned: 9"
+      }
+    },
+    "Experience": {
+      "Label": {
+        "long": "Experience",
+        "abbv": "XP"
+      },
+      "Cost": {
+        "long": "Experience Cost",
+        "abbv": "XP Cost"
+      },
+      "Spent": {
+        "long": "Experience Spent",
+        "abbv": "XP Spent"
+      },
+      "Unspent": {
+        "long": "Experience Unspent",
+        "short": "Unspent",
+        "abbv": "XP Unspent"
+      }
+    },
+    "Heritage": "Heritage",
+    "Archetype": "Archetype",
+    "Attributes": {
+      "Label": "Attribute",
+      "LabelPlural": "Attributes",
+      "Physique": {
+        "long": "Physique",
+        "abbr": "Phy"
+      },
+      "Finesse": {
+        "long": "Finesse",
+        "abbr": "Fin"
+      },
+      "Wits": {
+        "long": "Wits",
+        "abbr": "Wit"
+      },
+      "Empathy": {
+        "long": "Empathy",
+        "abbr": "Emp"
+      }
+    },
+    "Skills": {
+      "Label": "Skill",
+      "LabelPlural": "Skills",
+      "Endurance": {
+        "long": "Endurance",
+        "abbr": "End"
+      },
+      "Force": {
+        "long": "Force",
+        "abbr": "For"
+      },
+      "Melee": {
+        "long": "Melee",
+        "abbr": "Mel"
+      },
+      "Dexterity": {
+        "long": "Dexterity",
+        "abbr": "Dex"
+      },
+      "Discreet": {
+        "long": "Discreet",
+        "abbr": "Dis"
+      },
+      "Marksmanship": {
+        "long": "Marksmanship",
+        "abbr": "Mrk"
+      },
+      "Mobility": {
+        "long": "Mobility",
+        "abbr": "Mob"
+      },
+      "Crafting": {
+        "long": "Crafting",
+        "abbr": "Crf"
+      },
+      "Medicus": {
+        "long": "Medicus",
+        "abbr": "Med"
+      },
+      "Lore": {
+        "long": "Lore",
+        "abbr": "Lor"
+      },
+      "Survival": {
+        "long": "Survival",
+        "abbr": "Srv"
+      },
+      "Vigilance": {
+        "long": "Vigilance",
+        "abbr": "Vig"
+      },
+      "Insight": {
+        "long": "Insight",
+        "abbr": "Isi"
+      },
+      "Instinct": {
+        "long": "Instinct",
+        "abbr": "Ist"
+      },
+      "Persuasion": {
+        "long": "Persuasion",
+        "abbr": "Per"
+      },
+      "Volition": {
+        "long": "Volition",
+        "abbr": "Vol"
+      },
+      "Spellcasting": {
+        "long": "Spellcasting",
+        "abbr": "Spl"
+      }
+    },
+    "Toughness": {
+      "Label": "Toughness",
+      "Threshold": "Pain Threshold",
+      "Maximum": "Maximum Toughness"
+    },
+    "Willpower": {
+      "Label": "Willpower",
+      "Current": "Current Willpower"
+    },
+    "Corruption": {
+      "Label": "Corruption",
+      "Total": "Total Corruption",
+      "Max": {
+        "long": "Corruption Maximum",
+        "short": "Maximum",
+        "abbv": "Corr. Max"
+      },
+      "Threshold": {
+        "long": "Corruption Threshold",
+        "short": "Threshold",
+        "abbv": "Corr.Thr."
+      },
+      "Temporary": {
+        "long": "Temporary Corruption",
+        "short": "Temporary",
+        "abbv": "Temp. Corr."
+      },
+      "Permanent": {
+        "long": "Permanent Corruption",
+        "short": "Permanent",
+        "abbv": "Perm. Corr."
+      }
+    },
+    "Language": {
+      "Label": "Languages",
+      "Unknown": "Unknown",
+      "Smattering": "Smattering",
+      "Knowledgeable": "Knowledgeable",
+      "Fluent": "Fluent"
+    },
+    "Bio": {
+      "Label": "Biography",
+      "Age": "Age",
+      "Ambition": "Ambition",
+      "Appearance": "Appearance",
+      "Archetype": "Archetype",
+      "Background": "Background",
+      "Description": "Description",
+      "Height": "Height",
+      "Heritage": "Heritage",
+      "Quote": "Quote",
+      "Shadow": "Shadow",
+      "Weakness": "Weakness",
+      "Weight": "Weight"
+    },
+    "Qualities": {
+      "Label": "Qualities",
+      "NoQuality": "No Qualities",
+      "Concealed": "Concealed",
+      "Desecrated": "Desecrated",
+      "Hallowed": "Hallowed",
+      "Retributive": "Retributive",
+      "Balanced": "Balanced",
+      "BloodLetting": "Blood Letting",
+      "DeepImpact": "Deep Impact",
+      "Ensnaring": "Ensnaring",
+      "Jointed": "Jointed",
+      "Long": "Long",
+      "Massive": "Massive",
+      "MechanicalReload": "Mechanical Reload",
+      "Precise": "Precise",
+      "Piercing": "Piercing",
+      "Returning": "Returning",
+      "Short": "Short",
+      "Unstable": "Unstable",
+      "Unwieldy": "Unwieldy",
+      "AcidCoated": "Acid Coated",
+      "BaneWeapon": "Bane Weapon",
+      "DeathRune": "Death Rune",
+      "Flaming": "Flaming",
+      "PoisonCoated": "Poison Coated",
+      "Thundering": "Thundering"
+    },
+    "Armor": {
+      "ArmorCategory": {
+        "Label": "Armor Category",
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy"
+      },
+      "Impeding": {
+        "long": "Impeding",
+        "abbv": "Imp"
+      },
+      "VisionPenalty": {
+        "long": "Vision Penalty",
+        "abbv": "VP"
+      },
+      "ParryBonus": {
+        "long": "Parry Bonus",
+        "abbv": "PB"
+      },
+      "Rating": {
+        "long": "Armor Rating",
+        "abbv": "AR",
+        "Total": "Total Armor Rating"
+      }
+    },
+    "Combat": {
+      "Label": "Combat",
+      "Speed": "Movement Speed",
+      "Parry": "Parry",
+      "Dodge": "Dodge",
+      "Initiative": "Initiative",
+      "Tempo": "Tempo",
+      "DrawSize": "Draw Size"
+    },
+    "Money": {
+      "Cost": "Cost",
+      "Thaler": "Thaler",
+      "Shilling": "Shillings",
+      "Orteg": "Ortegs"
+    },
+    "Artifact": {
+      "Label": "Artifact",
+      "IsArtifact": "This is an Artifact",
+      "Powers": "Artifact Powers",
+      "NewPower": "Create Artifact Power",
+      "DeletePower": "Delete Artifact Power"
+    },
+    "SheetLabels": {
+      "Actor": "WrathOfDavokar Actor Sheet",
+      "Item": "WrathOfDavokar Item Sheet"
+    },
+    "Item": {
+      "Description": "Description",
+      "Attributes": "Attributes",
+      "Weight": "Weight",
+      "Type": "Item Type",
+      "Equipped": "Equipped",
+      "Unequipped": "Unequipped",
+      "EquipItem": "Equip {type}",
+      "UnequipItem": "Unequip {type}",
+      "Encumbrance": "Encumbrance",
+      "IsArtifact": "Artifact",
+      "Modifiers": "Modifiers"
+    },
+    "Action": {
+      "Label": "Action",
+      "Fast": "Fast Action",
+      "Slow": "Slow Action",
+      "Free": "Free Action",
+      "Reaction": "Reaction",
+      "Passive": "Passive",
+      "Special": "Special",
+      "Move": {
+        "long": "Movement Action",
+        "plural": "Movement Actions",
+        "abbv": "MA"
+      }
+    },
+    "Rank": {
+      "Label": "Rank",
+      "One": {
+        "Talent": "Novice",
+        "Trait": "I",
+        "abbv": "N"
+      },
+      "Two": {
+        "Talent": "Adept",
+        "Trait": "II",
+        "abbv": "A"
+      },
+      "Three": {
+        "Talent": "Master",
+        "Trait": "III",
+        "abbv": "M"
+      }
+    },
+    "Weapon": {
+      "BaseDamage": {
+        "abbv": "DMG",
+        "long": "Base Damage"
+      },
+      "Grip": {
+        "Label": "Grip",
+        "OneHand": {
+          "long": "One Handed",
+          "abbv": "1H"
+        },
+        "TwoHand": {
+          "long": "Two Handed",
+          "abbv": "2H"
+        }
+      },
+      "AreaEffect": {
+        "Label": "Area Effect",
+        "Cone": "Cone",
+        "Radius": "Radius",
+        "None": "No Area Effect"
+      }
+    },
+    "Range": {
+      "Label": "Range",
+      "Engaged": "Engaged"
+    },
+    "Trap": {
+      "Bite": "Bite"
+    },
+    "Power": {
+      "Tradition": {
+        "Label": "Tradition",
+        "Theurgy": "Theurgy",
+        "Witchcraft": "Witchcraft",
+        "Wizardry": "Wizardry",
+        "Sorcery": "Sorcery",
+        "TrollSinging": "Troll Singing",
+        "Symbolism": "Symbolism",
+        "StaffMagic": "Staff Magic",
+        "None": "No Tradition"
+      },
+      "Component": "Material Component"
+    },
+    "Condition": "Condition",
+    "CriticalInjury": {
+      "Label": "Critical Injury",
+      "DeathMod":"Death Modifier",
+      "HealingTime": {
+        "Formula": "Healing Time Formula",
+        "Label": "Healing Time"
+      }
+    },
+    "Wrath": {
+      "Label": "Wrath",
+      "Points": "Wrath Points",
+      "Increase": "Increase Wrath",
+      "Decrease": "Decrease Wrath"
     }
   },
-
+  "YZUR": {
+    "CHAT": {
+      "ROLL": {
+        "Trauma": "Trauma",
+        "GearDamage": "Gear Damage",
+        "HitLocation": "Hit Location",
+        "HitLocations": "Hit Locations",
+        "ExtraHit": "Extra Hit",
+        "ExtraHits": "Extra Hits",
+        "Suppression": "Suppression",
+        "DamageOrStress": "Damage/Stress",
+        "AmmoSpent": "Ammo Spent",
+        "JamCount": "Jam Count",
+        "Jammed": "Jammed",
+        "Push": "Push",
+        "Corruption": "Temporary Corruption",
+        "Wrath": "Wrath",
+        "WodWillpower": "Willpower"
+      },
+      "Successes": "Successes"
+    },
+    "DIETERMS": {
+      "BaseDie": "Skill Dice",
+      "DavokarSkillDie": "Skill Dice",
+      "D8DavokarDie": "D8 Artifact Dice",
+      "D10DavokarDie": "D10 Artifact Dice",
+      "D12DavokarDie": "D12 Artifact Dice"
+    }
+  },
   "TYPES": {
     "Actor": {
       "character": "Character",
       "npc": "NPC"
     },
     "Item": {
+      "artifactPower": "Artifact Power",
+      "alchemicalItem": "Alchemical Item",
+      "armorBody": "Body Armor",
+      "armorHead": "Helmet",
+      "armorShield": "Shield",
+      "boon": "Boon",
+      "burden": "Burden",
+      "condition": "Condition",
+      "criticalInjury": "Critical Injury",
+      "equipment": "Equipment",
       "item": "Item",
-      "feature": "Feature",
-      "spell": "Spell"
+      "itemEffect": "Item Effect",
+      "monsterTrait": "Monstrous Trait",
+      "mysticalPower": "Mystical Power",
+      "ritual": "Ritual",
+      "talent": "Talent",
+      "trap": "Trap",
+      "weapon": "Weapon"
     }
   }
 }

@@ -1,0 +1,111 @@
+{{! Settings Tab }}
+<div class='tab settings' data-group='primary' data-tab='settings'>
+
+  {{!-- Artifact Settings  --}}
+  {{#if (hasProperty system "isArtifact")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Artifact.Label'}}</div>
+      <div class="panel-content">
+        <label for="system.isArtifact">{{localize 'WRATH_OF_DAVOKAR.Artifact.IsArtifact'}}</label>
+        <input id="system.isArtifact" name="system.isArtifact" type="checkbox" value="true" {{checked system.isArtifact}}/>
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- Qualities --}}
+  {{#if (hasProperty  system "qualities")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</div>
+      <div class="panel-content align-left">
+      {{#each system.qualities}}
+          {{#unless (eq @key 'noQuality')}}
+          <div>
+            <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
+            <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+          </div>
+          {{/unless}}
+      {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- Modifiers --}}
+  {{#if (hasProperty  system "modifiers")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.Modifiers'}}</div>
+      <div class="panel-content flex-column flex-gap align-left">
+        {{#each system.modifiers}}
+          <h2>{{localize this.localize}}</h2>
+          {{#each this}}
+            {{#if (hasProperty this "value")}}  {{!-- Only render if the property has a value field --}}
+              <div class="flex-row flex-gap">
+                <label for="system.modifiers.{{@../key}}.{{@key}}.value">{{localize this.localize}}</label>
+                <input type="number" name="system.modifiers.{{@../key}}.{{@key}}.value" value="{{this.value}}" data-dtype="Number"/>
+              </div>
+            {{/if}}
+          {{/each}}
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- Effects --}}
+  {{#if (hasProperty  system "effectData")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize "TYPES.Item.itemEffect"}} </div>
+      <div class="panel-content">
+        {{#each system.effectData}}
+          <div class="panel item-effect flex-group-left" data-item-effect-id="{{@key}}">
+            <div class="panel-header flex-row flex-group-center flex-gap">
+              <div class='item-image'>
+                <a class='rollable interactive' data-roll-type='item'>
+                  <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
+                </a>
+              </div>
+              <input type='text' name='system.effectData.{{@key}}.name' value='{{this.name}}'/>
+          
+              <a class='item-control item-effect-delete' data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
+                <i class='fas fa-trash'></i>
+              </a>
+            </div>
+
+            <div class="panel-content">
+              <div class="resource-grid">
+                {{!-- Icon --}}
+                <label class='resource-label'>{{localize 'EFFECT.Image'}}:</label>
+                <file-picker type="image" name='system.effectData.{{@key}}.img' noupload="true" value="{{this.img}}"></file-picker>
+
+                {{!-- Color --}}
+                <label class='resource-label'>{{localize 'EFFECT.Tint'}}:</label>
+                <color-picker value={{this.tint}} name="system.effectData.{{@key}}.tint"></color-picker>
+
+                {{!-- Duration --}}
+                <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Time.Rounds'}}:</label>
+                <input type='number' name='system.effectData.{{@key}}.duration.rounds' value='{{this.duration.rounds}}' data-dtype="Number"/>
+                <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Time.Turns'}}:</label>
+                <input type='number' name='system.effectData.{{@key}}.duration.turns' value='{{this.duration.turns}}' data-dtype="Number"/>
+              </div>
+
+              {{!-- Description --}}
+              {{editor
+                this.enrichedDescription
+                target=(concat 'system.effectData.' @key '.description')
+                engine='prosemirror'
+                button=true
+                editable=editable
+              }}
+
+            </div>
+          </div>
+        {{/each}}
+
+      </div>
+      <div class="item-controls">
+          <a class="item-effect-create" data-action="create" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}">
+          <i class="fas fa-plus"></i> {{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}
+        </a>
+      </div>
+    </div>
+  {{/if}}
+
+</div>

@@ -9,17 +9,21 @@
       title='{{item.name}}'
     />
     <div class='header-fields'>
-      <h1 class='charname'><input
-          name='name'
-          type='text'
-          value='{{item.name}}'
-          placeholder='Name'
-        /></h1>
-    </div>
+      <div class="flexrow flex-gap flex-group-left">
+        <h1 class='charname flexgrow'><input
+            name='name'
+            type='text'
+            value='{{item.name}}'
+            placeholder='Name'
+          /></h1>
+          <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
+            <i class='fas fa-message'></i>
+          </a>
+      </div>
   </header>
 
   {{! Sheet Tab Navigation }}
-  <nav class='sheet-tabs tabs' data-group='primary'>
+  <nav class='sheet-tabs tab-body tabs' data-group='primary'>
     <a class='item' data-tab='description'>Description</a>
     <a class='item' data-tab='attributes'>Attributes</a>
   </nav>
@@ -37,11 +41,6 @@
         button=true
         editable=editable
       }}
-    </div>
-
-    {{! Attributes Tab }}
-    <div class='tab attributes' data-group='primary' data-tab='attributes'>
-      {{! As you add new fields, add them in here! }}
     </div>
   </section>
 </form>
