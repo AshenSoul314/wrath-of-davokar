@@ -16,7 +16,14 @@ function generateRankedEffectGroup(type, count = 9) {
       name: `WRATH_OF_DAVOKAR.Effect.${typeCap}.${level}`,
       img: `${EFFECT_ICON_PATH}${type}-${level}.svg`,
       changes: [],
-      statuses: [`${type}-${level}`],
+      flags: {
+        wod: {
+          type: type,
+          value: count,
+          onTurnStart: true,
+          singular: true
+        }
+      }
     };
   });
 }
@@ -27,7 +34,7 @@ export const STATUS_EFFECTS = [
   {
     id: "dead",
     name: "EFFECT.StatusDead",
-    img: "icons/svg/skull.svg"
+    img: "icons/svg/skull.svg",
   },
   {
     id: "unconscious",
@@ -70,28 +77,19 @@ export const STATUS_EFFECTS = [
     id: "broken",
     name: "WRATH_OF_DAVOKAR.Effect.Broken",
     img: `${EFFECT_ICON_PATH}broken.svg`,
-    changes: [],
-    statuses: ["broken"],
+    changes: []
   },
   {
     id: "pain",
     name: "WRATH_OF_DAVOKAR.Effect.Pain",
     img: `${EFFECT_ICON_PATH}pain.svg`,
-    changes: [],
-    statuses: ["pain"],
+    changes: []
   },
   {
     id: "blightMarked",
     name: "WRATH_OF_DAVOKAR.Effect.BlightMarked",
     img: `${EFFECT_ICON_PATH}blightMarked.svg`,
-    changes: [
-      {
-        key: "system.conditions.blightMarked",
-        mode: 5,
-        value: true
-      }
-    ],
-    statuses: ["blightMarked"],
+    changes: []
   },
   
   // Dynamically generated groups
@@ -168,3 +166,44 @@ export function prepareActiveEffectCategories(effects) {
   }
   return categories;
 }
+
+
+export async function handleEffectCreation(effect, options, userId) {
+  // Only run for players or GMs (avoid remote duplication)
+  if (!game.users.get(userId)?.isGM && userId !== game.user.id) return;
+
+  // Only handle effect creation on Actors
+  const actor = effect.parent;
+  if (!(actor instanceof Actor)) return;
+
+  // Only handle effects with WOD flags
+  const flags = getProperty(effect, "flags.wod") || null;
+  if (flags === null) return
+
+  // Get the flag values or the defaults
+  const type = getProperty(existing, "flags.wod.type") ?? null;
+  const value =  getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
+  const single = getProperty(existing, "flags.wod.single") ?? false;
+
+  // Only care about singular, managed effects
+  if (!single || (type === null)) return;
+
+  // Check if there is a copy of this effect already in the actor data
+  const existing = actor.effects.find(e => getProperty(e, "flags.wod.type") === type);
+  if (!existing) return;
+
+  const existingValue = getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
+
+  // Handle singular same-type effect
+  if (existing) {
+    if (value > existingValue) {
+      await existing.delete(); // Allow new effect to replace it
+    } else {
+      // Block the weaker or equal effect
+      ui.notifications.info(`${actor.name} already has a stronger or equal ${type} effect.`);
+      return false; // Cancel creation
+    }
+  }
+}
+
+

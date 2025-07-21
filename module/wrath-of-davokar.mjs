@@ -4,7 +4,7 @@ import { WrathOfDavokarActorSheet } from './sheets/actor-sheet.mjs';
 import { WrathOfDavokarItemSheet } from './sheets/item-sheet.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { WRATH_OF_DAVOKAR } from './helpers/config.mjs';
-import { STATUS_EFFECTS } from './helpers/effects.mjs';
+import { STATUS_EFFECTS, handleEffectCreation } from './helpers/effects.mjs';
 import { YearZeroRollManager } from '../lib/yzur.js';
 import { initWrathTracker } from './helpers/wrath-tracker.mjs';
 import { applyMessageHeader, linkEffectButtons } from './helpers/chat.mjs';
@@ -177,7 +177,7 @@ Handlebars.registerHelper('localizeTraditions', function (traditionsObj) {
   if (traditions.length === 0) {
     traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.None"));
   }
-  data.tradition = traditions.join(', ');
+  const result = traditions.join(', ');
   return result;
 });
 
@@ -244,6 +244,10 @@ async function _onPush(event) {
   await roll.push({ async: true });
   await roll.toMessage();
 }
+
+Hooks.on('preCreateActiveEffect', (effect, options, userId) => {
+  handleEffectCreation(effect, options, userId);
+});
 
 
 /* -------------------------------------------- */

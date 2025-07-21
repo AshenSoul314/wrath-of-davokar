@@ -99,8 +99,8 @@ export function linkEffectButtons(html) {
 
       const effect = foundry.utils.deepClone(effectData);
       effect.name ??= item.name;
-      effect.icon ??= item.img;
-      effect.origin = sourceActor ? `${actor.uuid}.${item.uuid}` : item.uuid;
+      effect.img ??= item.img;
+      effect.origin = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
       effect.flags ??= {};
       effect.flags["wrath-of-davokar"] = {
         itemEffectKey: effectKey
@@ -144,7 +144,7 @@ export function linkEffectButtons(html) {
       if (!targetActor) continue;
 
       // Check if the given effect originates from this item
-      const removeId = sourceActor ? `${actor.uuid}.${item.uuid}` : item.uuid;
+      const removeId = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
       const toRemove = targetActor.effects.filter(effect => {
         const flags = effect.flags?.["wrath-of-davokar"];
         

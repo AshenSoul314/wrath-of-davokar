@@ -343,7 +343,6 @@ export class WrathOfDavokarActorSheet extends ActorSheet {
       }
     }
 
-    
     // Sort Items By Name
     equipment.sort((a, b) => a.name.localeCompare(b.name));
     armorHead.sort((a, b) => a.name.localeCompare(b.name));
@@ -383,8 +382,6 @@ export class WrathOfDavokarActorSheet extends ActorSheet {
     context.criticalInjuries = criticalInjuries;
     context.artifacts = artifacts;
     context.system.encumbrance.value = encumbranceValue;
-
-    console.log(context.artifacts)
   }
 
   /* -------------------------------------------- */

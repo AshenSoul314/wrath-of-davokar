@@ -123,6 +123,10 @@
         "experience": {
           "total": 0
         },
+        "movement": {
+          "value": 30,
+          "bonus": 0
+        },
         "money": {
           "thaler": 0,
           "shilling": 0,
@@ -202,6 +206,7 @@
     "templates": {
       "base": {
         "description": "",
+        "formula": "",
         "effectData": {},
         "modifiers": {
           "attributes": {
@@ -448,7 +453,10 @@
       ],
       "damage": 0,
       "range": "engaged",
-      "area": "none",
+      "area": {
+        "hasArea": false,
+        "type": "none"
+      },
       "grip": "",
       "qualities": {
         "balanced": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Balanced" },
