@@ -24,6 +24,10 @@
         "SendToChat": "Send to Chat"
       }
     },
+    "Time": {
+      "Rounds": "Rounds",
+      "Turns": "Turns"
+    },
     "Effect": {
       "Source": "Source",
       "Toggle": "Toggle Effect",

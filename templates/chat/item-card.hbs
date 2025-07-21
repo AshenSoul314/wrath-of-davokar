@@ -139,16 +139,18 @@
         <button 
           class="applyItemEffectButton flexgrow" 
           type="button" data-item-id="{{../_id}}" 
-          {{#if ../actorID}} data-actor-id="{{../actorID}}" {{/if}} 
+          {{#if ../actorId}} data-actor-id="{{../actorId}}" {{/if}} 
           data-item-power-id="{{@key}}" 
           title="{{localize 'EFFECT.Transfer'}}">
-            <i class="fa-solid fa-share"></i> {{this.name}}
+            <i class="fa-solid fa-share"></i>
+            <img class="effect-icon" src="{{this.img}}"> 
+            {{this.name}}
         </button>
         <button 
           class="removeItemEffectButton flexshrink" 
           type="button" 
           data-item-id="{{../_id}}"
-          {{#if ../actorID}} data-actor-id="{{../actorID}}" {{/if}} 
+          {{#if ../actorId}} data-actor-id="{{../actorId}}" {{/if}} 
           data-item-effect-id="{{@key}}"
           title="'{{localize "DOCUMENT.Delete" type=(localize "Types.Item.itemEffect")}}">
           <i class="fa-solid fa-trash"></i>

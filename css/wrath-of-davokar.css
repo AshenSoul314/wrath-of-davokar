@@ -748,3 +748,13 @@
   padding-top: 5px;
   border-bottom: 1px solid #7a7971;
 }
+.chat-message .message-content .applyItemEffectButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.chat-message .message-content .applyItemEffectButton .effect-icon {
+  width: 1.5em;
+  height: 1.5em;
+}

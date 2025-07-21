@@ -56,6 +56,7 @@ export class WrathOfDavokarItem extends Item {
       enrichedDescription: enrichedDescription,
       system: this.system
     };
+    console.log(data);
     
     content = await renderTemplate('systems/wrath-of-davokar/templates/chat/item-card.hbs', data);
 
@@ -131,7 +132,7 @@ export class WrathOfDavokarItem extends Item {
     const label = `${item.name}`;
 
     // If there's no roll data, send a chat message.
-    if (!this.system.formula) {
+    if (!this.system.formula || !this.system.trim()) {
       this.buildChatCard()
     }
     // Otherwise, create a roll and send a chat message from it.
