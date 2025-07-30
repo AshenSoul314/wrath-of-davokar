@@ -7,7 +7,7 @@ import {
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class WrathOfDavokarItemSheet extends ItemSheet {
+export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -242,7 +242,8 @@ export class WrathOfDavokarItemSheet extends ItemSheet {
       img: "systems/wrath-of-davokar/assets/icons/artifact-power.svg", 
       description: "", 
       action: "", 
-      corruption: ""
+      corruption: "",
+      macro: "",
     };
     
     await this.item.update({ 

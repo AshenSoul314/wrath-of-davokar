@@ -19,7 +19,7 @@
         <div class="resource-grid  align-left">
 
           {{!-- Icon --}}
-          <label class='resource-label'>{{localize 'TOKEN.ImagePath'}}:</label>
+          <label class='resource-label'>{{localize 'DOCUMENT.FIELDS.img.label'}}:</label>
           <file-picker type="image" name='system.powers.{{@key}}.img' noupload="true" value="{{this.img}}"></file-picker>
 
           {{!-- Action --}}
@@ -30,7 +30,8 @@
           <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}</span>
           <input type='text' name='system.powers.{{@key}}.corruption' value='{{this.corruption}}'/>
         </div>
-        {{! Editors must receive enriched text data from getData to properly handle rolls }}
+        {{! Description }}
+        <span class="resource-label">{{localize 'Description'}}</span>
         {{editor
           this.enrichedDescription
           target=(concat 'system.powers.' @key '.description')
@@ -38,6 +39,13 @@
           button=true
           editable=true
         }}
+
+        {{! Macro }}
+        <span class="resource-label">{{localize 'DOCUMENT.Macro'}}</span>
+        <code-mirror name="system.powers.{{@key}}.macro" language="javascript">
+          {{~ this.macro ~}}
+        </code-mirror>
+
       </div>
     </div>
   {{/each}}

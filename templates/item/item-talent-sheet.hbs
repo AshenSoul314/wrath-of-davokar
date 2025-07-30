@@ -44,19 +44,25 @@
   <section class='sheet-body'>
     {{! Description Tab }}
     <div class='tab' data-group='primary' data-tab='main'>
-      <div class="flex-row flex-gap flex-align-stretch flex-align-start">
+      
+      {{!-- Action(s) --}}
+      <div class="flex-group-left"> 
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
-        <input type='text' name='system.action' value='{{system.action}}'/>
+        <span>
+          {{~#each system.action}}
+            {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
+          {{/each~}}
+        </span>
       </div>
       <hr>
-      {{! Editors must receive enriched text data from getData to properly handle rolls }}
-        {{editor
-          enrichedDescription
-          target='system.description'
-          engine='prosemirror'
-          button=true
-          editable=editable
-        }}
+      {{! Description}}
+      {{editor
+        enrichedDescription
+        target='system.description'
+        engine='prosemirror'
+        button=true
+        editable=editable
+      }}
     </div>
 
     {{!-- Effects Tab --}}

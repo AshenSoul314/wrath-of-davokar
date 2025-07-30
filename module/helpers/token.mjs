@@ -1,5 +1,5 @@
 import { getCssColor } from './utils.mjs';
-
+const Token = foundry.canvas.placeables.Token;
 /**
  * Wraps the Token prototype's `drawBars` method to replace the second bar (`bar2`)
  * with a custom corruption bar visualization.

@@ -12,3 +12,7 @@ node_modules/
 
 # OS Specific
 .DS_Store
+
+# Config Files
+foundry-config.yaml
+foundry

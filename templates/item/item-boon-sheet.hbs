@@ -7,24 +7,25 @@
       title='{{item.name}}'
     />
     <div class='header-fields'>
-      <h1 class='charname'>
       <div class="flexrow flex-gap flex-group-left">
-        <h1 class='charname flexgrow'><input
+        <h1 class='charname flexgrow'>
+          <input
             name='name'
             type='text'
             value='{{item.name}}'
             placeholder='Name'
-          /></h1>
-          <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
-            <i class='fas fa-message'></i>
-          </a>
+          />
+        </h1>
+        <a class='item-send-to-chat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}' >
+          <i class='fas fa-message'></i>
+        </a>
       </div>
       <div class='grid grid-3col flex-align-center'>
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Type'}}</label>
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}</label>
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}</label>
         <label>{{localize 'TYPES.Item.boon'}}</label>
-        <select name="system.rank.monsterTrait">
+        <select name="system.rank.value">
           <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Trait'}}</option>
           <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Trait'}}</option>
           <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Trait'}}</option>
@@ -45,8 +46,19 @@
   <section class='sheet-body'>
     {{! Description Tab }}
     <div class='tab' data-group='primary' data-tab='main'>
+
+      {{!-- Action(s) --}}
+      <div class="flex-group-left"> 
+        <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+        <span>
+          {{~#each system.action}}
+            {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
+          {{/each~}}
+        </span>
+      </div>
+      <hr>
       
-      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+      {{! Description }}
       {{editor
         enrichedDescription
         target='system.description'

@@ -6,9 +6,15 @@ import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { WRATH_OF_DAVOKAR } from './helpers/config.mjs';
 import { STATUS_EFFECTS, handleEffectCreation } from './helpers/effects.mjs';
 import { YearZeroRollManager } from '../lib/yzur.js';
-import { initWrathTracker } from './helpers/wrath-tracker.mjs';
-import { applyMessageHeader, linkEffectButtons } from './helpers/chat.mjs';
+import { initWrathTracker, updateWrathSettings } from './helpers/wrath-tracker.mjs';
+import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons } from './helpers/chat.mjs';
 import { wrapDrawBars } from './helpers/token.mjs';
+import './helpers/handlebars-helpers.mjs'
+
+const Actors = foundry.documents.collections.Actors;
+const Items = foundry.documents.collections.Items;
+const ActorSheet = foundry.appv1.sheets.ActorSheet;
+const ItemSheet = foundry.appv1.sheets.ItemSheet;
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -73,129 +79,62 @@ Hooks.once('init', function () {
     "ROLL.infosTemplate": "systems/wrath-of-davokar/templates/dice/infos.hbs",
   });
 
+  // ---------------------------
   // Game Settings
-  game.settings.register("wrath-of-davokar", "wrathPoints", {
+  // ---------------------------
+
+  // Wrath Points
+  game.settings.register("wrath-of-davokar", "wrath-points", {
     name: "Wrath Points",
     scope: "world",
     config: false,
     default: 0,
     type: Number,
+    default: 0
+  });
+  
+  // Wrath Track UI
+  game.settings.register('wrath-of-davokar', 'overflow-wrath', {
+    name: "Overflow Wrath Threshold",
+    hint: "The maximum number of Wrath Points allowed before triggering the wrath display begins to visually overflow. This should usually equal to twice the number of players",
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 8,
     onChange: value => {
-      const wrathDisplay = document.getElementById("wrath-points-display");
-      if (wrathDisplay) {
-        wrathDisplay.innerText = `${value}`;
+      let val = Number(value);
+      if (!Number.isInteger(val) || val < 1) {
+        ui.notifications.error("Overflow Wrath must be an integer greater than or equal to 1. Resetting to 8.");
+        game.settings.set('wrath-of-davokar', 'overflowWrath', 8);
       }
-    },
+    }
+  });
+
+  // Movement Action
+  game.settings.register('wrath-of-davokar', 'movement-action-length', {
+    name: "Movement Action Length",
+    hint: "The distance (in grid units) a creature travels in one Movement Action by default.",
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 30,
+  });
+
+  // Performance Mode
+  game.settings.register('wrath-of-davokar', 'performance-mode', {
+    name: "Performance Mode",
+    hint: "If checked, Wrath of Davokar will use fewer performance intensive graphics and switch to lighter-weight alternatives",
+    scope: 'client',
+    config: true,
+    type: Boolean,
+    default: false,
   });
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
 
-/* -------------------------------------------- */
-/*  Handlebars Helpers                          */
-/* -------------------------------------------- */
 
-Handlebars.registerHelper('concat', function (...args) {
-  const options = args.pop(); // Remove handlebars options object
-  return args.join('');
-});
-
-Handlebars.registerHelper('gt', function (a, b) {
-  return a > b;
-});
-
-Handlebars.registerHelper('lt', function (a, b) {
-  return a < b;
-});
-
-Handlebars.registerHelper('eq', function (a, b) {
-  return a == b;
-});
-
-Handlebars.registerHelper('isEmpty', function (a) {
-  return (!Array.isArray(a)) || (a.length == 0)
-});
-
-Handlebars.registerHelper('hasProperty', function(obj, key) {
-  return obj.hasOwnProperty.call(obj, key);
-});
-
-Handlebars.registerHelper('isIn', function (value, ...args) {
-  // The last argument is Handlebars options object; remove it
-  const options = args.pop();
-  return args.includes(value);
-});
-
-Handlebars.registerHelper('localizeRankTrait', function (rank) {
-  let result = `${rank}`
-  if (rank == 1) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.One.Trait");
-  } else if (rank== 2) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.Two.Trait");
-  } else if (rank == 3) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.Three.Trait");
-  }
-  return result;
-});
-
-Handlebars.registerHelper('localizeRankTalent', function (rank) {
-  let result = `${rank.value}`
-  if (rank == 1) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.One.Talent");
-  } else if (rank== 2) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.Two.Talent");
-  } else if (rank == 3) {
-    result = game.i18n.localize("WRATH_OF_DAVOKAR.Rank.Three.Talent");
-  }
-  return result;
-});
-
-Handlebars.registerHelper('localizeTraditions', function (traditionsObj) {
-  let traditions = []
-  if (traditionsObj.theurgy.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.Theurgy"));
-  }
-  if (traditionsObj.trollSinging.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.TrollSinging"));
-  }
-  if (traditionsObj.sorcery.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.Sorcery"));
-  }
-  if (traditionsObj.staffMagic.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.StaffMagic"));
-  }
-  if (traditionsObj.symbolism.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.Symbolism"));
-  }
-  if (traditionsObj.witchcraft.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.Witchcraft"));
-  }
-  if (traditionsObj.wizardry.value) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.Wizardry"));
-  }
-  if (traditions.length === 0) {
-    traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.None"));
-  }
-  const result = traditions.join(', ');
-  return result;
-});
-
-Handlebars.registerHelper('localizeRange', function (range, area) {
-  let result = `${range}`
-  if (this.system.range == 'engaged') {
-    result += game.i18n.localize("WRATH_OF_DAVOKAR.Range.Engaged");
-  } else {
-    result += `${range} ${game.i18n.localize("WRATH_OF_DAVOKAR.Action.Move.abbv")}`;
-  }
-
-  if (area.hasArea && area.type) {
-    result += ` ${game.i18n.localize("WRATH_OF_DAVOKAR.Weapon.AreaEffect.Cone")} `;
-  } else if (area.hasArea && (!area.type)) {
-    result += ` ${game.i18n.localize("WRATH_OF_DAVOKAR.Weapon.AreaEffect.Radius")} `;
-  }
-  return result;
-});
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
@@ -222,8 +161,10 @@ Hooks.once('ready', async () => {
 /*  YZUR Hooks                                  */
 /* -------------------------------------------- */
 
-Hooks.on('renderChatLog', (app, html, data) => {
-  html.on('click', '.dice-button.push', _onPush);
+Hooks.on('renderChatMessageHTML', (message, html, context) => {
+  html.querySelectorAll('.dice-button.push').forEach(button => {
+    button.addEventListener('click', _onPush);
+  });
 });
 
 async function _onPush(event) {
@@ -249,16 +190,20 @@ Hooks.on('preCreateActiveEffect', (effect, options, userId) => {
   handleEffectCreation(effect, options, userId);
 });
 
+Hooks.on("updateSetting", (setting) => {
+  if (setting.key === "wrath-of-davokar.wrath-points") {
+    updateWrathSettings(setting);
+  }
+});
 
 /* -------------------------------------------- */
 /*  Chat Customization                          */
 /* -------------------------------------------- */
-Hooks.on("renderChatMessage", (message, html, data) => {
+Hooks.on("renderChatMessageHTML", (message, html, context) => {
+  addWrathWrapperToMessage(html);
   applyMessageHeader(message, html);
   linkEffectButtons(html);
 });
-
-
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
@@ -314,8 +259,7 @@ async function createItemMacro(data, slot) {
   }
 
   // Create the macro command using the uuid.
-  
-  const command = powerID === -1 ? `game.wrathofdavokar.rollItemMacro("${data.uuid}");` : `game.wrathofdavokar.rollItemMacro("${data.uuid}", ${powerID});`;
+  const command = `await game.wrathofdavokar.rollItemMacro("${data.uuid}", ${powerID});`;
   const name = powerID === -1 ? item.name : `${item.name}: ${item.system.powers[powerID].name}`;
   const img = powerID === -1 ? item.img : item.system.powers[powerID].img;
 
@@ -339,9 +283,11 @@ async function createItemMacro(data, slot) {
  * Create a Macro from an Item drop.
  * Get an existing item macro if one exists, otherwise create a new one.
  * @param {string} itemUuid
+ * @param {number} powerId
  */
-function rollItemMacro(itemUuid, powerId=-1) {
+async function rollItemMacro(itemUuid, powerId) {
   // Reconstruct the drop data so that we can load the item.
+  console.log('Enter Run Macro')
   const dropData = {
     type: 'Item',
     uuid: itemUuid,
@@ -358,8 +304,17 @@ function rollItemMacro(itemUuid, powerId=-1) {
 
     // Trigger the item roll
     if (powerId === -1) {
-      item.roll();
+      console.log('This is an Item')
+      const macro = item.system.macro
+
+      if (macro && typeof macro === "string" && macro.trim() !== "") {
+        item.executeMacro()
+      } else {
+        console.log('No custom macro found');
+        item.roll();
+      }
     } else {
+      console.log('This is an Artifact Power')
       try {
         item.buildChatCardArtifactPower(powerId);
       } catch {

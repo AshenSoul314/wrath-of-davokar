@@ -4,7 +4,8 @@
   "description": "CSS compiler for the WrathOfDavokar system",
   "scripts": {
     "build": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --no-source-map",
-    "watch": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --source-map --watch"
+    "watch": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --source-map --watch",
+    "createSymlinks": "node ./tools/create-symlinks.mjs"
   },
   "browserslist": [
     "last 3 versions"
@@ -14,5 +15,8 @@
   "private": true,
   "devDependencies": {
     "sass": "^1.53.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
   }
 }

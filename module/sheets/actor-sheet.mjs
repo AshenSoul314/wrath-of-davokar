@@ -3,11 +3,13 @@ import {
   prepareActiveEffectCategories,
 } from '../helpers/effects.mjs';
 
+import {selectSkillRoll} from '../helpers/dialog.mjs' 
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class WrathOfDavokarActorSheet extends ActorSheet {
+export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -400,6 +402,82 @@ export class WrathOfDavokarActorSheet extends ActorSheet {
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
+
+    // Roll Skill and/or Attribute
+    html.on('click', '.text-attribute, .text-skill, .spellcasting-title', async (event) => {
+      const element = event.currentTarget;
+      let attribute = element.dataset.attribute || null
+      let skill = element.dataset.skill || null;
+      let spellcasting = false;
+      
+      if (skill === 'spellcasting') {
+        skill = 'endurance';
+        spellcasting = true;
+      }
+
+      if (attribute === null) {
+        switch (skill) {
+          case "endurance":
+          case "force":
+          case "melee":
+            attribute = 'physique';
+            break;
+          case "dexterity":
+          case "discreet":
+          case "marksmanship":
+          case "mobility":
+            attribute = 'finesse';
+            break;
+          case "crafting":
+          case "lore":
+          case "medicus":
+          case "survival":
+          case "vigilance":
+            attribute = 'wits';
+            break;
+          case "insight":
+          case "instinct":
+          case "persuasion":
+          case "volition":
+            attribute = 'empathy';
+            break;
+          default:
+            attribute = 'physique'
+        }
+      }
+
+      if (skill === null) {
+        switch (attribute) {
+          case "physique":
+            skill = "force";
+            break;
+          case "finesse":
+            skill = "dexterity";
+            break;
+          case "wits":
+            skill = "crafting";
+            break;
+          case "empathy":
+            skill = "insight";
+            break;
+          default:
+            "physique"
+        }
+      }
+
+      const result = await selectSkillRoll(this.actor, {defaultCombo: [attribute, skill], usingSpellcasting: spellcasting});
+      if (result === null) {
+        return;
+      }
+
+      const {selectedAttribute, selectedSkill, usingSpellcasting} = result
+
+      if (usingSpellcasting) {
+        this.actor.buildRoll(['spellcasting']);
+      } else {
+        this.actor.buildRoll([selectedAttribute, selectedSkill])
+      }
+    });
 
     // Add Inventory Item
     html.on('click', '.item-create', this._onItemCreate.bind(this));

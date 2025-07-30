@@ -68,11 +68,16 @@
         {{!-- Component --}}
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Power.Component'}}:</label>
         <input type='text' name='system.component' value='{{system.component}}'/>
-        
-        {{!-- Action --}}
+
+        {{!-- Action(s) --}}
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
-        <input type='text' name='system.action' value='{{system.action}}'/>
+        <span>
+          {{~#each system.action}}
+            {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
+          {{/each~}}
+        </span>
       </div>
+      
       <hr>
       {{! Editors must receive enriched text data from getData to properly handle rolls }}
       {{editor

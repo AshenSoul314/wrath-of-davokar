@@ -1,3 +1,6 @@
+import {chooseAttackerToken, selectSkillRoll} from '../helpers/dialog.mjs'
+
+
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -134,4 +137,119 @@ export class WrathOfDavokarActor extends Actor {
     }
   }
 
+  async buildRoll(rollTerms, modify=0) {
+    let formulaParts = [];
+    console.log(rollTerms)
+    for (const term of rollTerms) {
+      switch (term) {
+        case 'physique':
+        case 'finesse':
+        case 'wits':
+        case 'empathy':
+          formulaParts.push(`${this.system.attributes[term].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[term])}]`);
+          break;
+        case "endurance":
+        case "force":
+        case "melee":
+        case "dexterity":
+        case "discreet":
+        case "marksmanship":
+        case "mobility":
+        case "crafting":
+        case "lore":
+        case "medicus":
+        case "survival":
+        case "vigilance":
+        case "insight":
+        case "instinct":
+        case "persuasion":
+        case "volition":
+          formulaParts.push(`${this.system.skills[term].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[term])}]`);
+          break;
+        case "spellcasting":
+          let total = this.system.attributes[this.system.skills.spellcasting.attribute].total;
+          if (this.system.skills.spellcasting.skill === 'corruption') {
+            total += this.system.corruption.total;
+          } else {
+            total += this.system.skills[this.system.skills.spellcasting.skill].total;
+          }
+          
+          formulaParts.push(`${total}ds[${game.i18n.localize("WRATH_OF_DAVOKAR.Skills.Spellcasting.long")}]`);
+          break;
+        case "corruption":
+          formulaParts.push(`${this.system.corruption.total}ds[${game.i18n.localize("WRATH_OF_DAVOKAR.Corruption.Total")}]`);
+          break;
+        default:
+          const message = game.i18n.format("WRATH_OF_DAVOKAR.Roll.Error.UnknownTerm", {term: term});
+          console.warn(message);
+          ui.notifications.warn(message);
+      }
+    }
+    const formula = formulaParts.join(' + ')
+    const yzeRoll = Roll.create(formula, { yzur: true });
+    if (modify !== 0) await yzeRoll.modify(modify);
+
+    await yzeRoll.toMessage()
+    return yzeRoll;
+  }
+
+  async attack(weapon) {
+    const user = game.user;
+    const targets = Array.from(user.targets);
+    const attacker = chooseAttackerToken(this);
+
+    if (targets.length === 0) {
+      const message = game.il8.format("WRATH_OF_DAVOKAR.Attack.Error.NoTargets");
+      console.warn(message);
+      ui.notifications.warn(message);
+      return;
+    }
+
+    if (attacker === null) {
+       const message = game.il8.format("WRATH_OF_DAVOKAR.Attack.Error.NoAttacker");
+      console.warn(message);
+      ui.notifications.warn(message);
+      return;
+    }
+
+
+    for (const token of targets) {
+      const target = token.actor;
+      const roll = this.getAttackRoll(weapon, attacker, target)
+
+    }
+  }
+
+  async getAttackRoll(weapon) {
+    const movementAction = game.settings.get("wrath-of-davokar", "movement-action-length");
+    const isMeleeWeapon = !(weapon.system.weaponType.bow || weapon.system.weaponType.crossbow || weapon.system.weaponType.throwing);
+    const delta =canvas.grid.measureDistance(token.center, target.center);
+    const deltaMA =  Math.ceil(delta / movementAction);
+
+    // Check if this is a ranged attack
+    if (delta > movementAction * 1.9) {
+
+      // Double check the player really wants to throw their weapon (do not bother is the weapon has the Returning quality)
+      if (isMeleeWeapon && !weapon.system.qualities.retuning.value) {
+        const proceed = await foundry.applications.api.DialogV2.confirm({
+          content: game.il8.format("WRATH_OF_DAVOKAR.Attack.Dialog.ConfirmThrow"),
+          rejectClose: false,
+          modal: true
+        });
+
+        if (!proceed) {
+          return null;
+        }
+      }
+
+      const outOfRangePenalty = Math.abs(Math.min(0, deltaMA - weapon.system.range)) * 2;
+
+    }
+    
+    
+
+    if (weapon.system.qualities.short.value || weapon.system.weaponType.throwing.value) {
+
+    }
+  }
 }

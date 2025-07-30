@@ -1,4 +1,4 @@
-<div class="wrath-of-davokar flexrow flex-group-right">
+{{!-- <div class="wrath-of-davokar flexrow flex-group-right">
     <div id="wrath-tracker" class="wrath-tracker-container flexshrink">
     <div class="wrath-tracker-header">Wrath Points</div>
     <div class="wrath-tracker-display">
@@ -7,4 +7,23 @@
         <button class="wp-increase" {{#unless isGM}}disabled{{/unless}}>+</button>
     </div>
     </div>
+</div> --}}
+
+<div class="wrath-of-davokar wrath-orb-container">
+  <div class="wrath-orb">
+    <img class="wrath-border" src="systems/wrath-of-davokar/assets/orb_border.png"></img>
+    <div class="wrath-liquid-container">
+      <div class="wrath-glass-bg"></div>
+      <img class="wrath-liquid" src="systems/wrath-of-davokar/assets/wrath_liquid.gif"></img>
+    </div>
+    {{!-- <div class="wrath-overlay"></div> --}}
+    <span  id="wrath-points-display" class="wrath-points">{{points}}</span>
+  </div>
+
+  {{#isGM}}
+    <div class="wrath-controls">
+      <button class="wp-decrease">–</button>
+      <button class="wp-increase">+</button>
+    </div>
+  {{/isGM}}
 </div>
