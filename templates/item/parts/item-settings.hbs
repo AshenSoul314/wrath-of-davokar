@@ -1,6 +1,19 @@
 {{! Settings Tab }}
 <div class='tab settings' data-group='primary' data-tab='settings'>
 
+  {{!-- Actions Settings  --}}
+  {{#if (hasProperty system "action")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</div>
+      <div class="panel-content align-left resource-grid">
+        {{#each system.action}}
+          <label for="system.action.{{@key}}.value">{{localize this.localize}}</label>
+          <input id="system.action.{{@key}}.value" name="system.action.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
   {{!-- Artifact Settings  --}}
   {{#if (hasProperty system "isArtifact")}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
@@ -12,19 +25,34 @@
     </div>
   {{/if}}
 
+  {{!-- Weapon Type --}}
+  {{#if (hasProperty  system "weaponType")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Weapon.Type.Label'}}</div>
+      <div class="panel-content align-left resource-grid">
+        {{#each system.weaponType}}
+          <div>
+            <label for="system.weaponType.{{@key}}.value">{{this.label}}</label>
+            <input id="system.weaponType.{{@key}}.value" name="system.weaponType.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
   {{!-- Qualities --}}
   {{#if (hasProperty  system "qualities")}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</div>
-      <div class="panel-content align-left">
-      {{#each system.qualities}}
+      <div class="panel-content align-left resource-grid">
+        {{#each system.qualities}}
           {{#unless (eq @key 'noQuality')}}
-          <div>
-            <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
-            <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
-          </div>
+            <div>
+              <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
+              <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+            </div>
           {{/unless}}
-      {{/each}}
+        {{/each}}
       </div>
     </div>
   {{/if}}
@@ -33,15 +61,13 @@
   {{#if (hasProperty  system "modifiers")}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.Modifiers'}}</div>
-      <div class="panel-content flex-column flex-gap align-left">
+      <div class="panel-content resource-grid flex-group-left">
         {{#each system.modifiers}}
-          <h2>{{localize this.localize}}</h2>
+          <h2 class="grid-span-2">{{localize this.localize}}</h2>
           {{#each this}}
             {{#if (hasProperty this "value")}}  {{!-- Only render if the property has a value field --}}
-              <div class="flex-row flex-gap">
-                <label for="system.modifiers.{{@../key}}.{{@key}}.value">{{localize this.localize}}</label>
-                <input type="number" name="system.modifiers.{{@../key}}.{{@key}}.value" value="{{this.value}}" data-dtype="Number"/>
-              </div>
+              <label for="system.modifiers.{{@../key}}.{{@key}}.value">{{localize this.localize}}</label>
+              <input type="number" name="system.modifiers.{{@../key}}.{{@key}}.value" value="{{this.value}}" data-dtype="Number"/>
             {{/if}}
           {{/each}}
         {{/each}}

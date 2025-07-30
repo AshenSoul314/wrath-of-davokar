@@ -58,12 +58,12 @@
         <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Range.Label'}}:</label>
         <div class='align-left flex-column flexshrink'>
           <select name="system.range">
-            <option value="engaged" {{#if (eq 'engaged' system.range)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Range.Engaged'}}</option>
-            <option value="1" {{#if (eq '1' system.range)}}selected{{/if}}>1 {{localize 'WRATH_OF_DAVOKAR.Action.Move.long'}}</option>
-            <option value="2" {{#if (eq '2' system.range)}}selected{{/if}}>2 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
-            <option value="2" {{#if (eq '3' system.range)}}selected{{/if}}>3 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
-            <option value="2" {{#if (eq '4' system.range)}}selected{{/if}}>4 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
-            <option value="2" {{#if (eq '5' system.range)}}selected{{/if}}>5 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=0 {{#if (eq 0 system.range)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Range.Engaged'}}</option>
+            <option value=1 {{#if (eq 1 system.range)}}selected{{/if}}>1 {{localize 'WRATH_OF_DAVOKAR.Action.Move.long'}}</option>
+            <option value=2 {{#if (eq 2 system.range)}}selected{{/if}}>2 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=3 {{#if (eq 3 system.range)}}selected{{/if}}>3 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=4 {{#if (eq 4 system.range)}}selected{{/if}}>4 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=5 {{#if (eq 5 system.range)}}selected{{/if}}>5 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
           </select>
 
           {{!-- Area --}}

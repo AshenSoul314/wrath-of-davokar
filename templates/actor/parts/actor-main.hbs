@@ -134,7 +134,7 @@
       {{!-- Physique --}}
       <div class="flex-column flex-gap">
         <div class="flex-row flex-align-center">
-          <div class="text-attribute">{{localize "WRATH_OF_DAVOKAR.Attributes.Physique.long"}}</div>
+          <div class="text-attribute" data-attribute="physique">{{localize "WRATH_OF_DAVOKAR.Attributes.Physique.long"}}</div>
           <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.physique.value" value="{{system.attributes.physique.value}}" data-dtype="Number"/>
           {{#if (gt system.attributes.physique.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.physique.bonus}})</span>
@@ -149,7 +149,7 @@
 
         {{!-- Endurance --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Endurance.long"}}</div>
+          <div class="text-skill" data-skill="endurance">{{localize "WRATH_OF_DAVOKAR.Skills.Endurance.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.endurance.value" value="{{system.skills.endurance.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.endurance.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.endurance.bonus}})</span>
@@ -164,7 +164,7 @@
 
         {{!-- Force --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Force.long"}}</div>
+          <div class="text-skill" data-skill="force">{{localize "WRATH_OF_DAVOKAR.Skills.Force.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.force.value" value="{{system.skills.force.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.force.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.force.bonus}})</span>
@@ -179,7 +179,7 @@
         
         {{!-- Melee --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Melee.long"}}</div>
+          <div class="text-skill" data-skill="melee">{{localize "WRATH_OF_DAVOKAR.Skills.Melee.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.melee.value" value="{{system.skills.melee.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.melee.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.melee.bonus}})</span>
@@ -196,7 +196,7 @@
       {{!-- Finesse --}}
       <div class="flex-column flex-gap">
         <div class="flex-row flex-align-center">
-          <div class="text-attribute">{{localize "WRATH_OF_DAVOKAR.Attributes.Finesse.long"}}</div>
+          <div class="text-attribute" data-attribute="finesse">{{localize "WRATH_OF_DAVOKAR.Attributes.Finesse.long"}}</div>
           <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.finesse.value" value="{{system.attributes.finesse.value}}" data-dtype="Number"/>
           {{#if (gt system.attributes.finesse.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.finesse.bonus}})</span>
@@ -211,7 +211,7 @@
         
         {{!-- Dexterity --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Dexterity.long"}}</div>
+          <div class="text-skill" data-skill="dexterity">{{localize "WRATH_OF_DAVOKAR.Skills.Dexterity.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.dexterity.value" value="{{system.skills.dexterity.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.dexterity.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.dexterity.bonus}})</span>
@@ -226,7 +226,7 @@
         
         {{!-- Discreet --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Discreet.long"}}</div>
+          <div class="text-skill" data-skill="discreet">{{localize "WRATH_OF_DAVOKAR.Skills.Discreet.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.discreet.value" value="{{system.skills.discreet.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.discreet.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.discreet.bonus}})</span>
@@ -241,7 +241,7 @@
         
         {{!-- Marksmanship --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Marksmanship.long"}}</div>
+          <div class="text-skill" data-skill="marksmanship">{{localize "WRATH_OF_DAVOKAR.Skills.Marksmanship.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.marksmanship.value" value="{{system.skills.marksmanship.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.marksmanship.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.marksmanship.bonus}})</span>
@@ -256,7 +256,7 @@
         
         {{!-- Mobility --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Mobility.long"}}</div>
+          <div class="text-skill" data-skill="mobility">{{localize "WRATH_OF_DAVOKAR.Skills.Mobility.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.mobility.value" value="{{system.skills.mobility.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.mobility.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.mobility.bonus}})</span>
@@ -273,7 +273,7 @@
       {{!-- Wits --}}
       <div class="flex-column flex-gap">
         <div class="flex-row flex-align-center">
-          <div class="text-attribute">{{localize "WRATH_OF_DAVOKAR.Attributes.Wits.long"}}</div>
+          <div class="text-attribute" data-attribute="wits">{{localize "WRATH_OF_DAVOKAR.Attributes.Wits.long"}}</div>
           <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.wits.value" value="{{system.attributes.wits.value}}" data-dtype="Number"/>
           {{#if (gt system.attributes.wits.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.wits.bonus}})</span>
@@ -288,7 +288,7 @@
         
         {{!-- Crafting --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Crafting.long"}}</div>
+          <div class="text-skill" data-skill="crafting">{{localize "WRATH_OF_DAVOKAR.Skills.Crafting.long"}}</div>
           <input class="input-skill"  type='number' step="1" min="0" name="system.skills.crafting.value" value="{{system.skills.crafting.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.crafting.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.crafting.bonus}})</span>
@@ -303,7 +303,7 @@
         
         {{!-- Lore --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Lore.long"}}</div>
+          <div class="text-skill" data-skill="lore">{{localize "WRATH_OF_DAVOKAR.Skills.Lore.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.lore.value" value="{{system.skills.lore.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.lore.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.lore.bonus}})</span>
@@ -318,7 +318,7 @@
         
         {{!-- Medicus --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Medicus.long"}}</div>
+          <div class="text-skill" data-skill="medicus">{{localize "WRATH_OF_DAVOKAR.Skills.Medicus.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.medicus.value" value="{{system.skills.medicus.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.medicus.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.medicus.bonus}})</span>
@@ -333,7 +333,7 @@
         
         {{!-- Survival --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Survival.long"}}</div>
+          <div class="text-skill" data-skill="survival">{{localize "WRATH_OF_DAVOKAR.Skills.Survival.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.survival.value" value="{{system.skills.survival.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.survival.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.survival.bonus}})</span>
@@ -348,7 +348,7 @@
         
         {{!-- Vigilance --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Vigilance.long"}}</div>
+          <div class="text-skill" data-skill="vigilance">{{localize "WRATH_OF_DAVOKAR.Skills.Vigilance.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.vigilance.value" value="{{system.skills.vigilance.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.vigilance.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.vigilance.bonus}})</span>
@@ -365,7 +365,7 @@
       {{!-- Empathy --}}
       <div class="flex-column flex-gap">
         <div class="flex-row flex-align-center">
-          <div class="text-attribute">{{localize "WRATH_OF_DAVOKAR.Attributes.Empathy.long"}}</div>
+          <div class="text-attribute" data-attribute="empathy">{{localize "WRATH_OF_DAVOKAR.Attributes.Empathy.long"}}</div>
           <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.empathy.value" value="{{system.attributes.empathy.value}}" data-dtype="Number"/>
           {{#if (gt system.attributes.empathy.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.empathy.bonus}})</span>
@@ -380,7 +380,7 @@
         
         {{!-- Insight --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Insight.long"}}</div>
+          <div class="text-skill" data-skill="insight">{{localize "WRATH_OF_DAVOKAR.Skills.Insight.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.insight.value" value="{{system.skills.insight.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.insight.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.insight.bonus}})</span>
@@ -395,7 +395,7 @@
         
         {{!-- Instinct --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Instinct.long"}}</div>
+          <div class="text-skill" data-skill="instinct">{{localize "WRATH_OF_DAVOKAR.Skills.Instinct.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.instinct.value" value="{{system.skills.instinct.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.instinct.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.instinct.bonus}})</span>
@@ -410,7 +410,7 @@
         
         {{!-- Persuasion --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Persuasion.long"}}</div>
+          <div class="text-skill" data-skill="persuasion">{{localize "WRATH_OF_DAVOKAR.Skills.Persuasion.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.persuasion.value" value="{{system.skills.persuasion.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.persuasion.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.persuasion.bonus}})</span>
@@ -425,7 +425,7 @@
         
         {{!-- Volition --}}
         <div class="flex-row flex-align-center">
-          <div class="text-skill">{{localize "WRATH_OF_DAVOKAR.Skills.Volition.long"}}</div>
+          <div class="text-skill" data-skill="volition">{{localize "WRATH_OF_DAVOKAR.Skills.Volition.long"}}</div>
           <input class="input-skill" type='number' step="1" min="0" name="system.skills.volition.value" value="{{system.skills.volition.value}}" data-dtype="Number"/>
           {{#if (gt system.skills.volition.bonus 0)}}
             <span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.skills.volition.bonus}})</span>
@@ -441,7 +441,7 @@
 
       {{!-- Spellcasting --}}
       <div class="flex-row flex-wrap  flex-align-center spellcasting-row grid-span-2">
-        <div class="spellcasting-title">{{localize 'WRATH_OF_DAVOKAR.Skills.Spellcasting.long'}}</div>
+        <div class="spellcasting-title" data-skill="spellcasting">{{localize 'WRATH_OF_DAVOKAR.Skills.Spellcasting.long'}}</div>
         <select class="flexgrow" name="system.skills.spellcasting.attribute">
           <option value="physique" {{#if (eq 'physique' system.skills.spellcasting.attribute)}}selected{{/if}}>{{localize "WRATH_OF_DAVOKAR.Attributes.Physique.long"}}</option>
           <option value="finesse" {{#if (eq 'finesse' system.skills.spellcasting.attribute)}}selected{{/if}}>{{localize "WRATH_OF_DAVOKAR.Attributes.Finesse.long"}}</option>

@@ -644,59 +644,171 @@
   border-top: 1px solid #7a7971;
 }
 
-.wrath-of-davokar .wrath-tracker-container {
+@keyframes pulse-black {
+  0% {
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.8);
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    box-shadow: 0 0 50px rgb(0, 0, 0);
+    filter: brightness(0.5) contrast(1.5) drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+  }
+  70% {
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
+    filter: brightness(0.6) contrast(1.3) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5));
+  }
+  100% {
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0);
+    filter: brightness(1) contrast(1);
+  }
+}
+@keyframes pulse-gold {
+  0% {
+    box-shadow: 0 0 0px rgba(207, 169, 255, 0.8);
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    box-shadow: 0 0 50px rgb(207, 169, 126);
+    filter: brightness(1.5) contrast(1.4);
+  }
+  70% {
+    box-shadow: 0 0 100px rgba(207, 169, 126, 0.5);
+    filter: brightness(1.4) contrast(1.2);
+  }
+  100% {
+    box-shadow: 0 0 100px rgba(207, 169, 126, 0);
+    filter: brightness(1) contrast(1);
+  }
+}
+@keyframes pulse-black-performance {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    border-color: rgb(0, 0, 0);
+  }
+  100% {
+    transform: scale(3);
+    border-color: rgba(0, 0, 0, 0);
+  }
+}
+@keyframes pulse-gold-performance {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    border-color: rgb(207, 169, 126);
+  }
+  100% {
+    transform: scale(3);
+    border-color: rgba(207, 169, 126, 0);
+  }
+}
+.wrath-of-davokar.wrath-orb-container {
+  width: 100px;
+  height: auto;
+  position: relative;
+  margin: 40px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: "IM Fell English", serif;
-  font-size: 16px;
-  color: #ddd;
-  background: #2e2a26;
-  border: 2px solid #4c3c29;
-  border-radius: 4px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6666666667) inset;
-  padding: 0.5em 1em;
-  width: fit-content;
-  margin-left: 10px;
 }
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-header {
-  font-size: 1.2em;
+.wrath-of-davokar.wrath-orb-container .pulse-increase {
+  animation: pulse-black 2s ease-in-out;
+}
+.wrath-of-davokar.wrath-orb-container .pulse-decrease {
+  animation: pulse-gold 2s ease-in-out;
+}
+.wrath-of-davokar.wrath-orb-container .pulse-increase-performance .wrath-orb::after {
+  animation: pulse-black-performance 2s ease-in-out;
+}
+.wrath-of-davokar.wrath-orb-container .pulse-decrease-performance .wrath-orb::after {
+  animation: pulse-gold-performance 2s ease-in-out;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(17, 17, 17, 0.2) 0%, rgba(255, 255, 255, 0.3333333333) 100%);
+  position: relative;
+  z-index: 10;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0;
+  transform-origin: center;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-in-out infinite;
+  z-index: 0;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb .wrath-border {
+  position: absolute;
+  top: -15px;
+  left: -10px;
+  min-width: 120px;
+  min-height: 120px;
+  z-index: 13;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb .wrath-liquid-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb .wrath-liquid-container .wrath-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transform: translateY(0%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 11;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-orb .wrath-points {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: #cfa97e;
-  text-shadow: 0 0 3px #000;
-  margin-bottom: 4px;
-  text-align: center;
-  text-wrap: nowrap;
+  font-size: 1.6rem;
+  font-family: "Cinzel", serif;
+  z-index: 12;
+  text-shadow: 0 0 5px #000;
 }
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display {
+.wrath-of-davokar.wrath-orb-container .wrath-controls {
+  margin-top: 10px;
   display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display .wrath-points {
-  font-size: 18px;
-  color: #ddd;
-  text-shadow: 1px 1px 2px #000;
-  min-width: 1em;
-  text-align: center;
-}
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button {
-  background: #5a3b28;
-  color: #fff;
-  border: 1px solid #7a5e3a;
-  padding: 0.2em 0.5em;
-  border-radius: 3px;
-  font-weight: bold;
-  transition: background 0.2s ease;
-  cursor: pointer;
+  gap: 6px;
   pointer-events: all;
 }
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button:hover:enabled {
-  background: #7a5e3a;
+.wrath-of-davokar.wrath-orb-container .wrath-controls button {
+  background: #191813;
+  border: 1px solid #7a5e3a;
+  color: #cfa97e;
+  font-size: 1.2rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: serif;
 }
-.wrath-of-davokar .wrath-tracker-container .wrath-tracker-display button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.wrath-of-davokar.wrath-orb-container .wrath-controls button:hover {
+  border: 1px solid #7a5e3a;
+  background: #444;
+  color: white;
+  box-shadow: 0 0 5px #cfa97e;
+}
+.wrath-of-davokar.wrath-orb-container .wrath-controls button:focus {
+  border: 1px solid #7a5e3a;
+  box-shadow: 0 0 5px #cfa97e;
+  outline: unset;
 }
 
 /* Hud Styles */
@@ -718,28 +830,28 @@
 }
 
 /* Chat Message Styles */
-.chat-message {
+.wrath-of-davokar.chat-message {
   padding: 0px;
 }
-.chat-message .message-header {
+.wrath-of-davokar.chat-message .message-header {
   padding: 5px;
   border-radius: 3px 3px 0 0;
 }
-.chat-message .message-header .message-sender {
+.wrath-of-davokar.chat-message .message-header .message-sender {
   align-items: center;
   gap: 6px;
   flex: 2;
 }
-.chat-message .message-header .message-sender .message-speaker {
+.wrath-of-davokar.chat-message .message-header .message-sender .message-speaker {
   font-weight: bold;
 }
-.chat-message .message-header .message-sender .message-user {
+.wrath-of-davokar.chat-message .message-header .message-sender .message-user {
   font-size: 0.75em;
 }
-.chat-message .message-content {
+.wrath-of-davokar.chat-message .message-content {
   padding: 5px;
 }
-.chat-message .message-content .item-card-header {
+.wrath-of-davokar.chat-message .message-content .item-card-header {
   align-content: end;
   align-items: center;
   gap: 10px;
@@ -748,13 +860,13 @@
   padding-top: 5px;
   border-bottom: 1px solid #7a7971;
 }
-.chat-message .message-content .applyItemEffectButton {
+.wrath-of-davokar.chat-message .message-content .applyItemEffectButton {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
 }
-.chat-message .message-content .applyItemEffectButton .effect-icon {
+.wrath-of-davokar.chat-message .message-content .applyItemEffectButton .effect-icon {
   width: 1.5em;
   height: 1.5em;
 }

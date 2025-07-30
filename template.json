@@ -206,6 +206,7 @@
     "templates": {
       "base": {
         "description": "",
+        "macro": "",
         "formula": "",
         "effectData": {},
         "modifiers": {
@@ -258,6 +259,16 @@
             "localize": "WRATH_OF_DAVOKAR.Item.Encumbrance",
             "total": {"localize": "WRATH_OF_DAVOKAR.Item.Encumbrance", "value": 0}
           }
+        }
+      },
+      "action": {
+        "action": {
+          "fast": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Fast.abbr"},
+          "slow": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Slow.abbr"},
+          "free": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Free.abbr"},
+          "passive": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Passive"},
+          "reaction": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Reaction"},
+          "special": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Special"}
         }
       },
       "armor": {
@@ -330,7 +341,8 @@
         "concealed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Concealed" },
         "desecrated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Desecrated" },
         "hallowed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Hallowed" },
-        "retributive": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Retributive" }
+        "retributive": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Retributive" },
+        "natural": {"value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Natural"}
       },
       "armorCategory": ""
     },
@@ -359,6 +371,7 @@
     "boon": {
       "templates": [
         "base",
+        "action",
         "rank",
         "xpCost"
       ]
@@ -398,20 +411,24 @@
     "monsterTrait": {
       "templates": [
         "base",
+        "action",
         "rank",
         "xpCost"
-      ],
-      "action": ""
+      ]
     },
     "mysticalPower": {
       "templates": [
         "base",
+        "action",
         "corruption",
         "rank",
         "tradition",
         "xpCost"
       ],
-      "action": "",
+      "qualities": {
+        "chain": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Chain" },
+        "concentration": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Concentration" }
+      },
       "component": ""
     },
     "ritual": {
@@ -427,10 +444,10 @@
     "talent": {
       "templates": [
         "base",
+        "action",
         "rank",
         "xpCost"
-      ],
-      "action": ""
+      ]
     },
     "trap": {
       "templates": [
@@ -452,7 +469,7 @@
         "weight"
       ],
       "damage": 0,
-      "range": "engaged",
+      "range": 0,
       "area": {
         "hasArea": false,
         "type": "none"
@@ -482,6 +499,21 @@
         "hallowed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Hallowed" },
         "poisonCoated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.PoisonCoated" },
         "thundering": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Thundering" }
+      },
+      "weaponType": {
+        "axe": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Axe" },
+        "bow": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Bow" },
+        "crossbow": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Crossbow" },
+        "flail": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Flail" },
+        "hammer": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Hammer" },
+        "knife": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Knife" },
+        "mace": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Mace" },
+        "polearm": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Polearm" },
+        "staff": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Staff" },
+        "sword": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Sword" },
+        "throwing": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Throwing" },
+        "unarmed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Unarmed" },
+        "whip": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Whip" }
       }
     }
   }

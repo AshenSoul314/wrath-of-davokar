@@ -1,5 +1,68 @@
 {
   "WRATH_OF_DAVOKAR": {
+    "Action": {
+      "Label": "Action",
+      "Fast": { "long": "Fast Action", "abbr": "Fast"},
+      "Slow": { "long": "Slow Action", "abbr": "Slow"},
+      "Free": { "long": "Free Action", "abbr": "Free"},
+      "Reaction": "Reaction",
+      "Passive": "Passive",
+      "Special": "Special",
+      "Move": {
+        "long": "Movement Action",
+        "plural": "Movement Actions",
+        "abbv": "MA"
+      }
+    },
+    "Archetype": "Archetype",
+    "Armor": {
+      "ArmorCategory": {
+        "Label": "Armor Category",
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy"
+      },
+      "Impeding": {
+        "long": "Impeding",
+        "abbv": "Imp"
+      },
+      "VisionPenalty": {
+        "long": "Vision Penalty",
+        "abbv": "VP"
+      },
+      "ParryBonus": {
+        "long": "Parry Bonus",
+        "abbv": "PB"
+      },
+      "Rating": {
+        "long": "Armor Rating",
+        "abbv": "AR",
+        "Total": "Total Armor Rating"
+      }
+    },
+    "Artifact": {
+      "Label": "Artifact",
+      "IsArtifact": "This is an Artifact",
+      "Powers": "Artifact Powers",
+      "NewPower": "Create Artifact Power",
+      "DeletePower": "Delete Artifact Power"
+    },
+    "Attack": {
+      "Error.NoTarget": "No target selected.",
+      "Error.NoAttacker": "No attacker selected.",
+      "Error.NoAttackerTokens": "No tokens found for this actor.",
+      "Dialog.ConfirmThrow": "You are making a ranged throwing attack with {weaponName} at {targetName}. Is this correct?",
+      "Dialog.ChooseAttacker.Content": "Choose which token to attack from:",
+      "Dialog.ChooseAttacker.Title": "Select Attacker Token for {actorName}"
+    },
+    "Attributes": {
+      "Label": "Attribute",
+      "LabelPlural": "Attributes",
+      "Physique": { "long": "Physique", "abbr": "Phy"},
+      "Finesse": { "long": "Finesse", "abbr": "Fin"},
+      "Wits": { "long": "Wits", "abbr": "Wit"},
+      "Empathy": { "long": "Empathy", "abbr": "Emp"}
+    },
     "Base": {
       "Name": "Name",
       "Icon": "Icon",
@@ -17,16 +80,70 @@
         "Boons": "Boons",
         "Burdens": "Burdens",
         "MonstrousTraits": "Monstrous Traits",
-        "ArtifactPowers": "Artifact Powers"
+        "ArtifactPowers": "Artifact Powers",
+        "Macro": "Macro"
       },
       "ToolTips": {
         "SkillBonus": "Item, Talent, and Effect Modifiers",
         "SendToChat": "Send to Chat"
       }
     },
-    "Time": {
-      "Rounds": "Rounds",
-      "Turns": "Turns"
+    "Bio": {
+      "Label": "Biography",
+      "Age": "Age",
+      "Ambition": "Ambition",
+      "Appearance": "Appearance",
+      "Archetype": "Archetype",
+      "Background": "Background",
+      "Description": "Description",
+      "Height": "Height",
+      "Heritage": "Heritage",
+      "Quote": "Quote",
+      "Shadow": "Shadow",
+      "Weakness": "Weakness",
+      "Weight": "Weight"
+    },
+    "Combat": {
+      "Label": "Combat",
+      "Speed": "Movement Speed",
+      "Parry": "Parry",
+      "Dodge": "Dodge",
+      "Initiative": "Initiative",
+      "Tempo": "Tempo",
+      "DrawSize": "Draw Size"
+    },
+    "Condition": "Condition",
+    "Corruption": {
+      "Label": "Corruption",
+      "Total": "Total Corruption",
+      "Max": {
+        "long": "Corruption Maximum",
+        "short": "Maximum",
+        "abbv": "Corr. Max"
+      },
+      "Threshold": {
+        "long": "Corruption Threshold",
+        "short": "Threshold",
+        "abbv": "Corr.Thr."
+      },
+      "Temporary": {
+        "long": "Temporary Corruption",
+        "short": "Temporary",
+        "abbv": "Temp. Corr."
+      },
+      "Permanent": {
+        "long": "Permanent Corruption",
+        "short": "Permanent",
+        "abbv": "Perm. Corr."
+      }
+    },
+    "CriticalInjury": {
+      "Label": "Critical Injury",
+      "DeathMod":"Death Modifier",
+      "HealingTime": {
+        "Formula": "Healing Time Formula",
+        "Label": "Healing Time"
+      }
     },
     "Effect": {
       "Source": "Source",
@@ -91,26 +208,122 @@
       }
     },
     "Heritage": "Heritage",
-    "Archetype": "Archetype",
-    "Attributes": {
-      "Label": "Attribute",
-      "LabelPlural": "Attributes",
-      "Physique": {
-        "long": "Physique",
-        "abbr": "Phy"
-      },
-      "Finesse": {
-        "long": "Finesse",
-        "abbr": "Fin"
-      },
-      "Wits": {
-        "long": "Wits",
-        "abbr": "Wit"
-      },
-      "Empathy": {
-        "long": "Empathy",
-        "abbr": "Emp"
+    "Item": {
+      "Attributes": "Attributes",
+      "Encumbrance": "Encumbrance",
+      "EquipItem": "Equip {type}",
+      "Equipped": "Equipped",
+      "Description": "Description",
+      "IsArtifact": "Artifact",
+      "Modifiers": "Modifiers",
+      "Type": "Item Type",
+      "UnequipItem": "Unequip {type}",
+      "Unequipped": "Unequipped",
+      "Weight": "Weight",
+      "Macro": {
+        "Label": "Item Macro",
+        "Error": {
+          "DuplicateError": "Macro {macroName} (id: {id}) is already registered, deferring to original",
+          "KeyError": "Macro (id: {id}) not found.",
+          "ValueError": "Macro {macroName} (id: {id}) did not return a function."
+        }
       }
+    },
+    "Language": {
+      "Label": "Languages",
+      "Unknown": "Unknown",
+      "Smattering": "Smattering",
+      "Knowledgeable": "Knowledgeable",
+      "Fluent": "Fluent"
+    },
+    "Money": {
+      "Cost": "Cost",
+      "Thaler": "Thaler",
+      "Shilling": "Shillings",
+      "Orteg": "Ortegs"
+    },
+    "Power": {
+      "Tradition": {
+        "Label": "Tradition",
+        "Theurgy": "Theurgy",
+        "Witchcraft": "Witchcraft",
+        "Wizardry": "Wizardry",
+        "Sorcery": "Sorcery",
+        "TrollSinging": "Troll Singing",
+        "Symbolism": "Symbolism",
+        "StaffMagic": "Staff Magic",
+        "None": "No Tradition"
+      },
+      "Component": "Material Component"
+    },
+    "Qualities": {
+      "Label": "Qualities",
+      "NoQuality": "No Qualities",
+      "AcidCoated": "Acid Coated",
+      "BaneWeapon": "Bane Weapon",
+      "Chain": "Chain",
+      "Concealed": "Concealed",
+      "Concentration": "Concentration",
+      "DeathRune": "Death Rune",
+      "Desecrated": "Desecrated",
+      "Flaming": "Flaming",
+      "Hallowed": "Hallowed",
+      "Natural": "Natural",
+      "Retributive": "Retributive",
+      "Balanced": "Balanced",
+      "BloodLetting": "Blood Letting",
+      "DeepImpact": "Deep Impact",
+      "Ensnaring": "Ensnaring",
+      "Jointed": "Jointed",
+      "Long": "Long",
+      "Massive": "Massive",
+      "MechanicalReload": "Mechanical Reload",
+      "PoisonCoated": "Poison Coated",
+      "Precise": "Precise",
+      "Piercing": "Piercing",
+      "Returning": "Returning",
+      "Short": "Short",
+      "Thundering": "Thundering",
+      "Unstable": "Unstable",
+      "Unwieldy": "Unwieldy"
+    },
+    "Range": {
+      "Label": "Range",
+      "Engaged": "Engaged"
+    },
+    "Rank": {
+      "Label": "Rank",
+      "One": {
+        "Talent": "Novice",
+        "Trait": "I",
+        "abbv": "N"
+      },
+      "Two": {
+        "Talent": "Adept",
+        "Trait": "II",
+        "abbv": "A"
+      },
+      "Three": {
+        "Talent": "Master",
+        "Trait": "III",
+        "abbv": "M"
+      }
+    },
+    "Roll": {
+      "Label": "Roll",
+      "Dice": {
+        "Bane": "Bane",
+        "Success": "Success",
+        "Pool": "Dice Pool",
+        "ArtifactDice": "Artifact Dice"
+      },
+      "Modifier": "Modifier",
+      "Push": "Push",
+      "Error.UnknownTerm": "Unknown die term used in actor roll builder: {term}. Skipping unknown term"
+    },
+    "SheetLabels": {
+      "Actor": "WrathOfDavokar Actor Sheet",
+      "Item": "WrathOfDavokar Item Sheet"
     },
     "Skills": {
       "Label": "Skill",
@@ -184,184 +397,21 @@
         "abbr": "Spl"
       }
     },
+    "Time": {
+      "Rounds": "Rounds",
+      "Turns": "Turns"
+    },
     "Toughness": {
       "Label": "Toughness",
       "Threshold": "Pain Threshold",
       "Maximum": "Maximum Toughness"
     },
+    "Trap": {
+      "Bite": "Bite"
+    },
     "Willpower": {
       "Label": "Willpower",
       "Current": "Current Willpower"
-    },
-    "Corruption": {
-      "Label": "Corruption",
-      "Total": "Total Corruption",
-      "Max": {
-        "long": "Corruption Maximum",
-        "short": "Maximum",
-        "abbv": "Corr. Max"
-      },
-      "Threshold": {
-        "long": "Corruption Threshold",
-        "short": "Threshold",
-        "abbv": "Corr.Thr."
-      },
-      "Temporary": {
-        "long": "Temporary Corruption",
-        "short": "Temporary",
-        "abbv": "Temp. Corr."
-      },
-      "Permanent": {
-        "long": "Permanent Corruption",
-        "short": "Permanent",
-        "abbv": "Perm. Corr."
-      }
-    },
-    "Language": {
-      "Label": "Languages",
-      "Unknown": "Unknown",
-      "Smattering": "Smattering",
-      "Knowledgeable": "Knowledgeable",
-      "Fluent": "Fluent"
-    },
-    "Bio": {
-      "Label": "Biography",
-      "Age": "Age",
-      "Ambition": "Ambition",
-      "Appearance": "Appearance",
-      "Archetype": "Archetype",
-      "Background": "Background",
-      "Description": "Description",
-      "Height": "Height",
-      "Heritage": "Heritage",
-      "Quote": "Quote",
-      "Shadow": "Shadow",
-      "Weakness": "Weakness",
-      "Weight": "Weight"
-    },
-    "Qualities": {
-      "Label": "Qualities",
-      "NoQuality": "No Qualities",
-      "Concealed": "Concealed",
-      "Desecrated": "Desecrated",
-      "Hallowed": "Hallowed",
-      "Retributive": "Retributive",
-      "Balanced": "Balanced",
-      "BloodLetting": "Blood Letting",
-      "DeepImpact": "Deep Impact",
-      "Ensnaring": "Ensnaring",
-      "Jointed": "Jointed",
-      "Long": "Long",
-      "Massive": "Massive",
-      "MechanicalReload": "Mechanical Reload",
-      "Precise": "Precise",
-      "Piercing": "Piercing",
-      "Returning": "Returning",
-      "Short": "Short",
-      "Unstable": "Unstable",
-      "Unwieldy": "Unwieldy",
-      "AcidCoated": "Acid Coated",
-      "BaneWeapon": "Bane Weapon",
-      "DeathRune": "Death Rune",
-      "Flaming": "Flaming",
-      "PoisonCoated": "Poison Coated",
-      "Thundering": "Thundering"
-    },
-    "Armor": {
-      "ArmorCategory": {
-        "Label": "Armor Category",
-        "Light": "Light",
-        "Medium": "Medium",
-        "Heavy": "Heavy"
-      },
-      "Impeding": {
-        "long": "Impeding",
-        "abbv": "Imp"
-      },
-      "VisionPenalty": {
-        "long": "Vision Penalty",
-        "abbv": "VP"
-      },
-      "ParryBonus": {
-        "long": "Parry Bonus",
-        "abbv": "PB"
-      },
-      "Rating": {
-        "long": "Armor Rating",
-        "abbv": "AR",
-        "Total": "Total Armor Rating"
-      }
-    },
-    "Combat": {
-      "Label": "Combat",
-      "Speed": "Movement Speed",
-      "Parry": "Parry",
-      "Dodge": "Dodge",
-      "Initiative": "Initiative",
-      "Tempo": "Tempo",
-      "DrawSize": "Draw Size"
-    },
-    "Money": {
-      "Cost": "Cost",
-      "Thaler": "Thaler",
-      "Shilling": "Shillings",
-      "Orteg": "Ortegs"
-    },
-    "Artifact": {
-      "Label": "Artifact",
-      "IsArtifact": "This is an Artifact",
-      "Powers": "Artifact Powers",
-      "NewPower": "Create Artifact Power",
-      "DeletePower": "Delete Artifact Power"
-    },
-    "SheetLabels": {
-      "Actor": "WrathOfDavokar Actor Sheet",
-      "Item": "WrathOfDavokar Item Sheet"
-    },
-    "Item": {
-      "Description": "Description",
-      "Attributes": "Attributes",
-      "Weight": "Weight",
-      "Type": "Item Type",
-      "Equipped": "Equipped",
-      "Unequipped": "Unequipped",
-      "EquipItem": "Equip {type}",
-      "UnequipItem": "Unequip {type}",
-      "Encumbrance": "Encumbrance",
-      "IsArtifact": "Artifact",
-      "Modifiers": "Modifiers"
-    },
-    "Action": {
-      "Label": "Action",
-      "Fast": "Fast Action",
-      "Slow": "Slow Action",
-      "Free": "Free Action",
-      "Reaction": "Reaction",
-      "Passive": "Passive",
-      "Special": "Special",
-      "Move": {
-        "long": "Movement Action",
-        "plural": "Movement Actions",
-        "abbv": "MA"
-      }
-    },
-    "Rank": {
-      "Label": "Rank",
-      "One": {
-        "Talent": "Novice",
-        "Trait": "I",
-        "abbv": "N"
-      },
-      "Two": {
-        "Talent": "Adept",
-        "Trait": "II",
-        "abbv": "A"
-      },
-      "Three": {
-        "Talent": "Master",
-        "Trait": "III",
-        "abbv": "M"
-      }
     },
     "Weapon": {
       "BaseDamage": {
@@ -384,36 +434,22 @@
         "Cone": "Cone",
         "Radius": "Radius",
         "None": "No Area Effect"
-      }
-    },
-    "Range": {
-      "Label": "Range",
-      "Engaged": "Engaged"
-    },
-    "Trap": {
-      "Bite": "Bite"
-    },
-    "Power": {
-      "Tradition": {
-        "Label": "Tradition",
-        "Theurgy": "Theurgy",
-        "Witchcraft": "Witchcraft",
-        "Wizardry": "Wizardry",
-        "Sorcery": "Sorcery",
-        "TrollSinging": "Troll Singing",
-        "Symbolism": "Symbolism",
-        "StaffMagic": "Staff Magic",
-        "None": "No Tradition"
       },
-      "Component": "Material Component"
-    },
-    "Condition": "Condition",
-    "CriticalInjury": {
-      "Label": "Critical Injury",
-      "DeathMod":"Death Modifier",
-      "HealingTime": {
-        "Formula": "Healing Time Formula",
-        "Label": "Healing Time"
+      "Type": {
+        "Label": "Weapon Type",
+        "Axe": "Axe",
+        "Bow": "Bow",
+        "Crossbow": "Crossbow",
+        "Flail": "Flail",
+        "Hammer": "Hammer",
+        "Knife": "Knife",
+        "Mace": "Mace",
+        "Polearm": "Polearm",
+        "Staff": "Staff",
+        "Sword": "Sword",
+        "Throwing": "Throwing",
+        "Unarmed": "Unarmed",
+        "Whip": "Whip"
       }
     },
     "Wrath": {

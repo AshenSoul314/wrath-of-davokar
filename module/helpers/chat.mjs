@@ -1,10 +1,24 @@
 
 /**
+ * Adds the "wrath-of-davokar" CSS class to the message content element
+ * of a Foundry VTT chat message.
+ *
+ * @param {HTMLElement} html - The root HTML element of the chat message, as passed to render hooks.
+ */
+export function addWrathWrapperToMessage(html) {
+  // Ensure it's the correct element and not already modified
+  if (html instanceof HTMLElement && html.classList.contains("chat-message") && !html.classList.contains("wrath-of-davokar")) {
+    html.classList.add("wrath-of-davokar");
+  }
+}
+
+
+/**
  * Modifies the chat message header to include custom visuals like token image, actor name, and player name.
  * It also adjusts the header background and text color based on the user's color for better contrast.
  *
  * @param {ChatMessage} message - The Foundry VTT chat message being rendered.
- * @param {jQuery} html - The jQuery-wrapped HTML content of the message being rendered.
+ * @param {HTMLElement} html - The HTML content of the message being rendered.
  */
 export function applyMessageHeader(message, html) {
   const user = message.author;
@@ -33,22 +47,25 @@ export function applyMessageHeader(message, html) {
   const color = yiq >= 128 ? "#000000" : "#FFFFFF";
 
   // Modify message header background
-  const $header = html.find("header.message-header");
-  $header.css("background-color", userColor);
-  $header.css("color", color);
+  const header = html.querySelector("header.message-header");
+  if (header) {
+    header.style.backgroundColor = userColor;
+    header.style.color = color;
 
-  // Replace the sender with custom HTML
-  const $sender = $header.find(".message-sender");
-  const $customSender = $(`
-    <div class="message-sender flexrow flex-nowrap flex-gap">
-    <img src="${tokenImg}" width="30" height="30" class="flexshrink" style="border: none;" />
-    <div class="flex-column">
-        <span class="message-speaker">${actorName}</span>
-        <span class="message-user">${userName}</span>
-    </div>
-    </div>
-  `);
-  $sender.replaceWith($customSender);
+    const sender = header.querySelector(".message-sender");
+    if (sender) {
+      const customSender = document.createElement("div");
+      customSender.className = "message-sender flexrow flex-nowrap flex-gap";
+      customSender.innerHTML = `
+        <img src="${tokenImg}" width="30" height="30" class="flexshrink" style="border: none;" />
+        <div class="flex-column">
+          <span class="message-speaker">${actorName}</span>
+          <span class="message-user">${userName}</span>
+        </div>
+      `;
+      sender.replaceWith(customSender);
+    }
+  }
 }
 
 /**
@@ -60,114 +77,116 @@ export function applyMessageHeader(message, html) {
  * Validates the item and effect exist, and ensures tokens are selected before applying.
  * Automatically fills in effect label, origin, and icon if missing.
  *
- * @param {jQuery} html - The jQuery-wrapped HTML content containing the buttons.
+ * @param {HTMLElement} html - The HTML content containing the buttons.
  */
 export function linkEffectButtons(html) {
-  html.find(".applyItemEffectButton").on("click", async (event) => {
-    const button = event.currentTarget;
-    const itemId = button.dataset.itemId;
-    const effectKey = button.dataset.itemPowerId;
-    const actorId = button.dataset.actorId;
-    
-    let item;
-    let sourceActor;
+  html.querySelectorAll(".applyItemEffectButton").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      const itemId = button.dataset.itemId;
+      const effectKey = button.dataset.itemPowerId;
+      const actorId = button.dataset.actorId;
+      
+      let item;
+      let sourceActor;
 
-    if (actorId) {
-      sourceActor = game.actors.get(actorId);
-      item = sourceActor?.items.get(itemId);
-    } else {
-      item = game.items.get(itemId);
-    }
+      if (actorId) {
+        sourceActor = game.actors.get(actorId);
+        item = sourceActor?.items.get(itemId);
+      } else {
+        item = game.items.get(itemId);
+      }
 
-    if (!item) {
-      return ui.notifications.warn("Item not found.");
-    }
+      if (!item) {
+        return ui.notifications.warn("Item not found.");
+      }
 
-    const effectData = foundry.utils.getProperty(item.system, `effectData.${effectKey}`);
-    if (!effectData) {
-      return ui.notifications.warn("Effect data not found.");
-    }
+      const effectData = foundry.utils.getProperty(item.system, `effectData.${effectKey}`);
+      if (!effectData) {
+        return ui.notifications.warn("Effect data not found.");
+      }
 
-    const selectedTokens = canvas.tokens.controlled;
-    if (!selectedTokens.length) {
-      return ui.notifications.warn("No tokens selected.");
-    }
+      const selectedTokens = canvas.tokens.controlled;
+      if (!selectedTokens.length) {
+        return ui.notifications.warn("No tokens selected.");
+      }
 
-    for (const token of selectedTokens) {
-      const targetActor = token.actor;
-      if (!targetActor) continue;
+      for (const token of selectedTokens) {
+        const targetActor = token.actor;
+        if (!targetActor) continue;
 
-      const effect = foundry.utils.deepClone(effectData);
-      effect.name ??= item.name;
-      effect.img ??= item.img;
-      effect.origin = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
-      effect.flags ??= {};
-      effect.flags["wrath-of-davokar"] = {
-        itemEffectKey: effectKey
-      };
+        const effect = foundry.utils.deepClone(effectData);
+        effect.name ??= item.name;
+        effect.img ??= item.img;
+        effect.origin = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
+        effect.flags ??= {};
+        effect.flags["wrath-of-davokar"] = {
+          itemEffectKey: effectKey
+        };
 
-      await targetActor.createEmbeddedDocuments("ActiveEffect", [effect]);
-      ui.notifications.info(`Applied "${effect.name}" to ${targetActor.name}`);
-    }
-    
+        await targetActor.createEmbeddedDocuments("ActiveEffect", [effect]);
+        ui.notifications.info(`Applied "${effect.name}" to ${targetActor.name}`);
+      }
+      
+    });
   });
 
-  html.find(".removeItemEffectButton").on("click", async (event) => {
-    const button = event.currentTarget;
-    const itemId = button.dataset.itemId;
-    const actorId = button.dataset.actorId;
-    const effectKey = button.dataset.itemEffectId;
+  html.querySelectorAll(".removeItemEffectButton").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      const itemId = button.dataset.itemId;
+      const actorId = button.dataset.actorId;
+      const effectKey = button.dataset.itemEffectId;
 
-    let item;
-    let sourceActor;
+      let item;
+      let sourceActor;
 
-    if (actorId) {
-      sourceActor = game.actors.get(actorId);
-      item = sourceActor?.items.get(itemId);
-    } else {
-      item = game.items.get(itemId);
-    }
+      if (actorId) {
+        sourceActor = game.actors.get(actorId);
+        item = sourceActor?.items.get(itemId);
+      } else {
+        item = game.items.get(itemId);
+      }
 
-    if (!item) {
-      return ui.notifications.warn("Item not found.");
-    }
+      if (!item) {
+        return ui.notifications.warn("Item not found.");
+      }
 
-    const selectedTokens = canvas.tokens.controlled;
-    if (!selectedTokens.length) {
-      return ui.notifications.warn("No tokens selected.");
-    }
-
-
-
-    for (const token of selectedTokens) {
-      const targetActor = token.actor;
-      if (!targetActor) continue;
-
-      // Check if the given effect originates from this item
-      const removeId = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
-      const toRemove = targetActor.effects.filter(effect => {
-        const flags = effect.flags?.["wrath-of-davokar"];
-        
-        return (
-          (effect.origin === removeId) &&
-          (flags?.itemEffectKey === effectKey)
-        );
-      });
-
-      // Check if the name matches this item
-      if (!toRemove.length) {
-        ui.notifications.info(`No matching effects on ${targetActor.name}`);
-        continue;
+      const selectedTokens = canvas.tokens.controlled;
+      if (!selectedTokens.length) {
+        return ui.notifications.warn("No tokens selected.");
       }
 
 
-      const names = toRemove.map(e => e.name).join(', ')
-      const ids = toRemove.map(e => e.id);
-      await targetActor.deleteEmbeddedDocuments("ActiveEffect", ids);
 
-      ui.notifications.info(`Removed "${names}" from ${targetActor.name}`);
-    }
+      for (const token of selectedTokens) {
+        const targetActor = token.actor;
+        if (!targetActor) continue;
+
+        // Check if the given effect originates from this item
+        const removeId = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
+        const toRemove = targetActor.effects.filter(effect => {
+          const flags = effect.flags?.["wrath-of-davokar"];
+          
+          return (
+            (effect.origin === removeId) &&
+            (flags?.itemEffectKey === effectKey)
+          );
+        });
+
+        // Check if the name matches this item
+        if (!toRemove.length) {
+          ui.notifications.info(`No matching effects on ${targetActor.name}`);
+          continue;
+        }
+
+
+        const names = toRemove.map(e => e.name).join(', ')
+        const ids = toRemove.map(e => e.id);
+        await targetActor.deleteEmbeddedDocuments("ActiveEffect", ids);
+
+        ui.notifications.info(`Removed "${names}" from ${targetActor.name}`);
+      }
+    });
   });
-
-
 }

@@ -7,8 +7,6 @@ export class WrathOfDavokarItem extends Item {
    * Augment the basic Item data model with additional dynamic data.
    */
   prepareData() {
-    // As with the actor class, items are documents that can have their data
-    // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
   }
 
@@ -56,7 +54,6 @@ export class WrathOfDavokarItem extends Item {
       enrichedDescription: enrichedDescription,
       system: this.system
     };
-    console.log(data);
     
     content = await renderTemplate('systems/wrath-of-davokar/templates/chat/item-card.hbs', data);
 
@@ -152,4 +149,31 @@ export class WrathOfDavokarItem extends Item {
       return roll;
     }
   }
+
+  async executeMacro() {
+    const macro = this.system.macro;
+
+    if (!macro || typeof macro !== "string" || macro.trim() === "") {
+      return this.roll?.(); // Fall back to a default item roll, if undefined
+    }
+
+    const actor = this.actor ?? null;
+    const token = actor?.getActiveTokens()[0] ?? null;
+    const speaker = ChatMessage.getSpeaker({ actor, token });
+    const character = game.user.character;
+    const scope = { item: this };
+
+    const AsyncFunction = foundry.utils.AsyncFunction;
+
+    try {
+      const fn = new AsyncFunction(
+        "speaker", "actor", "token", "character", "scope", ...Object.keys(scope),
+        `{${macro}\n}`
+      );
+      return await fn.call(this, speaker, actor, token, character, scope, ...Object.values(scope));
+    } catch (err) {
+      ui.notifications.error("MACRO.Error", { localize: true });
+    }
+  }
 }
+

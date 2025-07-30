@@ -4,7 +4,7 @@
  * @return {Promise}
  */
 export const preloadHandlebarsTemplates = async function () {
-  return loadTemplates([
+  return foundry.applications.handlebars.loadTemplates([
     // Actor partials.
     'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',
     'systems/wrath-of-davokar/templates/actor/parts/actor-description.hbs',
@@ -13,8 +13,9 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/wrath-of-davokar/templates/actor/parts/actor-mysticalPowers.hbs',
     'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',
     // Item partials
-    'systems/wrath-of-davokar/templates/item/parts/item-effects.hbs',
     'systems/wrath-of-davokar/templates/item/parts/item-artifact-powers.hbs',
+    'systems/wrath-of-davokar/templates/item/parts/item-effects.hbs',
+    'systems/wrath-of-davokar/templates/item/parts/item-macro.hbs',
     'systems/wrath-of-davokar/templates/item/parts/item-settings.hbs',
     // Dice partials
     'systems/wrath-of-davokar/templates/dice/roll.hbs',
