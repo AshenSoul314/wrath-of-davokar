@@ -7,16 +7,27 @@
     .text-attribute {
       font-weight: bold;
       text-transform: uppercase;
-      border-bottom: 1px solid utils.$c-border;
+      border-bottom: 1px solid utils.$c-dark;
       text-align: left;
-      width: 80%;
+      width: 80%;    
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 0 0 4px orangered;
+      }
     }
 
     .text-skill {
       text-align: left;
       padding-left: 10px;
-      width: 80%;
+      width: 80%;    
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 0 0 4px orangered;
+      }
     }
+
 
     .input-attribute,
     .input-skill {
@@ -44,6 +55,11 @@
         font-weight: bold;
         text-transform: uppercase;
         min-width: 20%;
+        cursor: pointer;
+
+        &:hover {
+          text-shadow: 0 0 4px orangered;
+        }
       }
       
       .spellcasting-total {

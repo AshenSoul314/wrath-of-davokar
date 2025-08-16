@@ -137,57 +137,48 @@ export class WrathOfDavokarActor extends Actor {
     }
   }
 
-  async buildRoll(rollTerms, modify=0) {
+  async buildRoll(rollTerms) {
     let formulaParts = [];
-    console.log(rollTerms)
-    for (const term of rollTerms) {
-      switch (term) {
-        case 'physique':
-        case 'finesse':
-        case 'wits':
-        case 'empathy':
-          formulaParts.push(`${this.system.attributes[term].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[term])}]`);
-          break;
-        case "endurance":
-        case "force":
-        case "melee":
-        case "dexterity":
-        case "discreet":
-        case "marksmanship":
-        case "mobility":
-        case "crafting":
-        case "lore":
-        case "medicus":
-        case "survival":
-        case "vigilance":
-        case "insight":
-        case "instinct":
-        case "persuasion":
-        case "volition":
-          formulaParts.push(`${this.system.skills[term].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[term])}]`);
-          break;
-        case "spellcasting":
-          let total = this.system.attributes[this.system.skills.spellcasting.attribute].total;
-          if (this.system.skills.spellcasting.skill === 'corruption') {
-            total += this.system.corruption.total;
-          } else {
-            total += this.system.skills[this.system.skills.spellcasting.skill].total;
-          }
-          
-          formulaParts.push(`${total}ds[${game.i18n.localize("WRATH_OF_DAVOKAR.Skills.Spellcasting.long")}]`);
-          break;
-        case "corruption":
-          formulaParts.push(`${this.system.corruption.total}ds[${game.i18n.localize("WRATH_OF_DAVOKAR.Corruption.Total")}]`);
-          break;
-        default:
-          const message = game.i18n.format("WRATH_OF_DAVOKAR.Roll.Error.UnknownTerm", {term: term});
-          console.warn(message);
-          ui.notifications.warn(message);
+    let dieRolled = false;
+
+    if (rollTerms.attribute && this.system.attributes[rollTerms.attribute].total > 0) {
+      formulaParts.push(`${this.system.attributes[rollTerms.attribute].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[rollTerms.attribute])}]`);
+      dieRolled = true;
+    }
+    if (rollTerms.skill && rollTerms.skill > 0) {
+      if (rollTerms.skill === 'corruption' && this.system.corruption.total > 0) {
+        formulaParts.push(`${this.system.corruption.total}ds[${game.i18n.localize("WRATH_OF_DAVOKAR.Corruption.Total")}]`);
+        dieRolled = true;
+      } else if (this.system.skills[rollTerms.skill].total > 0) {
+        formulaParts.push(`${this.system.skills[rollTerms.skill].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[rollTerms.skill])}]`);
+        dieRolled = true;
       }
     }
+
+    if (rollTerms.spellcasting) {
+      //Handle Special Spellcasting Logic Here
+    }
+
+    if (rollTerms.d8 && rollTerms.d8 > 0) {
+      formulaParts.push(`${rollTerms.d8}d8`);
+      dieRolled = true;
+    }
+    if (rollTerms.d10 && rollTerms.d10 > 0) {
+      formulaParts.push(`${rollTerms.d10}d10`);
+      dieRolled = true;
+    }
+    if (rollTerms.d12 && rollTerms.d12 > 0) {
+      formulaParts.push(`${rollTerms.d12}d12`);
+      dieRolled = true;
+    }
+
+    if (!dieRolled) {
+      formulaParts.push(`1ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[rollTerms.attribute])}]`);
+    }
+
     const formula = formulaParts.join(' + ')
     const yzeRoll = Roll.create(formula, { yzur: true });
-    if (modify !== 0) await yzeRoll.modify(modify);
+    if (rollTerms.mod !== 0) await yzeRoll.modify(rollTerms.mod);
 
     await yzeRoll.toMessage()
     return yzeRoll;

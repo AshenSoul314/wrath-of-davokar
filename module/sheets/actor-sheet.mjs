@@ -407,11 +407,14 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.text-attribute, .text-skill, .spellcasting-title', async (event) => {
       const element = event.currentTarget;
       let attribute = element.dataset.attribute || null
+      console.log(attribute);
       let skill = element.dataset.skill || null;
+      console.log(skill);
       let spellcasting = false;
       
       if (skill === 'spellcasting') {
-        skill = 'endurance';
+        attribute = this.actor.system.skills.spellcasting.attribute;
+        skill = this.actor.system.skills.spellcasting.skill;
         spellcasting = true;
       }
 
@@ -465,18 +468,15 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
         }
       }
 
-      const result = await selectSkillRoll(this.actor, {defaultCombo: [attribute, skill], usingSpellcasting: spellcasting});
+      
+      console.log([attribute, skill]);
+
+      const result = await selectSkillRoll(this.actor, [attribute, skill], spellcasting);
       if (result === null) {
         return;
       }
+      this.actor.buildRoll(result);
 
-      const {selectedAttribute, selectedSkill, usingSpellcasting} = result
-
-      if (usingSpellcasting) {
-        this.actor.buildRoll(['spellcasting']);
-      } else {
-        this.actor.buildRoll([selectedAttribute, selectedSkill])
-      }
     });
 
     // Add Inventory Item

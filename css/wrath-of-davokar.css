@@ -269,14 +269,22 @@
 .wrath-of-davokar .attributes-grid .text-attribute {
   font-weight: bold;
   text-transform: uppercase;
-  border-bottom: 1px solid #7a7971;
+  border-bottom: 1px solid #191813;
   text-align: left;
   width: 80%;
+  cursor: pointer;
+}
+.wrath-of-davokar .attributes-grid .text-attribute:hover {
+  text-shadow: 0 0 4px orangered;
 }
 .wrath-of-davokar .attributes-grid .text-skill {
   text-align: left;
   padding-left: 10px;
   width: 80%;
+  cursor: pointer;
+}
+.wrath-of-davokar .attributes-grid .text-skill:hover {
+  text-shadow: 0 0 4px orangered;
 }
 .wrath-of-davokar .attributes-grid .input-attribute,
 .wrath-of-davokar .attributes-grid .input-skill {
@@ -302,6 +310,10 @@
   font-weight: bold;
   text-transform: uppercase;
   min-width: 20%;
+  cursor: pointer;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-row .spellcasting-title:hover {
+  text-shadow: 0 0 4px orangered;
 }
 .wrath-of-davokar .attributes-grid .spellcasting-row .spellcasting-total {
   font-weight: bold;
@@ -680,28 +692,6 @@
     filter: brightness(1) contrast(1);
   }
 }
-@keyframes pulse-black-performance {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-    border-color: rgb(0, 0, 0);
-  }
-  100% {
-    transform: scale(3);
-    border-color: rgba(0, 0, 0, 0);
-  }
-}
-@keyframes pulse-gold-performance {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-    border-color: rgb(207, 169, 126);
-  }
-  100% {
-    transform: scale(3);
-    border-color: rgba(207, 169, 126, 0);
-  }
-}
 .wrath-of-davokar.wrath-orb-container {
   width: 100px;
   height: auto;
@@ -717,12 +707,6 @@
 .wrath-of-davokar.wrath-orb-container .pulse-decrease {
   animation: pulse-gold 2s ease-in-out;
 }
-.wrath-of-davokar.wrath-orb-container .pulse-increase-performance .wrath-orb::after {
-  animation: pulse-black-performance 2s ease-in-out;
-}
-.wrath-of-davokar.wrath-orb-container .pulse-decrease-performance .wrath-orb::after {
-  animation: pulse-gold-performance 2s ease-in-out;
-}
 .wrath-of-davokar.wrath-orb-container .wrath-orb {
   width: 100px;
   height: 100px;
@@ -730,20 +714,6 @@
   background: radial-gradient(ellipse at center, rgba(17, 17, 17, 0.2) 0%, rgba(255, 255, 255, 0.3333333333) 100%);
   position: relative;
   z-index: 10;
-}
-.wrath-of-davokar.wrath-orb-container .wrath-orb::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  opacity: 0;
-  transform-origin: center;
-  pointer-events: none;
-  border-radius: 50%;
-  animation: pulse-ring 2s ease-in-out infinite;
-  z-index: 0;
 }
 .wrath-of-davokar.wrath-orb-container .wrath-orb .wrath-border {
   position: absolute;
