@@ -30,7 +30,7 @@
   "packFolders": [],
   "socket": false,
   "manifest": "https://github.com/AshenSoul314/wrath-of-davokar/releases/latest/download/system.json",
-  "download": "https://github.com/AshenSoul31/4wrath-of-davokar/releases/download/0.1.0/wrath-of-davokar.zip",
+  "download": "https://github.com/AshenSoul314/wrath-of-davokar/releases/download/v0.1.0/wrath-of-davokar.zip",
   "media": [
     {
         "type": "cover",
