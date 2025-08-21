@@ -12,21 +12,7 @@ function updateWrathDisplay(current) {
 
   liquid.style.transform = `translateY(${100 - fillPercent}%)`;
   pointsDisplay.textContent = `${current}`;
-
-  // Apply aura effect only if not in performance mode
-  const performanceMode = game.settings.get("wrath-of-davokar", "performance-mode");
-  if (!performanceMode) {
-    orb.classList.remove("pulse-increase", "pulse-decrease"); 
-    if (current > previousWrath) {
-      orb.classList.add("pulse-increase");
-    } else if (current < previousWrath) {
-      orb.classList.add("pulse-decrease");
-    }
-    
-    // Force reflow to allow animation to restart if applied repeatedly and update previous wrath tracker
-    void orb.offsetWidth;
-  }
-
+  
   previousWrath = current;
 }
 
