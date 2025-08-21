@@ -1,104 +1,62 @@
 @use "../utils" as utils;
 
-@keyframes pulse-black {
-  0% {
-    box-shadow: 0 0 0px rgba(0, 0, 0, 0.8);
-    filter: brightness(1) contrast(1);
-  }
-  50% {
-    box-shadow: 0 0 50px rgb(0, 0, 0);
-    filter: brightness(0.5) contrast(1.5) drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
-  }
-  70% {
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
-    filter:brightness(0.6) contrast(1.3) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5));
-  }
-  100% {
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0);
-    filter: brightness(1) contrast(1);
-  }
-}
-@keyframes pulse-gold {
-  0% {
-    box-shadow: 0 0 0px rgba(207, 169, 255, 0.8);
-    filter: brightness(1) contrast(1);
-  }
-  50% {
-    box-shadow: 0 0 50px rgb(207, 169, 126);
-    filter: brightness(1.5) contrast(1.4);
-  }
-  70% {
-    box-shadow: 0 0 100px rgba(207, 169, 126, 0.5);
-    filter: brightness(1.4) contrast(1.2);
-  }
-  100% {
-    box-shadow: 0 0 100px rgba(207, 169, 126, 0);
-    filter: brightness(1) contrast(1);
-  }
-}
-
 .wrath-of-davokar.wrath-orb-container {
-  width: 100px;
+  width: clamp(80px, 15vmin, 100px);
   height: auto;
   position: relative;
-  margin: 40px auto;
+  margin: clamp(20px, 4vmin, 30px) auto; ;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  
-  .pulse-increase {
-    animation: pulse-black 2s ease-in-out;
-  }
-
-  .pulse-decrease {
-    animation: pulse-gold 2s ease-in-out;
-  }
-
-
   .wrath-orb {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    aspect-ratio: 1/1;
     border-radius: 50%;
-    background: radial-gradient(ellipse at center, #1113 0%, #FFF5 100%);
     position: relative;
     z-index: 10;
 
     .wrath-border {
       position: absolute;
-      top: -15px;
-      left: -10px;
-      min-width: 120px;
-      min-height: 120px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: auto;
       z-index: 13;
     }
 
     .wrath-liquid-container {
       position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       border-radius: 50%;
+      height: 86%;
+      width: auto;
+      aspect-ratio: 1/1;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 10%;
       overflow: hidden;
+      background: radial-gradient(ellipse at center, rgba(17, 17, 17, 0.2) 0%, rgba(255, 255, 255, 0.3333333333) 100%);
       
       .wrath-liquid {
         position: absolute;
-        bottom: 0;
         left: 0;
         width: 100%;
         height: auto;
         transform: translateY(0%);
         transition: transform 0.4s ease-in-out;
         z-index: 11;
+        object-fit: cover;
       }
     }
     .wrath-points {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -44%);
       color: utils.$c-gold-light;
-      font-size: 1.6rem;
+      font-size: clamp(1rem, 3.5vmin, 2rem);
       font-family: "Cinzel", serif;
       z-index: 12;
       text-shadow: 0 0 5px #000;
@@ -106,18 +64,19 @@
   }
 
   .wrath-controls {
-    margin-top: 10px;
+    margin-top: clamp(4px, 1vmin, 12px);
     display: flex;
-    gap: 6px;
+    gap: clamp(2px, 0.5vmin, 8px);
     pointer-events: all;
 
     button {
       background: utils.$c-dark;
       border: 1px solid utils.$c-gold;
-      color: utils.$c-gold-light;
-      font-size: 1.2rem;
-      width: 28px;
-      height: 28px;
+      color:utils.$c-gold-light;
+      font-size: clamp(0.8rem, 2vmin, 1rem);
+      font-weight: bold;
+      width:clamp(20px, 4vmin, 1.2rem);
+      aspect-ratio: 1/1;
       border-radius: 6px;
       cursor: pointer;
       font-family: serif;
