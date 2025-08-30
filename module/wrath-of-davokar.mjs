@@ -92,7 +92,7 @@ Hooks.once('init', function () {
     type: Number,
     default: 0
   });
-  
+
   // Wrath Track UI
   game.settings.register('wrath-of-davokar', 'overflow-wrath', {
     name: "Overflow Wrath Threshold",
@@ -130,6 +130,7 @@ Hooks.once('init', function () {
     default: false,
   });
 
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
@@ -153,7 +154,7 @@ Hooks.once('ready', async () => {
   await initWrathTracker();
 
   // Wrap the Draw Bars Function
-  wrapDrawBars() 
+  wrapDrawBars()
 });
 
 
@@ -232,7 +233,7 @@ async function createItemMacro(data, slot) {
   let powerID = -1;
 
   if (item.system.isArtifact) {
-    
+
     let content = `<label><input type="radio" name="choice" value="-1" checked>${item.name}</label>`;
     for (let [key, value] of Object.entries(item.system.powers)) {
       content += `<label><input type="radio" name="choice" value="${key}">${item.name}: ${value.name}</label>`;

@@ -42,9 +42,12 @@
                 }}
               </div>
               <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b> 
-                <span>{{this.system.action}}</span>
-
+                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+                <span>
+                  {{~#each system.action}}
+                    {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
+                  {{/each~}}
+                </span>
                 <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
                 <span>
                   {{#if (eq this.system.rank.value '1')}}
@@ -94,9 +97,8 @@
                 }}
               </div>
               <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b> 
-                <span>{{this.system.action}}</span>
-
+                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+                <span>{{localizeActions this.system.action}}</span>
                 <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
                 <span>
                   {{#if (eq this.system.rank.value '1')}}
@@ -201,10 +203,3 @@
     </div>
 
   </section>
-
-
-
-
-
-
-

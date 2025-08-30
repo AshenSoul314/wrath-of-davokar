@@ -17,7 +17,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
 
   // Skip spellcasting
   const attributes = Object.keys(actor.system.attributes);
-  const skills = Object.keys(actor.system.skills).filter(skill => skill !== "spellcasting"); 
+  const skills = Object.keys(actor.system.skills).filter(skill => skill !== "spellcasting");
   skills.push('corruption');
   console.log('before function', defaultCombo);
 
@@ -27,7 +27,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
     const selected = attr === defaultCombo[0];
 
     console.log(`${attr} === ${defaultCombo[0]} --> ${selected}`)
-    
+
     if (selected) {
       return `<option value="${attr}" selected>${label} (${actor.system.attributes[attr].total})</option>`;
     }
@@ -101,11 +101,11 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
           const d8 = form.d8?.value;
           const d10 = form.d10?.value;
           const d12 = form.d12?.value;
-          
+
           const result = {
-            attribute: attribute, 
-            skill: skill, 
-            spellcasting: useSpellcasting, 
+            attribute: attribute,
+            skill: skill,
+            spellcasting: useSpellcasting,
             mod: modifier,
             d8: d8,
             d10: d10,
@@ -154,7 +154,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
     console.warn('User Closed Prompt')
     result = null;
   }
-    
+
   return result;
 }
 
@@ -202,6 +202,102 @@ export async function chooseAttackerToken(actor) {
       }
     });
   } catch {
+    result = null;
+  }
+
+  return result;
+}
+
+/**
+ * Display a dialog asking the user to select a slot to equip an item in
+ *
+ * @param {Actor} actor - The actor the item will be equiped on.
+ * @param {Item} item - The item being equiped
+ * @returns {Promise<String | null>}
+ * Returns the slot key the item will be equipped to or `null` if the dialog was cancelled.
+ */
+export async function selectEquipSlot(actor, item) {
+  const slots = actor.system.encumbrance.equipSlots;
+
+  let html = '<div class="wrath-of-davokar">'
+
+  for (let key in slots) {
+
+    let equippedItem = undefined;
+    if (slots[key].itemId) {
+      equippedItem = actor.items.get(slots[key].itemId);
+    }
+
+    let itemName = game.i18n.localize("WRATH_OF_DAVOKAR.Item.ItemSlots.EmptySlot")
+    if (equippedItem) {
+      itemName = equippedItem.name
+    }
+
+    let disable = ''
+    if ((slots[key].maxItemWeight !== null) &&
+        (slots[key].maxItemWeight < item.system.weight)) {
+      disable = 'disabled';
+    }
+
+    html += `
+      <div class="flex-row flex-gap">
+        <input type="radio" id="${key}" name="equipSlot" value="${key}" ${disable}>
+        <label for="${key}">${itemName}</label>
+      </div>
+    `
+    // Iterate over the slot's subslots (if any exist)
+    for (let subKey in slots[key].subslots) {
+
+      equippedItem = undefined;
+      if (slots[key].subslots[subKey].itemId) {
+        equippedItem = actor.items.get(slots[key].subslots[subKey].itemId);
+      }
+
+      itemName = game.i18n.localize("WRATH_OF_DAVOKAR.Item.ItemSlots.EmptySlot");
+      if (equippedItem) {
+        itemName = equippedItem.system.name
+      }
+
+      disable = ''
+      if (((slots[key].subslots[subKey].maxItemWeight !== null) &&
+          (slots[key].subslots[subKey].maxItemWeight < item.system.weight)) ||
+          (item.system.hasOwnProperty('numSubSlots'))) {
+        disable = 'disabled';
+      }
+
+      html += `
+        <div class="flex-row flex-gap" style="padding-left: 4em;">
+          <input type="radio" id="${key}.${subKey}" name="equipSlot" value="${key}.${subKey}" ${disable}>
+          <label for="${key}.${subKey}">${itemName}</label>
+        </div>
+      `
+    }
+  }
+  html += '</div>';
+
+  let result;
+  try {
+    console.log(html);
+    result = await foundry.applications.api.DialogV2.prompt({
+      window: { title: game.i18n.format("WRATH_OF_DAVOKAR.Item.EquipItem", {type: item.name}) },
+      content: html,
+      ok: {
+        label: game.i18n.format("Confirm"),
+        callback: (event, button, dialog) => {
+          const form = button.form;
+          const [slotKey, subslotKey] = form.equipSlot.value.split(".");
+          return [slotKey, subslotKey];
+        }
+      },
+      cancel: {
+        label: game.i18n.format("Cancel"),
+        callback: () => null
+      },
+      defaultButton: "ok",
+      close: () => null,
+    });
+  } catch (error) {
+    console.error(error)
     result = null;
   }
 

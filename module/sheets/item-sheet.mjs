@@ -48,7 +48,7 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
     // Adding a pointer to CONFIG.WRATH_OF_DAVOKAR
     context.config = CONFIG.WRATH_OF_DAVOKAR;
 
-    
+
     // Enrich description info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
     context.enrichedDescription = await TextEditor.enrichHTML(
@@ -146,8 +146,8 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
     // Add AOE Radio Button Data for Weapons
     if (itemData.type == 'weapon') {
       context.system.area.radio = {
-        'none': 'WRATH_OF_DAVOKAR.Weapon.AreaEffect.None', 
-        'cone':  'WRATH_OF_DAVOKAR.Weapon.AreaEffect.Cone', 
+        'none': 'WRATH_OF_DAVOKAR.Weapon.AreaEffect.None',
+        'cone':  'WRATH_OF_DAVOKAR.Weapon.AreaEffect.Cone',
         'radius':'WRATH_OF_DAVOKAR.Weapon.AreaEffect.Radius'
       };
     }
@@ -238,20 +238,27 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
     // Add a new power at the end of the powers section
     let powerId = Object.keys(powers).length
     powers[powerId] = {
-      name: "", 
-      img: "systems/wrath-of-davokar/assets/icons/artifact-power.svg", 
-      description: "", 
-      action: "", 
+      name: "",
+      img: "systems/wrath-of-davokar/assets/icons/artifact-power.svg",
+      description: "",
+      action: {
+        reaction: false,
+        passive: false,
+        special: false,
+        slow: false,
+        fast: false,
+        free: false
+      },
       corruption: "",
       macro: "",
     };
-    
-    await this.item.update({ 
+
+    await this.item.update({
       _id:this.item.id,
       "system.powers": powers
     });
   }
-  
+
   /**
    * Handle deletion of artifact powers.
    * @param {Event} event   The originating click event
@@ -262,8 +269,8 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
 
     // Get the ID of the power being removed
     const div = $(event.currentTarget).parents('.artifact-power');
-    let powerId = parseInt(div.data("artifact-power-id"));        
-    if( isNaN(powerId) ) { 
+    let powerId = parseInt(div.data("artifact-power-id"));
+    if( isNaN(powerId) ) {
       return;
     }
 
@@ -307,13 +314,13 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
       description: "",
       tint: "#ffffff"
     };
-    
-    await this.item.update({ 
+
+    await this.item.update({
       _id:this.item.id,
       "system.effectData": itemEffects
     });
   }
-  
+
   /**
    * Handle deletion of item effects.
    * @param {Event} event   The originating click event
@@ -324,8 +331,8 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
 
     // Get the ID of the power being removed
     const div = $(event.currentTarget).parents('.item-effect');
-    let effectID = parseInt(div.data("item-effect-id"));        
-    if( isNaN(effectID) ) { 
+    let effectID = parseInt(div.data("item-effect-id"));
+    if( isNaN(effectID) ) {
       return;
     }
 
@@ -347,4 +354,3 @@ export class WrathOfDavokarItemSheet extends foundry.appv1.sheets.ItemSheet {
     await this.item.update(update);
   }
 }
-

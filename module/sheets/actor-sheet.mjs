@@ -3,7 +3,8 @@ import {
   prepareActiveEffectCategories,
 } from '../helpers/effects.mjs';
 
-import {selectSkillRoll} from '../helpers/dialog.mjs' 
+import {selectSkillRoll, selectEquipSlot} from '../helpers/dialog.mjs'
+const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -57,6 +58,7 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
+    context.actorId = actorData._id;
 
     // Adding a pointer to CONFIG.WRATH_OF_DAVOKAR
     context.config = CONFIG.WRATH_OF_DAVOKAR;
@@ -186,31 +188,6 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     for (let [k, v] of Object.entries(context.system.skills)) {
       v.label = game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[k].long) ?? k;
     }
-
-    // Total Armor Value
-    context.system.armorRating = {
-      "max": 0,
-      "value": 0
-    };
-
-    for (let armorBody of context.armorBody) {
-      if (armorBody.system.equip.isEquipped) {
-        context.system.armorRating.max += armorBody.system.rating.max;
-        context.system.armorRating.value += armorBody.system.rating.value;
-      }
-    }
-    for (let armorHead of context.armorHead) {
-      if (armorHead.system.equip.isEquipped) {
-        context.system.armorRating.max += armorHead.system.rating.max;
-        context.system.armorRating.value += armorHead.system.rating.value;
-      }
-    }
-    for (let armorShield of context.armorShield) {
-      if (armorShield.system.equip.isEquipped) {
-        context.system.armorRating.max += armorShield.system.rating.max;
-        context.system.armorRating.value += armorShield.system.rating.value;
-      }
-    }
   }
 
   /**
@@ -289,59 +266,58 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     let encumbranceValue = 0;
 
     // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
+    for (let item of context.items) {
+      item.img = item.img || Item.DEFAULT_ICON;
 
-      if ('isArtifact' in i.system) {
-        if (i.system.isArtifact) {
-          artifacts.push(i);
-          console.log('found artifact')
+      if ('isArtifact' in item.system) {
+        if (item.system.isArtifact) {
+          artifacts.push(item);
         }
       }
 
-      if (i.type === 'equipment' || i.type === 'trap' || i.type === 'alchemicalItem' ) {
-        equipment.push(i);
-        encumbranceValue += i.system.equip.isEquipped ? 0 : i.system.weight;
+      if (['equipment', 'trap', 'alchemicalItem', 'container'].includes(item.type)) {
+        equipment.push(item);
+        encumbranceValue += item.system.equip.isEquipped ? 0 : item.system.weight;
       }
-      else if (i.type === 'armorHead') {
-        armorHead.push(i);
-        encumbranceValue += i.system.equip.isEquipped ? 0 : i.system.weight;
+      else if (item.type === 'armorHead') {
+        armorHead.push(item);
+        encumbranceValue += item.system.equip.isEquipped ? 0 : item.system.weight;
       }
-      else if (i.type === 'armorBody') {
-        armorBody.push(i);
-        encumbranceValue += i.system.equip.isEquipped ? 0 : i.system.weight;
+      else if (item.type === 'armorBody') {
+        armorBody.push(item);
+        encumbranceValue += item.system.equip.isEquipped ? 0 : item.system.weight;
       }
-      else if (i.type === 'armorShield') {
-        armorShield.push(i);
-        encumbranceValue += i.system.equip.isEquipped ? 0 : i.system.weight;
+      else if (item.type === 'armorShield') {
+        armorShield.push(item);
+        encumbranceValue += item.system.equip.isEquipped ? 0 : item.system.weight;
       }
-      else if (i.type === 'weapon') {
-        weapons.push(i);
-        encumbranceValue += i.system.equip.isEquipped ? 0 : i.system.weight;
+      else if (item.type === 'weapon') {
+        weapons.push(item);
+        encumbranceValue += item.system.equip.isEquipped ? 0 : item.system.weight;
       }
-      else if (i.type === 'mysticalPower') {
-        mysticalPowers.push(i);
+      else if (item.type === 'mysticalPower') {
+        mysticalPowers.push(item);
       }
-      else if (i.type === 'ritual') {
-        rituals.push(i);
+      else if (item.type === 'ritual') {
+        rituals.push(item);
       }
-      else if (i.type === 'talent') {
-        talents.push(i);
+      else if (item.type === 'talent') {
+        talents.push(item);
       }
-      else if (i.type === 'monsterTrait') {
-        traits.push(i);
+      else if (item.type === 'monsterTrait') {
+        traits.push(item);
       }
-      else if (i.type === 'boon') {
-        boons.push(i);
+      else if (item.type === 'boon') {
+        boons.push(item);
       }
-      else if (i.type === 'burden') {
-        burdens.push(i);
+      else if (item.type === 'burden') {
+        burdens.push(item);
       }
-      else if (i.type === 'condition') {
-        conditions.push(i);
+      else if (item.type === 'condition') {
+        conditions.push(item);
       }
-      else if (i.type === 'criticalInjury') {
-        criticalInjuries.push(i);
+      else if (item.type === 'criticalInjury') {
+        criticalInjuries.push(item);
       }
     }
 
@@ -383,7 +359,6 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     context.conditions = conditions;
     context.criticalInjuries = criticalInjuries;
     context.artifacts = artifacts;
-    context.system.encumbrance.value = encumbranceValue;
   }
 
   /* -------------------------------------------- */
@@ -407,11 +382,9 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.text-attribute, .text-skill, .spellcasting-title', async (event) => {
       const element = event.currentTarget;
       let attribute = element.dataset.attribute || null
-      console.log(attribute);
       let skill = element.dataset.skill || null;
-      console.log(skill);
       let spellcasting = false;
-      
+
       if (skill === 'spellcasting') {
         attribute = this.actor.system.skills.spellcasting.attribute;
         skill = this.actor.system.skills.spellcasting.skill;
@@ -468,9 +441,6 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
         }
       }
 
-      
-      console.log([attribute, skill]);
-
       const result = await selectSkillRoll(this.actor, [attribute, skill], spellcasting);
       if (result === null) {
         return;
@@ -484,15 +454,25 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
 
     // Delete Inventory Item
     html.on('click', '.item-delete', (ev) => {
+      console.log('Request to Delete Item')
       const itemDiv = $(ev.currentTarget).parents('.item');
       const item = this.actor.items.get(itemDiv.data('itemId'));
-      item.delete();
-      itemDiv.slideUp(200, () => this.render(false));
+
+      if (item.system.equip.isEquipped) {
+        console.log('Unequipping Item')
+        this._unequipItem(item).then(() => {
+          item.delete();
+          itemDiv.slideUp(200, () => this.render(false));
+        });
+      } else {
+        item.delete();
+        itemDiv.slideUp(200, () => this.render(false));
+      }
     });
 
     // Equip/Unequip Inventory Item
     html.on('click', '.item-equip', (event) => {
-      this._onEquip(event);
+      this._onToggleEquip(event);
     });
 
     // Armor Rating Changes
@@ -618,20 +598,172 @@ export class WrathOfDavokarActorSheet extends foundry.appv1.sheets.ActorSheet {
       });
       return roll;
     }
-  } 
-  
+  }
+
   /**
   * Handle equipping/unequipping a character's item
   * @param {Event} event   The originating click event
   * @private
   */
-  async _onEquip(event) {
+  async _onToggleEquip(event) {
+    console.log('Here');
     event.preventDefault();
     const itemDiv = $(event.currentTarget).parents('.item');
     const item = this.actor.items.get(itemDiv.data('itemId'));
-    let update = { _id: item.id};
-    update["system.equip.isEquipped"] = !(item.system.equip.isEquipped);
-    await item.update(update);
+    const isEquipped = item.system.equip.isEquipped;
+
+    if (isEquipped == true) {
+      this._unequipItem(item);
+    } else {
+      this._equipItem(item)
+    }
+  }
+
+  async _unequipItem(item) {
+    console.log(`attempting to unequip item ${item.id}`);
+    let itemSlotKey = null;
+    let orignalSlotData = {};
+    const slots = this.actor.system.encumbrance.equipSlots;
+    console.log(item.system);
+
+    if (item?.system.equip.requiresEquipSlot) {
+      console.log("Requires Equip Slot - finding slot...");
+
+      // Iterate over the four major slots
+      for (let key in slots) {
+
+        console.log(`Slot ${key}: itemId = ${slots[key].itemId}`);
+        if (slots[key].itemId === item.id) {
+          console.log('MATCH');
+          itemSlotKey = `system.encumbrance.equipSlots.${key}`;
+          orignalSlotData = slots[key];
+          break;
+        }
+
+        // Iterate over the slot's subslots (if any exist)
+        let subItemMatch = false;
+        for (let subKey in slots[key].subslots) {
+          console.log(`Slot ${key}.subslots.${subKey}: itemId = ${slots[key].subslots[subKey].itemId}`);
+          if (slots[key].subslots[subKey].itemId === item.id) {
+            console.log('MATCH');
+            itemSlotKey = `system.encumbrance.equipSlots.${key}.subslots.${subKey}`;
+            orignalSlotData = slots[key].subslots[subKey];
+            subItemMatch = true;
+            break;
+          }
+        }
+
+        if (subItemMatch === true) break;
+      }
+
+      // update the slot to be empty if one was found
+      console.log(`Matching Key = ${itemSlotKey}`);
+      if (itemSlotKey !== null) {
+        console.log('Removing item from slot')
+        let updatedItemSlot = {itemId: null, maxItemWeight: orignalSlotData.maxItemWeight};
+        if (orignalSlotData.hasOwnProperty('subslots')) {
+          updatedItemSlot.subslots = {};
+        }
+
+        let actorUpdate = { _id: this.actor.id};
+        actorUpdate[itemSlotKey] = updatedItemSlot;
+        console.log(actorUpdate);
+        await this.actor.update(actorUpdate);
+      }
+    }
+
+    // Update Item Effects that are not auto applied
+    if (item.system.hasOwnProperty('equip') && !item.system.equip.alwaysTransferEffects) {
+      for (const effect of item.effects) {
+        effect.update({ transfer: false });
+      }
+    }
+
+    // Unequip the item
+    let itemUpdate = { _id: item.id};
+    itemUpdate["system.equip.isEquipped"] = false;
+    await item.update(itemUpdate);
+  }
+
+  async _equipItem(item) {
+
+    if (item?.system.equip.requiresEquipSlot) {
+      const slots = this.actor.system.encumbrance.equipSlots;
+      let updatedItemSlot = {itemId: item.id};
+      const selection = await selectEquipSlot(this.actor, item);
+
+      // No slot was selected by the user. Return
+      if (!selection) return;
+
+      // Get a reference to the slot being edited
+      const [equipSlot, equipSubslot] = selection;
+      let selectedSlot = slots[equipSlot];
+      if (equipSubslot) {
+        selectedSlot = slots[equipSlot].subslots[equipSubslot];
+      }
+
+      // Free up the slot
+      // Slot has subslots (possible subitems need to be removed first)
+      if (selectedSlot.hasOwnProperty('subslots')) {
+        for (let subKey in selectedSlot.subslots) {
+          const subitem = this.actor.items.get(selectedSlot.subslots[subKey].itemId);
+          this._unequipItem(subitem);
+        }
+        updatedItemSlot.subslots = {};
+      }
+
+      // Slot has an item in it, remove it
+      if (selectedSlot.itemId) {
+        equippedItem = this.actor.items.get(selectedSlot.itemId);
+        this._unequipItem(equippedItem)
+      }
+
+      // This item is a container, setup subslots
+      if (item.type === 'container') {
+        updatedItemSlot.subslots = {};
+        for (let i = 0; i < item.system.numSubSlots; i++) {
+          updatedItemSlot.subslots[`subslot_${i}`] = {itemId: null, maxItemWeight: item.system.maxItemWeight};
+        }
+      }
+
+      // update the slot
+      let actorUpdate = { _id: this.actor.id};
+      let selectedSlotKey  = `system.encumbrance.equipSlots.${equipSlot}`;
+      if (equipSubslot) {
+        selectedSlotKey += `.subslots.${equipSubslot}`
+      }
+      actorUpdate[selectedSlotKey] = updatedItemSlot;
+      await this.actor.update(actorUpdate);
+
+    } else if (['armorBody', 'armorHead', 'armorShield'].includes(item?.type)) {
+
+      switch (item.type) {
+        case 'armorBody':
+          equippedItem = this.equippedArmorBody;
+          break;
+        case 'armorHead':
+          equippedItem = this.equippedArmorHead;
+          break;
+        case 'armorShield':
+          equippedItem = this.equippedArmorShield;
+          break;
+      }
+      if (this.equippedItem !== null) {
+        this._unequipItem(equippedItem);
+      }
+    }
+
+    // Update Item Effects that are not auto applied
+    if (item.system.hasOwnProperty('equip') && !item.system.equip.alwaysTransferEffects) {
+      for (const effect of item.effects) {
+        effect.update({ transfer: true });
+      }
+    }
+
+    // Equip the item
+    let itemUpdate = { _id: item.id};
+    itemUpdate["system.equip.isEquipped"] = true;
+    await item.update(itemUpdate);
   }
 
   /**

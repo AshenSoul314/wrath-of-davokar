@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "description": "CSS compiler for the WrathOfDavokar system",
   "scripts": {
-    "build": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --no-source-map",
-    "watch": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.css --style=expanded --source-map --watch",
+    "build": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.v1-0.css --style=expanded --no-source-map",
+    "watch": "sass scss/wrath-of-davokar.scss css/wrath-of-davokar.v1-0.css --style=expanded --source-map --watch",
     "createSymlinks": "node ./tools/create-symlinks.mjs"
   },
   "browserslist": [

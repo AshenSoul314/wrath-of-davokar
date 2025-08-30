@@ -91,7 +91,7 @@ export const STATUS_EFFECTS = [
     img: `${EFFECT_ICON_PATH}blightMarked.svg`,
     changes: []
   },
-  
+
   // Dynamically generated groups
   ...generateRankedEffectGroup("acid"),
   ...generateRankedEffectGroup("fire"),
@@ -177,22 +177,22 @@ export async function handleEffectCreation(effect, options, userId) {
   if (!(actor instanceof Actor)) return;
 
   // Only handle effects with WOD flags
-  const flags = getProperty(effect, "flags.wod") || null;
+  const flags = foundry.utils.getProperty(effect, "flags.wod") || null;
   if (flags === null) return
 
   // Get the flag values or the defaults
-  const type = getProperty(existing, "flags.wod.type") ?? null;
-  const value =  getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
-  const single = getProperty(existing, "flags.wod.single") ?? false;
+  const type = foundry.utils.getProperty(existing, "flags.wod.type") ?? null;
+  const value =  foundry.utils.getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
+  const single = foundry.utils.getProperty(existing, "flags.wod.single") ?? false;
 
   // Only care about singular, managed effects
   if (!single || (type === null)) return;
 
   // Check if there is a copy of this effect already in the actor data
-  const existing = actor.effects.find(e => getProperty(e, "flags.wod.type") === type);
+  const existing = actor.effects.find(e => foundry.utils.getProperty(e, "flags.wod.type") === type);
   if (!existing) return;
 
-  const existingValue = getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
+  const existingValue = foundry.utils.getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
 
   // Handle singular same-type effect
   if (existing) {
@@ -205,5 +205,3 @@ export async function handleEffectCreation(effect, options, userId) {
     }
   }
 }
-
-

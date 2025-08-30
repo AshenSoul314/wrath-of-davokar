@@ -6,13 +6,14 @@ $c-tan: #444;
 $c-brown: #5a3b28;
 $c-brown-dark: #2e2a26;
 $c-brown-light: #4c3c29;
-$c-gold: #7a5e3a;
-$c-gold-light: #cfa97e;
+$c-gold: #b8860b;
+$c-gold-light: #daa520;
+$c-gold-bright: #fcc200 ;
 
-$c-corruption: #363b4e;
-$c-corruption-light: #927fbf;
+$c-corruption: #630eb8;
+$c-corruption-light: #c187c2;
 $c-toughness: #9f1e49;
-$c-willpower: #005792;
+$c-willpower: #00bfff;
 
 $c-border: #7a7971;
 $c-light-text: #ddd;
@@ -28,6 +29,7 @@ $c-light-text: #ddd;
   --wod-color-brown-light: #{$c-brown-light};
   --wod-color-gold: #{$c-gold};
   --wod-color-gold-light: #{$c-gold-light};
+  --wod-color-gold-bright: #{$c-gold-bright};
 
   --wod-color-corruption: #{$c-corruption};
   --wod-color-corruption-light: #{$c-corruption-light};

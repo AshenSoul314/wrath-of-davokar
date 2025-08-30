@@ -8,6 +8,7 @@
       "Reaction": "Reaction",
       "Passive": "Passive",
       "Special": "Special",
+      "None": "N/A",
       "Move": {
         "long": "Movement Action",
         "plural": "Movement Actions",
@@ -113,6 +114,10 @@
       "DrawSize": "Draw Size"
     },
     "Condition": "Condition",
+    "Container": {
+      "NumSubSlots": "Item Capacity",
+      "MaxItemWeight": "Maximum Weight Of Any Carried Item"
+    },
     "Corruption": {
       "Label": "Corruption",
       "Total": "Total Corruption",
@@ -210,16 +215,24 @@
     "Heritage": "Heritage",
     "Item": {
       "Attributes": "Attributes",
+      "ItemSlots": {
+        "label": "Weapons & Equipped Items",
+        "EmptySlot": "Empty",
+        "SlotRequired": "Requires an Open Equip Slot to be Equipped"
+      },
       "Encumbrance": "Encumbrance",
+      "EquipSettings": "Equip Settings",
       "EquipItem": "Equip {type}",
       "Equipped": "Equipped",
       "Description": "Description",
       "IsArtifact": "Artifact",
       "Modifiers": "Modifiers",
+      "AlwaysTransferEffects": "Always transfer Active Effects even when Item is unequipped",
       "Type": "Item Type",
       "UnequipItem": "Unequip {type}",
       "Unequipped": "Unequipped",
       "Weight": "Weight",
+      "WornItems": "Worn Items",
       "Macro": {
         "Label": "Item Macro",
         "Error": {
@@ -236,6 +249,7 @@
       "Knowledgeable": "Knowledgeable",
       "Fluent": "Fluent"
     },
+    "Macro": "Automation Hooks File",
     "Money": {
       "Cost": "Cost",
       "Thaler": "Thaler",
@@ -502,6 +516,7 @@
       "boon": "Boon",
       "burden": "Burden",
       "condition": "Condition",
+      "container": "Container",
       "criticalInjury": "Critical Injury",
       "equipment": "Equipment",
       "item": "Item",

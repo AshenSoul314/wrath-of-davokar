@@ -44,15 +44,11 @@
   <section class='sheet-body tab-body'>
     {{! Description Tab }}
     <div class='tab' data-group='primary' data-tab='main'>
-      
+
       {{!-- Action(s) --}}
-      <div class="flex-group-left"> 
+      <div class="flex-group-left">
         <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
-        <span>
-          {{~#each system.action}}
-            {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
-          {{/each~}}
-        </span>
+        <span>{{localizeActions system.action}}</span>
       </div>
       <hr>
       {{! Description }}
@@ -74,6 +70,6 @@
     <div class="tab settings" data-group="primary" data-tab="settings">
       {{> "systems/wrath-of-davokar/templates/item/parts/item-settings.hbs"}}
     </div>
-    
+
   </section>
 </form>

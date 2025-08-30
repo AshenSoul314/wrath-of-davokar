@@ -7,8 +7,8 @@
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</div>
       <div class="panel-content align-left resource-grid">
         {{#each system.action}}
-          <label for="system.action.{{@key}}.value">{{localize this.localize}}</label>
-          <input id="system.action.{{@key}}.value" name="system.action.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+          <label for="system.action.{{@key}}">{{localizeSingleAction @key}}</label>
+          <input id="system.action.{{@key}}" name="system.action.{{@key}}" type="checkbox" value="true" {{checked this}}/>
         {{/each}}
       </div>
     </div>
@@ -25,16 +25,41 @@
     </div>
   {{/if}}
 
+  {{!-- Macro Settings  --}}
+  {{#if (hasProperty system "macro")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Macro'}}</div>
+      <div class="panel-content">
+        <file-picker type="any" name='system.macro' noupload="true" value="{{system.macro}}"></file-picker>
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- Equipment Slot Settings  --}}
+  {{#if (hasProperty system "equip")}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.EquipSettings'}}</div>
+      <div class="panel-content align-left flex-column">
+        <div>
+          <label for="system.equip.requiresEquipSlot">{{localize 'WRATH_OF_DAVOKAR.Item.ItemSlots.SlotRequired'}}</label>
+          <input id="system.equip.requiresEquipSlot" name="system.equip.requiresEquipSlot" type="checkbox" value="true" {{checked system.equip.requiresEquipSlot}}/>
+        </div>
+        <div>
+          <label for="system.equip.alwaysTransferEffects">{{localize 'WRATH_OF_DAVOKAR.Item.AlwaysTransferEffects'}}</label>
+          <input id="system.equip.alwaysTransferEffects" name="system.equip.alwaysTransferEffects" type="checkbox" value="true" {{checked system.equip.alwaysTransferEffects}}/>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
   {{!-- Weapon Type --}}
   {{#if (hasProperty  system "weaponType")}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Weapon.Type.Label'}}</div>
-      <div class="panel-content align-left resource-grid">
+      <div class="panel-content align-left resource-grid-2">
         {{#each system.weaponType}}
-          <div>
-            <label for="system.weaponType.{{@key}}.value">{{this.label}}</label>
-            <input id="system.weaponType.{{@key}}.value" name="system.weaponType.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
-          </div>
+          <label for="system.weaponType.{{@key}}.value">{{localize this.localize}}</label>
+          <input id="system.weaponType.{{@key}}.value" name="system.weaponType.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
         {{/each}}
       </div>
     </div>
@@ -44,32 +69,12 @@
   {{#if (hasProperty  system "qualities")}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</div>
-      <div class="panel-content align-left resource-grid">
+      <div class="panel-content align-left resource-grid-2">
         {{#each system.qualities}}
           {{#unless (eq @key 'noQuality')}}
-            <div>
-              <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
-              <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
-            </div>
+            <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
+            <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
           {{/unless}}
-        {{/each}}
-      </div>
-    </div>
-  {{/if}}
-
-  {{!-- Modifiers --}}
-  {{#if (hasProperty  system "modifiers")}}
-    <div class="panel flex-column flex-group-center flex-align-stretch">
-      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.Modifiers'}}</div>
-      <div class="panel-content resource-grid flex-group-left">
-        {{#each system.modifiers}}
-          <h2 class="grid-span-2">{{localize this.localize}}</h2>
-          {{#each this}}
-            {{#if (hasProperty this "value")}}  {{!-- Only render if the property has a value field --}}
-              <label for="system.modifiers.{{@../key}}.{{@key}}.value">{{localize this.localize}}</label>
-              <input type="number" name="system.modifiers.{{@../key}}.{{@key}}.value" value="{{this.value}}" data-dtype="Number"/>
-            {{/if}}
-          {{/each}}
         {{/each}}
       </div>
     </div>
@@ -89,7 +94,7 @@
                 </a>
               </div>
               <input type='text' name='system.effectData.{{@key}}.name' value='{{this.name}}'/>
-          
+
               <a class='item-control item-effect-delete' data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
                 <i class='fas fa-trash'></i>
               </a>

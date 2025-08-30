@@ -62,7 +62,7 @@
             </a>
           {{/if}}
         {{/if}}
-        
+
         <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "Types.Item.armorBody")}}'>
           <i class='fas fa-edit'></i>
         </a>
@@ -129,7 +129,7 @@
             </a>
           {{/if}}
         {{/if}}
-        
+
         <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "Types.Item.armorHead")}}'>
           <i class='fas fa-edit'></i>
         </a>
@@ -196,7 +196,7 @@
             </a>
           {{/if}}
         {{/if}}
-        
+
         <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "Types.Item.armorShield")}}'>
           <i class='fas fa-edit'></i>
         </a>
@@ -274,7 +274,7 @@
             </a>
           {{/if}}
         {{/if}}
-        
+
         <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "Types.Item.armorShield")}}'>
           <i class='fas fa-edit'></i>
         </a>
@@ -320,6 +320,7 @@
         {{#if (eq item.type 'equipment')}}{{localize "TYPES.Item.equipment"}}{{/if}}
         {{#if (eq item.type 'trap')}}{{localize "TYPES.Item.trap"}}{{/if}}
         {{#if (eq item.type 'alchemicalItem')}}{{localize "TYPES.Item.alchemicalItem"}}{{/if}}
+        {{#if (eq item.type 'container')}}{{localize "TYPES.Item.container"}}{{/if}}
       </div>
       <div class='item-attribute'>{{item.system.weight}}</div>
       <div class='item-controls'>
@@ -344,7 +345,7 @@
             </a>
           {{/if}}
         {{/if}}
-        
+
         <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "Types.Item.armorHead")}}'>
           <i class='fas fa-edit'></i>
         </a>

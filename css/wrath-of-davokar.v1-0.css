@@ -8,12 +8,13 @@
   --wod-color-brown: #5a3b28;
   --wod-color-brown-dark: #2e2a26;
   --wod-color-brown-light: #4c3c29;
-  --wod-color-gold: #7a5e3a;
-  --wod-color-gold-light: #cfa97e;
-  --wod-color-corruption: #363b4e;
-  --wod-color-corruption-light: #927fbf;
+  --wod-color-gold: #b8860b;
+  --wod-color-gold-light: #daa520;
+  --wod-color-gold-bright: #fcc200;
+  --wod-color-corruption: #630eb8;
+  --wod-color-corruption-light: #c187c2;
   --wod-color-toughness: #9f1e49;
-  --wod-color-willpower: #005792;
+  --wod-color-willpower: #00bfff;
   --wod-color-border: #7a7971;
   --wod-color-light-text: #ddd;
 }
@@ -348,12 +349,12 @@
 }
 .wrath-of-davokar .progress-bar .bar-corruption-permanent {
   border: none;
-  background-color: #363b4e;
+  background-color: #630eb8;
   height: 20px;
 }
 .wrath-of-davokar .progress-bar .bar-corruption-temporary {
   border: none;
-  background-color: #927fbf;
+  background-color: #c187c2;
   height: 20px;
 }
 .wrath-of-davokar .bar-willpower {
@@ -372,7 +373,7 @@
   border-width: 1px;
   border-color: #7a7971;
   border-style: solid;
-  background-color: #005792;
+  background-color: #00bfff;
   height: 20px;
 }
 
@@ -487,6 +488,9 @@
   text-align: left;
   display: flex;
 }
+.wrath-of-davokar .container-list {
+  border-left: #7a7971 2px solid;
+}
 .wrath-of-davokar .items-list {
   list-style: none;
   margin: 0;
@@ -494,11 +498,6 @@
   overflow-y: auto;
   scrollbar-width: thin;
   color: #444;
-}
-.wrath-of-davokar .items-list .item-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 .wrath-of-davokar .items-list .item-name {
   flex: 2;
@@ -527,7 +526,7 @@
 .wrath-of-davokar .items-list .item {
   align-items: center;
   padding: 0 2px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #7a7971;
 }
 .wrath-of-davokar .items-list .item:last-child {
   border-bottom: none;
@@ -709,7 +708,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -44%);
-  color: #cfa97e;
+  color: #daa520;
   font-size: clamp(1rem, 3.5vmin, 2rem);
   font-family: "Cinzel", serif;
   z-index: 12;
@@ -723,8 +722,8 @@
 }
 .wrath-of-davokar.wrath-orb-container .wrath-controls button {
   background: #191813;
-  border: 1px solid #7a5e3a;
-  color: #cfa97e;
+  border: 1px solid #b8860b;
+  color: #daa520;
   font-size: clamp(0.8rem, 2vmin, 1rem);
   font-weight: bold;
   width: clamp(20px, 4vmin, 1.2rem);
@@ -734,14 +733,14 @@
   font-family: serif;
 }
 .wrath-of-davokar.wrath-orb-container .wrath-controls button:hover {
-  border: 1px solid #7a5e3a;
+  border: 1px solid #b8860b;
   background: #444;
   color: white;
-  box-shadow: 0 0 5px #cfa97e;
+  box-shadow: 0 0 5px #daa520;
 }
 .wrath-of-davokar.wrath-orb-container .wrath-controls button:focus {
-  border: 1px solid #7a5e3a;
-  box-shadow: 0 0 5px #cfa97e;
+  border: 1px solid #b8860b;
+  box-shadow: 0 0 5px #daa520;
   outline: unset;
 }
 
