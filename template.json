@@ -130,7 +130,7 @@
         "money": {
           "thaler": 0,
           "shilling": 0,
-          "orteg": 0 
+          "orteg": 0
         },
         "encumbrance": {
           "max": 0
@@ -154,6 +154,14 @@
         "height": "",
         "weakness": "",
         "weight": ""
+      },
+      "encumbrance": {
+        "equipSlots": {
+          "one": { "itemId": null, "maxItemWeight": null, "subslots": {} },
+          "two": { "itemId": null, "maxItemWeight": null, "subslots": {} },
+          "three": { "itemId": null, "maxItemWeight": null, "subslots": {} },
+          "four": { "itemId": null, "maxItemWeight": null, "subslots": {} }
+        }
       },
       "notes": "",
       "willpower": {
@@ -194,6 +202,7 @@
       "boon",
       "burden",
       "condition",
+      "container",
       "criticalInjury",
       "equipment",
       "monsterTrait",
@@ -208,67 +217,16 @@
         "description": "",
         "macro": "",
         "formula": "",
-        "effectData": {},
-        "modifiers": {
-          "attributes": {
-            "localize": "WRATH_OF_DAVOKAR.Attributes.Label",
-            "physique": {"localize": "WRATH_OF_DAVOKAR.Attributes.Physique.long", "value": 0},
-            "finesse": {"localize": "WRATH_OF_DAVOKAR.Attributes.Finesse.long", "value": 0},
-            "wits": {"localize": "WRATH_OF_DAVOKAR.Attributes.Wits.long", "value": 0},
-            "empathy": {"localize": "WRATH_OF_DAVOKAR.Attributes.Empathy.long", "value": 0}
-          },
-          "skills": {
-            "localize": "WRATH_OF_DAVOKAR.Skills.Label",
-            "endurance": {"localize": "WRATH_OF_DAVOKAR.Skills.Endurance.long", "value": 0},
-            "force": {"localize": "WRATH_OF_DAVOKAR.Skills.Force.long", "value": 0},
-            "melee": {"localize": "WRATH_OF_DAVOKAR.Skills.Melee.long", "value": 0},
-            "dexterity": {"localize": "WRATH_OF_DAVOKAR.Skills.Dexterity.long", "value": 0},
-            "Discreet": {"localize": "WRATH_OF_DAVOKAR.Skills.Discreet.long", "value": 0},
-            "marksmanship": {"localize": "WRATH_OF_DAVOKAR.Skills.Marksmanship.long", "value": 0},
-            "mobility": {"localize": "WRATH_OF_DAVOKAR.Skills.Mobility.long", "value": 0},
-            "crafting": {"localize": "WRATH_OF_DAVOKAR.Skills.Crafting.long", "value": 0},
-            "medicus": {"localize": "WRATH_OF_DAVOKAR.Skills.Medicus.long", "value": 0},
-            "lore": {"localize": "WRATH_OF_DAVOKAR.Skills.Lore.long", "value": 0},
-            "survival": {"localize": "WRATH_OF_DAVOKAR.Skills.Survival.long", "value": 0},
-            "vigilance": {"localize": "WRATH_OF_DAVOKAR.Skills.Vigilance.long", "value": 0},
-            "insight": {"localize": "WRATH_OF_DAVOKAR.Skills.Insight.long", "value": 0},
-            "instinct": {"localize": "WRATH_OF_DAVOKAR.Skills.Instinct.long", "value": 0},
-            "persuasion": {"localize": "WRATH_OF_DAVOKAR.Skills.Persuasion.long", "value": 0},
-            "volition": {"localize": "WRATH_OF_DAVOKAR.Skills.Volition.long", "value": 0},
-            "spellcasting": {"localize": "WRATH_OF_DAVOKAR.Skills.Spellcasting.long", "value": 0}
-          },
-          "combat": {
-            "localize": "WRATH_OF_DAVOKAR.Combat.Label",
-            "speed": {"localize": "WRATH_OF_DAVOKAR.Combat.Speed", "value": 0},
-            "tempo": {"localize": "WRATH_OF_DAVOKAR.Combat.Tempo", "value": 0},
-            "drawSize": {"localize": "WRATH_OF_DAVOKAR.Combat.DrawSize", "value": 0}
-          },
-          "toughness": {
-            "localize": "WRATH_OF_DAVOKAR.Toughness.Label",
-            "max": {"localize": "WRATH_OF_DAVOKAR.Toughness.Maximum", "value": 0},
-            "threshold": {"localize": "WRATH_OF_DAVOKAR.Toughness.Threshold", "value": 0}
-          },
-          "corruption": {
-            "localize": "WRATH_OF_DAVOKAR.Corruption.Label",
-            "max": {"localize": "WRATH_OF_DAVOKAR.Corruption.Max.long", "value": 0},
-            "permanent": {"localize": "WRATH_OF_DAVOKAR.Corruption.Permanent.long", "value": 0},
-            "temporary": {"localize": "WRATH_OF_DAVOKAR.Corruption.Temporary.long", "value": 0},
-            "threshold": {"localize": "WRATH_OF_DAVOKAR.Corruption.Threshold.long", "value": 0}
-          },
-          "encumbrance": {
-            "localize": "WRATH_OF_DAVOKAR.Item.Encumbrance",
-            "total": {"localize": "WRATH_OF_DAVOKAR.Item.Encumbrance", "value": 0}
-          }
-        }
+        "effectData": {}
       },
       "action": {
         "action": {
-          "fast": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Fast.abbr"},
-          "slow": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Slow.abbr"},
-          "free": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Free.abbr"},
-          "passive": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Passive"},
-          "reaction": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Reaction"},
-          "special": {"value": false, "localize": "WRATH_OF_DAVOKAR.Action.Special"}
+          "fast": false,
+          "slow": false,
+          "free": false,
+          "passive": false,
+          "reaction": false,
+          "special": false
         }
       },
       "armor": {
@@ -287,7 +245,9 @@
       },
       "equip" : {
         "equip": {
-          "isEquipped": false
+          "isEquipped": false,
+          "requiresEquipSlot": false,
+          "alwaysTransferEffects": false
         }
       },
       "weight": {
@@ -388,6 +348,16 @@
         "rank"
       ]
     },
+    "container": {
+      "templates": [
+        "base",
+        "artifact",
+        "cost",
+        "equip"
+      ],
+      "numSubSlots": 1,
+      "maxItemWeight": 1
+    },
     "criticalInjury": {
       "templates": [
         "base"
@@ -405,8 +375,7 @@
         "cost",
         "equip",
         "weight"
-      ],
-      "number": 1
+      ]
     },
     "monsterTrait": {
       "templates": [

@@ -39,10 +39,10 @@
                 }}
               </div>
               <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Power.Tradition.Label"}}:</b> 
+                <b>{{localize "WRATH_OF_DAVOKAR.Power.Tradition.Label"}}:</b>
                 <span>{{localizeTraditions this.system.tradition}}</span>
-                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b> 
-                <span>{{this.system.action}}</span>
+                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+                <span>{{localizeActions system.action}}</span>
 
                 <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
                 <span>
@@ -156,8 +156,8 @@
                     }}
                   </div>
                   <div class="resource-grid ">
-                    <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b> 
-                    <span>{{power.action}}</span>
+                    <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+                    <span>{{localizeActions power.action}}</span>
                     <span class="flexgrow talent-bottom-left"><b>{{localize "WRATH_OF_DAVOKAR.Corruption.Label"}}:</b></span>
                     <span class='die-roll rollable' data-roll="{{power.corruption}}" data-label="{{localize 'WRATH_OF_DAVOKAR.Corruption.Temporary.long'}}">
                       <i class="fa-solid fa-dice-d20"></i> {{power.corruption}}
@@ -172,10 +172,3 @@
     </div>
 
   </section>
-
-
-
-
-
-
-

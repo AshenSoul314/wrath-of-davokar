@@ -23,9 +23,26 @@
           <file-picker type="image" name='system.powers.{{@key}}.img' noupload="true" value="{{this.img}}"></file-picker>
 
           {{!-- Action --}}
-          <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</span>
-          <input type='text' name='system.powers.{{@key}}.action' value='{{this.action}}'/>
-          
+          <span class="resource-label grid-span-2">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</span>
+
+          <label for="system.action.{{@key}}.reaction.value">{{localize "WRATH_OF_DAVOKAR.Action.Reaction"}}</label>
+          <input id="system.action.{{@key}}.reaction.value" name="system.action.{{@key}}.reaction.value" type="checkbox" value="true" {{checked this.reaction.value}}/>
+
+          <label for="system.action.{{@key}}.passive.value">{{localize "WRATH_OF_DAVOKAR.Action.Passive"}}</label>
+          <input id="system.action.{{@key}}.passive.value" name="system.action.{{@key}}.passive.value" type="checkbox" value="true" {{checked this.passive.value}}/>
+
+          <label for="system.action.{{@key}}.fast.value">{{localize "WRATH_OF_DAVOKAR.Action.Fast.abbr"}}</label>
+          <input id="system.action.{{@key}}.fast.value" name="system.action.{{@key}}.fast.value" type="checkbox" value="true" {{checked this.fast.value}}/>
+
+          <label for="system.action.{{@key}}.slow.value">{{localize "WRATH_OF_DAVOKAR.Action.Slow.abbr"}}</label>
+          <input id="system.action.{{@key}}.slow.value" name="system.action.{{@key}}.slow.value" type="checkbox" value="true" {{checked this.slow.value}}/>
+
+          <label for="system.action.{{@key}}.free.value">{{localize "WRATH_OF_DAVOKAR.Action.Free.abbr"}}</label>
+          <input id="system.action.{{@key}}.free.value" name="system.action.{{@key}}.free.value" type="checkbox" value="true" {{checked this.free.value}}/>
+
+          <label for="system.action.{{@key}}.special.value">{{localize "WRATH_OF_DAVOKAR.Action.Special"}}</label>
+          <input id="system.action.{{@key}}.special.value" name="system.action.{{@key}}.special.value" type="checkbox" value="true" {{checked this.special.value}}/>
+
           {{!-- Corruption --}}
           <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}</span>
           <input type='text' name='system.powers.{{@key}}.corruption' value='{{this.corruption}}'/>
@@ -42,10 +59,7 @@
 
         {{! Macro }}
         <span class="resource-label">{{localize 'DOCUMENT.Macro'}}</span>
-        <code-mirror name="system.powers.{{@key}}.macro" language="javascript">
-          {{~ this.macro ~}}
-        </code-mirror>
-
+        <file-picker type="any" name='system.powers.{{@key}}.macro' noupload="true" value="{{this.macro}}"></file-picker>
       </div>
     </div>
   {{/each}}

@@ -62,15 +62,59 @@ export class WrathOfDavokarActor extends Actor {
         skill.total = skill.value + skill.bonus;
       }
     }
-  
+
     // Set Spellcasting Total
     if (systemData.skills.spellcasting.skill == 'corruption') {
-      systemData.skills.spellcasting.total = systemData.corruption.value + 
+      systemData.skills.spellcasting.total = systemData.corruption.value +
         systemData.attributes[systemData.skills.spellcasting.attribute].total;
     } else {
-      systemData.skills.spellcasting.total = systemData.skills[systemData.skills.spellcasting.skill].total + 
+      systemData.skills.spellcasting.total = systemData.skills[systemData.skills.spellcasting.skill].total +
         systemData.attributes[systemData.skills.spellcasting.attribute].total;
     }
+
+    // Total Armor Value and Encombrance
+    let totalEnc = 0;
+    let totalArmorValue = 0;
+    let totalArmorMax = 0;
+    let equippedItems = [];
+    const equippedArmorBody = null;
+    const equippedArmorHead = null;
+    const equippedArmorShield = null;
+
+    for (let item of actorData.items) {
+      const enc = foundry.utils.getProperty(item.system, "encumbrance") ?? 0;
+      const isEquipped = foundry.utils.getProperty(item.system, "equip.isEquipped") ?? false;
+      const armorRating = foundry.utils.getProperty(item.system, "armorRating.value") ?? 0;
+      const armorMax = foundry.utils.getProperty(item.system, "armorRating.max") ?? 0;
+
+      if (isEquipped) {
+        totalArmorValue += armorRating;
+        totalArmorMax += armorMax;
+        equippedItems.push(item);
+
+        switch (item.type) {
+          case 'armorBody':
+            equippedArmorBody = item;
+            break;
+          case 'armorHead':
+            equippedArmorHead = item;
+            break;
+          case 'armorShield':
+            equippedArmorShield = item;
+            break;
+        }
+
+
+      } else {
+        totalEnc += enc;
+      }
+    }
+    systemData.armorRating = { "max": totalArmorMax, "value": totalArmorValue };
+    systemData.encumbrance.value = totalEnc;
+    actorData.equippedItems = equippedItems;
+    actorData.equippedArmorBody = equippedArmorBody;
+    actorData.equippedArmorHead = equippedArmorHead;
+    actorData.equippedArmorShield = equippedArmorShield;
   }
 
   /**
@@ -135,6 +179,25 @@ export class WrathOfDavokarActor extends Actor {
         data[k] = `${foundry.utils.deepClone(v.total)}ds[${label}]`;
       }
     }
+  }
+
+  async _preUpdate(change, options, userId) {
+    const superResult = await super._preUpdate(change, options, userId);
+
+    if (superResult === false) return false;
+
+    // Access corruption data
+    const corruption = this.system?.corruption;
+    if (!corruption) return result;
+
+    // Check if the update attempts to set corruption.value below min
+    const newValue = foundry.utils.getProperty(change, "system.corruption.value");
+    if (typeof newValue === "number" && newValue < corruption.min) {
+      setProperty(change, "system.corruption.value", corruption.min);
+    }
+
+    return superResult;
+
   }
 
   async buildRoll(rollTerms) {
@@ -236,8 +299,8 @@ export class WrathOfDavokarActor extends Actor {
       const outOfRangePenalty = Math.abs(Math.min(0, deltaMA - weapon.system.range)) * 2;
 
     }
-    
-    
+
+
 
     if (weapon.system.qualities.short.value || weapon.system.weaponType.throwing.value) {
 

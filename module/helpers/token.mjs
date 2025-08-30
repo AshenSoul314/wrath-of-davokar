@@ -21,7 +21,13 @@ export function wrapDrawBars() {
   Token.prototype.drawBars = function () {
     // Run original method first
     const bars = original.call(this);
+    const scale = canvas.dimensions.uiScale;
+    const barThickness = 8 * (this.document.height >= 2 ? 1.5 : 1) * scale;
+    const wpGap = 3 * scale;
 
+    // ----------------------------------------
+    //            CORRUPTION BAR
+    // ----------------------------------------
     // Get the actor’s corruption data
     const corruption = this.actor?.system?.corruption;
     if (!corruption) return bars;
@@ -30,53 +36,94 @@ export function wrapDrawBars() {
     const attr = this.document.bar2?.attribute;
     if (attr !== "corruption") return bars;
 
-    const { min: permanent = 0, temporary = 0, max: max = 0, threshold: threshold = 0 } = corruption;
-    if (max <= 0) return bars;
+    const { min: permanent = 0, temporary = 0, max: maxCorruption = 0, threshold: threshold = 0 } = corruption;
+    if (maxCorruption <= 0) return bars;
 
-    const bar = this.bars?.bar2;
-    if (!bar || typeof bar.clear !== "function") return bars;
+    const bar2 = this.bars?.bar2;
+    if (!bar2 || typeof bar2.clear !== "function") return bars;
 
     // Clear and redraw corruption segments
-    bar.clear();
+    bar2.clear();
 
-    const width = this.w;
-    const height = 8;
+    const corrBarwidth = this.w;
 
     const permColor =  getCssColor('--wod-color-corruption');
     const tempColor =  getCssColor('--wod-color-corruption-light');
-    const thresholdColor =  getCssColor('--wod-color-gold-light');
+    const thresholdColor = getCssColor('--wod-color-gold-bright');
 
-    const permWidth = (permanent / max) * width;
-    const tempWidth = (temporary / max) * width;
-    const thresholdX = (threshold / max) * width;
+    const permWidth = (permanent / maxCorruption) * corrBarwidth;
+    const tempWidth = (temporary / maxCorruption) * corrBarwidth;
+    const thresholdX = (threshold / maxCorruption) * corrBarwidth;
 
     // Draw BG
-    bar.lineStyle(1, 0x000000, 1.0);
-    bar.beginFill(0x000000, 0.5)
-    bar.drawRoundedRect(0, 0, width, height, 3);
+    bar2.lineStyle(1, 0x000000, 1.0);
+    bar2.beginFill(0x000000, 0.5)
+    bar2.drawRoundedRect(0, 0, corrBarwidth, barThickness, 3);
+    bar2.endFill();
 
     // Permanent corruption segment
-    bar.beginFill(permColor);
-    bar.lineStyle(1, 0x000000, 1.0);
-    bar.drawRoundedRect(0, 0, permWidth, height, 3);
-    bar.endFill();
+    bar2.beginFill(permColor);
+    bar2.lineStyle(1, 0x000000, 1.0);
+    bar2.drawRoundedRect(0, 0, permWidth, barThickness, 3);
+    bar2.endFill();
 
     // Temporary corruption segment
-    bar.beginFill(tempColor);
-    bar.lineStyle(1, 0x000000, 1.0);
-    bar.drawRoundedRect(permWidth, 0, tempWidth, height, 3);
-    bar.endFill();
+    bar2.beginFill(tempColor);
+    bar2.lineStyle(1, 0x000000, 1.0);
+    bar2.drawRoundedRect(permWidth, 0, tempWidth, barThickness, 3);
+    bar2.endFill();
 
     // Threshold
-    bar.lineStyle(2, thresholdColor, 1.0); // 2px thick, gold color
-    bar.moveTo(thresholdX, 0);
-    bar.lineTo(thresholdX, height);
-    bar.endFill();
+    bar2.lineStyle(2, thresholdColor, 1.0); // 2px thick, gold color
+    bar2.moveTo(thresholdX, 0);
+    bar2.lineTo(thresholdX, barThickness);
+    bar2.endFill();
 
     // Tooltip
-    bar.name = `Corruption: ${permanent + temporary} (${permanent} perm + ${temporary} temp)`;
+    bar2.name = `Corruption: ${permanent + temporary} (${permanent} perm + ${temporary} temp)`;
+    
+    // ----------------------------------------
+    //            WILLPOWER BAR
+    // ----------------------------------------
+    const wp = this.actor.system?.willpower?.value ?? 0;
+    const maxWP = this.actor.system?.willpower?.max ?? 0;
+    const wpColor = getCssColor('--wod-color-willpower');
 
-    return bars;
+    // Skip tokens with no WP (NPCS)
+    if (maxWP === 0) {
+      return bars
+    }
+    const wpBarHeight = this.h - (2 * barThickness) - wpGap;
+    const segmentHeight = wpBarHeight / maxWP;
+
+    const x = this.w - barThickness;
+    for (let i = 0; i < maxWP; i++) {
+      const y = wpBarHeight - (i * segmentHeight) + wpGap;
+      bar2.lineStyle(1, 0x000000, 1.0);
+
+      if (i < wp) {
+        bar2.beginFill(wpColor);
+      } else {
+        bar2.beginFill(0x000000, 0.5)
+      }
+      bar2.drawRect(x, y, barThickness, segmentHeight - wpGap);
+      bar2.endFill();
+    }
+
+    return bars
+  }
+
+  // Force redraw of all tokens once canvas is ready
+  const redrawAllTokens = () => {
+    for (const token of canvas.tokens.placeables) {
+      token.drawBars();
+    }
+  };
+
+  if (canvas.ready) {
+    redrawAllTokens();
+  } else {
+    Hooks.once("canvasReady", redrawAllTokens);
   }
 }
 
@@ -90,11 +137,11 @@ export function wrapDrawBars() {
  *
  * @hook renderTokenHUD
  * @param {TokenHUD} hud - The rendered HUD instance.
- * @param {jQuery} html - jQuery-wrapped HTML of the HUD.
+ * @param {HTMLElement} element - HTML of the HUD.
  * @param {object} tokenData - Data for the token associated with the HUD.
  */
-Hooks.on("renderTokenHUD", (hud, html, tokenData) => {
-  const token = canvas.tokens.get(tokenData._id);
+Hooks.on("renderTokenHUD", (hud, element, tokenData) => {
+  const token = hud.object;
   const actor = token?.actor;
   if (!actor) return;
 
@@ -102,32 +149,35 @@ Hooks.on("renderTokenHUD", (hud, html, tokenData) => {
   /*  Willpower Tracker                         */
   /* ------------------------------------------ */
   const wp = actor.system?.willpower?.value ?? 0;
-  const max = actor.system?.willpower?.max ?? 10;
+  const maxWP = actor.system?.willpower?.max ?? 10;
 
   // Prevent duplicates
-  html.find(".wp-hud").remove();
+  element.querySelector(".wp-hud")?.remove(); // pick your container
+  
 
   // Create Willpower display
-  const wpDisplay = $(`
-    <div class="control-icon wp-hud" title="Willpower: ${wp}/${max}">
-      <span>✦</span><span class="wp-count">${wp}</span>
+  const wpDisplayHTML = `
+    <div class="wrath-of-davokar control-icon wp-hud" title="Willpower: ${wp}/${maxWP}">
+      <span class="wp-count">✦${wp}</span>
     </div>
-  `);
+  `;
 
-  // Optional: click to reduce by 1 (demo functionality)
-  wpDisplay.on("mouseup", async (event) => {
+  // Append to the right side of the HUD
+  const target = element.querySelector(".col.right");
+  if (!target) return;
 
-    let newWP = 0
+  target.insertAdjacentHTML("beforeend", wpDisplayHTML);
+  const wpDisplay = element.querySelector(".wp-hud");
+
+  // click to reduce by 1 (demo functionality)
+  wpDisplay.addEventListener("mouseup", async (event) => {
+    let newWP = wp;
     if (event.button === 0) {
-      newWP = Math.min(max, wp + 1);
+      newWP = Math.min(maxWP, wp + 1);
     } else if (event.button === 2) {
       newWP = Math.max(0, wp - 1);
-    } else {
-      return;
-    }
+    } else return;
     await actor.update({ "system.willpower.value": newWP });
   });
 
-  // Append to the right side of the HUD
-  html.find(".col.right").append(wpDisplay);
 });
