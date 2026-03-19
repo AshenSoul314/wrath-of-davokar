@@ -1,0 +1,19 @@
+<div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
+  {{#each burdens}}
+    <div class="talent-card item flexgrow" data-item-id="{{this._id}}">
+      <div class="talent-header flex-row flex-group-center flex-gap">
+        <div class='item-image'>
+          <a class='interactive' data-action="itemRoll"><img src='{{this.img}}' title='{{this.name}}' width='40' height='40'/></a>
+        </div>
+        <span class="flexgrow">{{this.name}}</span>
+        <a class='item-control' data-action="itemEdit"   title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.burden")}}'><i class='fas fa-edit'></i></a>
+        <a class='item-control' data-action="itemDelete" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.burden")}}'><i class='fas fa-trash'></i></a>
+      </div>
+      <div class="talent-content">
+        <div class="talent-text">
+          <prose-mirror name="system.description" toggled="true">{{{this.enrichedDescription}}}</prose-mirror>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

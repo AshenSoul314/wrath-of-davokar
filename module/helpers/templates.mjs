@@ -5,19 +5,15 @@
  */
 export const preloadHandlebarsTemplates = async function () {
   return foundry.applications.handlebars.loadTemplates([
-    // Actor partials.
-    'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',
-    'systems/wrath-of-davokar/templates/actor/parts/actor-description.hbs',
-    'systems/wrath-of-davokar/templates/actor/parts/actor-items.hbs',
-    'systems/wrath-of-davokar/templates/actor/parts/actor-effects.hbs',
-    'systems/wrath-of-davokar/templates/actor/parts/actor-mysticalPowers.hbs',
-    'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',
-    // Item partials
-    'systems/wrath-of-davokar/templates/item/parts/item-artifact-powers.hbs',
-    'systems/wrath-of-davokar/templates/item/parts/item-effects.hbs',
-    'systems/wrath-of-davokar/templates/item/parts/item-macro.hbs',
-    'systems/wrath-of-davokar/templates/item/parts/item-settings.hbs',
-    // Dice partials
+    // Inner tab partials (used via {{> "..."}})
+    'systems/wrath-of-davokar/templates/actor/parts/talents/talents-talents.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/talents/talents-traits.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/talents/talents-boons.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/talents/talents-burdens.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/powers/powers-mysticalPowers.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/powers/powers-rituals.hbs',
+    'systems/wrath-of-davokar/templates/actor/parts/powers/powers-artifacts.hbs',
+    // Dice partials (used via {{> "..."}} in YZUR templates)
     'systems/wrath-of-davokar/templates/dice/roll.hbs',
     'systems/wrath-of-davokar/templates/dice/infos.hbs',
     'systems/wrath-of-davokar/templates/dice/tooltip.hbs',

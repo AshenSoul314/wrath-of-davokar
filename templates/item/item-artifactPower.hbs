@@ -1,0 +1,30 @@
+{{! Artifact Power Tab }}
+<section class='tab sheet-body item-artifactPower {{tab.cssClass}}' data-group='primary' data-tab='main'>
+  <div class="resource-grid ">
+
+    {{!-- Corruption --}}
+    <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}:</label>
+    <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+
+    {{!-- Action(s) --}}
+    <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+    <span>{{localizeActions system.action}}</span>
+
+  </div>
+
+  <hr>
+  <div class="form-group editor">
+    {{#if editable}}
+      <prose-mirror
+        name="system.description"
+        value="{{system.description}}"
+        button="true"
+        toggled="true"
+      >
+        {{{enrichedDescription}}}
+      </prose-mirror>
+    {{else}}
+      {{{enrichedDescription}}}
+    {{/if}}
+  </div>
+</section>

@@ -6,9 +6,10 @@
     font-family: utils.$font-primary;
   }
 
+
   .sheet-header {
-    flex: 0 auto;
-    overflow: hidden;
+    flex: 0;
+    overflow: visible;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -43,10 +44,14 @@
   }
 
   .sheet-body,
-  .sheet-body .tab,
-  .sheet-body .tab .editor {
-    height: 100%;  
+  .sheet-body .editor {
+    height: 100%;
     min-height: 10em;
+  }
+
+  .sheet-body {
+    overflow: scroll;
+    padding: 1em;
   }
 
   .tox {

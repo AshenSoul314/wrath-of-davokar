@@ -1,0 +1,39 @@
+<div class="flex-column flex-group-center flex-align-stretch flex-gap">
+  {{#each artifacts as |item|}}
+    <div class="panel item" data-item-id="{{item._id}}">
+      <div class="panel-header flex-row flex-group-center flex-gap">
+        <div class='item-image'>
+          <a class='interactive' data-action="itemRoll"><img src='{{item.img}}' title='{{item.name}}' width='40' height='40'/></a>
+        </div>
+        <span class="flexgrow">{{item.name}}</span>
+        <a class='item-control' data-action="itemEdit" title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.mysticalPower")}}'><i class='fas fa-edit'></i></a>
+      </div>
+
+      <div class="panel-content flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
+        {{#each item.system.powers as |power|}}
+          <div class="talent-card item flexgrow" data-item-id="{{item._id}}" data-power-id="{{@key}}">
+            <div class="talent-header flex-row flex-group-center flex-gap">
+              <div class='item-image'>
+                <a class='interactive' data-action="showArtifactCard"><img src='{{power.img}}' title='{{power.name}}' width='40' height='40'/></a>
+              </div>
+              <span class="flexgrow">{{power.name}}</span>
+            </div>
+            <div class="talent-content">
+              <div class="talent-text">
+                <prose-mirror name="system.description" toggled="true">{{{power.enrichedDescription}}}</prose-mirror>
+              </div>
+              <div class="resource-grid">
+                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+                <span>{{localizeActions power.action}}</span>
+                <b>{{localize "WRATH_OF_DAVOKAR.Corruption.Label"}}:</b>
+                <span class='die-roll rollable' data-roll="{{power.corruption}}" data-label="{{localize 'WRATH_OF_DAVOKAR.Corruption.Temporary.long'}}">
+                  <i class="fa-solid fa-dice fa-xl-d20"></i> {{power.corruption}}
+                </span>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{/each}}
+</div>

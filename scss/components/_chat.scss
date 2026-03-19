@@ -9,8 +9,8 @@
     border-radius: 3px 3px 0 0;
 
     .message-sender {
-      align-items: center; 
-      gap: 6px; 
+      align-items: center;
+      gap: 6px;
       flex:2;
       .message-speaker {
         font-weight: bold;
@@ -34,6 +34,17 @@
       border-bottom: 1px solid utils.$c-border;
     }
 
+    .dice-buttons {
+      width: 100%;
+      margin-top: 1em;
+      flex-direction: column;
+      gap: 10px;
+
+      .dice-button {
+        width: 100%;
+      }
+    }
+
     .applyItemEffectButton {
       display: flex;
       justify-content: center;
@@ -49,5 +60,3 @@
   }
 
 }
-
-

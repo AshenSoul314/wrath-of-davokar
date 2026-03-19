@@ -1,0 +1,58 @@
+
+
+<div class='sheet-header'>
+  <img
+    class='profile-img'
+    src='{{item.img}}'
+    data-action='editImage'
+    data-field='img'
+    title='{{item.name}}'
+  />
+  <div class='header-fields'>
+    <div class="flexrow flex-gap flex-group-left">
+      <h1 class='charname flexgrow'>
+        <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+      </h1>
+      <a class='flexshrink' data-action='sendToChat' title='{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}'>
+        <i class='fas fa-message'></i>
+      </a>
+    </div>
+    <div class='grid grid-3col flex-align-center'>
+
+      {{!-- RANK --}}
+      {{#if (hasProperty system "rank")}}
+        <div>
+          <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}</label>
+          <select name="system.rank.value">
+            {{#if (isIn  item.type "talent" "mysticalPower" "ritual")}}
+              <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Talent'}}</option>
+              <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Talent'}}</option>
+              <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Talent'}}</option>
+            {{else}}
+              <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Trait'}}</option>
+              <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Trait'}}</option>
+              <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Trait'}}</option>
+            {{/if}}
+          </select>
+        </div>
+      {{/if}}
+
+      {{!-- EXPERIENCE --}}
+      {{#if (hasProperty system "xpCost")}}
+        <div>
+          <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}</label>
+          <input type='number' step="5" name='system.xpCost' value='{{system.xpCost}}' data-dtype='Number'/>
+        </div>
+      {{/if}}
+
+      {{!-- WEIGHT --}}
+      {{#if (hasProperty system "weight")}}
+        <div>
+          <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Weight'}}</label>
+          <input type='number' step="0.5" name='system.weight' value='{{system.weight}}' data-dtype='Number'/>
+        </div>
+      {{/if}}
+
+    </div>
+  </div>
+</div>

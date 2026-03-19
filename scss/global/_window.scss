@@ -12,6 +12,27 @@
   padding-left: 10%;
 }
 
+.hidden {
+  display: none;
+}
+
+.wrath-of-davokar.sheet {
+  .window-content {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .tab {
+    height: 100%;
+    overflow-y: auto;
+  }
+}
 
 // .rollable {
 //   &:hover,

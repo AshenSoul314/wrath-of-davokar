@@ -1,0 +1,23 @@
+
+{{!-- Talent Tab --}}
+<section class='tab sheet-body item-talent {{tab.cssClass}}' data-group='primary' data-tab='main'>
+  <div class="flex-group-left">
+    <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+    <span>{{localizeActions system.action}}</span>
+  </div>
+  <hr>
+  <div class="form-group editor">
+    {{#if editable}}
+      <prose-mirror
+        name="system.description"
+        value="{{system.description}}"
+        button="true"
+        toggled="true"
+      >
+        {{{enrichedDescription}}}
+      </prose-mirror>
+    {{else}}
+      {{{enrichedDescription}}}
+    {{/if}}
+  </div>
+</section>

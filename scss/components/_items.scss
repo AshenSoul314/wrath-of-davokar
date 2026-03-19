@@ -1,14 +1,14 @@
 @use "../utils" as utils;
 
 .wrath-of-davokar {
-  .quality{
+  .quality {
+    background: utils.$c-toughness;
+    color: utils.$c-light-text;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 0.1em 0.5em;
     text-align: center;
-    background-color: var(--color-dark);
-    color: var(--color-light-text);
-    border-radius: 20px;
-    margin-left: 5px;
-    margin-top: 5px;
-    padding: 5px;
+    border-radius: 1vh;
   }
 
   .item-send-to-chat {
@@ -18,11 +18,46 @@
     margin-right: 5px;
   }
 
+  .artifact-power-warning {
+    color: utils.$c-red;
+  }
+
+  .artifact-power-list {
+    .dimmed {
+      color: utils.$c-beige;
+    }
+  }
+
+  .artifact-power-search {
+    .artifact-power-dropdown {
+      border: utils.$c-border 1px solid;
+      border-top-width: 0;
+      border-radius: 0 0 1em 1em;
+      margin-top: 0;
+      margin-left: 1em;
+      margin-right: 1em;
+      padding: 1em;
+      background-color: utils.$c-dark;
+      list-style-type: none;
+
+      .artifact-power-dropdown-item {
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .already-added {
+        color: utils.$c-green;
+        cursor: default;
+      }
+
+    }
+  }
+
   // -----------------------------------------
   // Items Lists
   // -----------------------------------------
 
-  .items-title{
+  .items-title {
     font-size: 1.25em;
     margin-top: 15px;
   }
@@ -36,10 +71,12 @@
     background: rgba(0, 0, 0, 0.05);
     border: utils.$border-groove;
     font-weight: bold;
-    > * {
+
+    >* {
       font-size: 14px;
       text-align: center;
     }
+
     .item-name {
       font-weight: bold;
       padding-left: 5px;
@@ -64,23 +101,47 @@
     .item-name {
       flex: 2;
       margin: 0;
+      padding: 5px;
       overflow: hidden;
       font-size: 13px;
       text-align: left;
       align-items: center;
       display: flex;
-      h3, h4 {
+
+      h3,
+      h4 {
         margin: 0;
         white-space: nowrap;
         overflow-x: hidden;
       }
     }
 
-    // Control Buttons
+    // A Control Button or Link
+    .item-control {
+      cursor: pointer;
+      transition: text-shadow 0.3s ease;
+
+      &:hover,
+      &:focus {
+        text-shadow: 0 0 0.3em utils.$c-shadow-red;
+      }
+
+      img {
+        transition: box-shadow 0.3s ease; // baseline
+      }
+
+      &:hover img {
+        box-shadow: 0 0 10px utils.$c-shadow-red;
+      }
+    }
+
+    // Control Buttons Div
     .item-controls {
       display: flex;
       flex: 0 0 100px;
       justify-content: flex-end;
+      padding: 5px;
+
       a {
         font-size: 12px;
         text-align: center;
@@ -93,10 +154,14 @@
       align-items: center;
       padding: 0 2px; // to align with the header border
       border-bottom: 1px solid utils.$c-border;
-      &:last-child { border-bottom: none; }
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       .item-name {
-        color: utils.$c-dark;
+        color: utils.$c-light-text;
+
         .item-image {
           flex: 0 0 30px;
           height: 30px;
@@ -108,7 +173,7 @@
 
       .item-attribute {
         flex: 0 0 120px;
-        padding: 0 8px;
+        padding: 5px 8px;
         text-align: center;
       }
 

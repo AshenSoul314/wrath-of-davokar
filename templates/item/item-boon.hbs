@@ -1,0 +1,27 @@
+{{! Boon Tab }}
+<section class='tab sheet-body item-alchemical {{tab.cssClass}}' data-group='primary' data-tab='main'>
+  {{!-- Action(s) --}}
+  <div class="flex-group-left">
+    <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+    <span>
+      {{~#each system.action}}
+        {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
+      {{/each~}}
+    </span>
+  </div>
+  <hr>
+  <div class="form-group editor">
+    {{#if editable}}
+      <prose-mirror
+        name="system.description"
+        value="{{system.description}}"
+        button="true"
+        toggled="true"
+      >
+        {{{enrichedDescription}}}
+      </prose-mirror>
+    {{else}}
+      {{{enrichedDescription}}}
+    {{/if}}
+  </div>
+</section>

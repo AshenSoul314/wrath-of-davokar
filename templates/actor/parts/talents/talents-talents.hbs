@@ -1,0 +1,29 @@
+<div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
+  {{#each talents}}
+    <div class="talent-card item flexgrow" data-item-id="{{this._id}}">
+      <div class="talent-header flex-row flex-group-center flex-gap">
+        <div class='item-image'>
+          <a class='interactive' data-action="itemRoll"><img src='{{this.img}}' title='{{this.name}}' width='40' height='40'/></a>
+        </div>
+        <span class="flexgrow">{{this.name}}</span>
+        <a class='item-control' data-action="itemEdit"   title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.talent")}}'><i class='fas fa-edit'></i></a>
+        <a class='item-control' data-action="itemDelete" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.talent")}}'><i class='fas fa-trash'></i></a>
+      </div>
+      <div class="talent-content">
+        <div class="talent-text">
+          <prose-mirror name="system.description" toggled="true">{{{this.enrichedDescription}}}</prose-mirror>
+        </div>
+        <div class="resource-grid talent-bottom-row">
+          <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+          <span>{{localizeActions this.system.action}}</span>
+          <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
+          <span>
+            {{#if (eq this.system.rank.value '1')}}{{localize "WRATH_OF_DAVOKAR.Rank.One.Talent"}}{{/if}}
+            {{#if (eq this.system.rank.value '2')}}{{localize "WRATH_OF_DAVOKAR.Rank.Two.Talent"}}{{/if}}
+            {{#if (eq this.system.rank.value '3')}}{{localize "WRATH_OF_DAVOKAR.Rank.Three.Talent"}}{{/if}}
+          </span>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

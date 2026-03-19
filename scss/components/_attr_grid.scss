@@ -1,39 +1,62 @@
 @use "../utils" as utils;
 
 .wrath-of-davokar {
+
   .attributes-grid {
     grid-template-rows: max-content;
+
+    .attr-physique-section {
+      margin-bottom: 1em;
+      margin-right: 1em;
+    }
+
+    .attr-finesse-section {
+      margin-bottom: 1em;
+      margin-left: 1em;
+    }
+
+    .attr-wits-section {
+      margin-top: 1em;
+      margin-right: 1em;
+    }
+
+    .attr-empathy-section {
+      margin-top: 1em;
+      margin-left: 1em;
+    }
+
+    .attr-header {
+      border-bottom: 1px solid utils.$c-border;
+    }
 
     .text-attribute {
       font-weight: bold;
       text-transform: uppercase;
-      border-bottom: 1px solid utils.$c-dark;
       text-align: left;
-      width: 80%;    
+      width: 80%;
       cursor: pointer;
 
       &:hover {
-        text-shadow: 0 0 4px orangered;
+        text-shadow: 0 0 4px utils.$c-shadow-red;
       }
     }
 
     .text-skill {
       text-align: left;
       padding-left: 10px;
-      width: 80%;    
+      width: 80%;
       cursor: pointer;
 
       &:hover {
-        text-shadow: 0 0 4px orangered;
+        text-shadow: 0 0 4px utils.$c-shadow-red;
       }
     }
-
 
     .input-attribute,
     .input-skill {
       max-width: 3em;
     }
-    
+
     .input-attribute {
       font-weight: bold;
     }
@@ -50,7 +73,7 @@
       gap: 10px;
       border-top: 1px solid utils.$c-border;
       padding-top: 10px;
-      
+
       .spellcasting-title {
         font-weight: bold;
         text-transform: uppercase;
@@ -61,7 +84,7 @@
           text-shadow: 0 0 4px orangered;
         }
       }
-      
+
       .spellcasting-total {
         font-weight: bold;
       }

@@ -38,7 +38,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
     let label;
     const selected = skill === defaultCombo[1];
     if (skill === 'corruption') {
-      label = `${game.i18n.format('WRATH_OF_DAVOKAR.Corruption.Total')} (${actor.system.corruption.total})}`;
+      label = `${game.i18n.format('WRATH_OF_DAVOKAR.Corruption.Total')} (${actor.system.corruption.value})}`;
     } else {
       const localize = game.i18n.format(`WRATH_OF_DAVOKAR.Skills.${skill.charAt(0).toUpperCase() + skill.slice(1)}.long`)
       label = `${localize} (${actor.system.skills[skill].total})`;
@@ -51,7 +51,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
   }).join("");
 
   const content = `
-  <div class="wrath-of-davokar">
+  <div class="wrath-of-davokar flex-column flex-gap">
     <div class="form-group">
       <label>${game.i18n.localize("WRATH_OF_DAVOKAR.Attributes.Label")}</label>
       <select name="attrSelect" ${defaultSpellcasting ? "disabled" : ""}>${attrOptions}</select>
@@ -67,6 +67,10 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
       </label>
     </div>
     <hr>
+    <div class="form-group">
+      <label>${game.i18n.localize("WRATH_OF_DAVOKAR.Roll.Title")}</label>
+      <input type="text" name="title" value=""></input>
+    </div>
     <div class="form-group">
       <label>${game.i18n.localize("WRATH_OF_DAVOKAR.Roll.Modifier")}</label>
       <input type="number" name="modifier" step="1" value="0"></input>
@@ -94,6 +98,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
         label: game.i18n.format("Confirm"),
         callback: (event, button, dialog) => {
           const form = button.form;
+          const title = form.title.value;
           const attribute = form.attrSelect.value;
           const skill = form.skillSelect.value;
           const useSpellcasting = form.spellToggle.checked;
@@ -103,6 +108,7 @@ export async function selectSkillRoll(actor, defaultCombo=["physique", "enduranc
           const d12 = form.d12?.value;
 
           const result = {
+            title: title,
             attribute: attribute,
             skill: skill,
             spellcasting: useSpellcasting,
@@ -209,15 +215,15 @@ export async function chooseAttackerToken(actor) {
 }
 
 /**
- * Display a dialog asking the user to select a slot to equip an item in
+ * Display a dialog asking the user to select am at-hand slot to equip an item in
  *
  * @param {Actor} actor - The actor the item will be equiped on.
  * @param {Item} item - The item being equiped
  * @returns {Promise<String | null>}
  * Returns the slot key the item will be equipped to or `null` if the dialog was cancelled.
  */
-export async function selectEquipSlot(actor, item) {
-  const slots = actor.system.encumbrance.equipSlots;
+export async function selectAtHandSlot(actor, item) {
+  const slots = actor.system.encumbrance.atHandSlots;
 
   let html = '<div class="wrath-of-davokar">'
 

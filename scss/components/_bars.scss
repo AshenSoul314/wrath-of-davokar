@@ -1,19 +1,24 @@
 @use "../utils" as utils;
 
 .wrath-of-davokar {
+
+  .willpower-token-hud-input {
+    border: 1px solid utils.$c-willpower;
+  }
+
   .progress-bar {
     border-width: 1px;
     border-style: solid;
     border-color: utils.$c-border;
-    border-radius: 10px;
+    border-radius: 0.5em;
     background-color: rgba(0, 0, 0, 0.01);
-    width: 100%; 
-    height:20px; 
+    width: 100%;
+    height:1em;
     display:flex;
     overflow-x: clip;
     overflow-y: clip;
     position: relative;
-    
+
 
     .bar-toughness {
       border: none;
@@ -24,45 +29,52 @@
     .bar-corruption-threshold {
       border-width: 0px 1px;
       border-style: solid;
-      border-color: rgba(255, 255, 255, 0.7); 
+      border-color: rgba(255, 255, 255, 0.7);
       background-color: black;
-      width:3px; 
-      position:absolute; 
-      height: 20px;
+      width:3px;
+      position:absolute;
+      height: 1em;
     }
 
     .bar-corruption-permanent {
       border: none;
       background-color: utils.$c-corruption;
-      height:20px;
+      height:1em;
     }
 
     .bar-corruption-temporary {
       border: none;
       background-color: utils.$c-corruption-light;
-      height:20px;
+      height:1em;
     }
   }
 
   .bar-willpower {
     margin-top: 0;
     margin-bottom: 0;
-    column-gap: 3px;
 
+    .bar-willpower-filled,
     .bar-willpower-empty {
-      border-width: 1px;
-      border-color: utils.$c-border;
-      border-style: solid;
-      background-color: rgba(0, 0, 0, 0.01);
-      height:20px;
+      border-right: 1px utils.$c-border solid;
+      flex: 1;
+
     }
 
+    .bar-willpower-filled.bar-willpower-start,
+    .bar-willpower-empty.bar-willpower-start {
+      border-radius: 0.5em 0 0 0.5em;
+    }
+
+    .bar-willpower-filled.bar-willpower-end,
+    .bar-willpower-empty.bar-willpower-end {
+      border-radius: 0 0.5em 0.5em 0;
+      border-right: unset;
+    }
+
+
+
     .bar-willpower-filled {
-      border-width: 1px;
-      border-color: utils.$c-border;
-      border-style: solid; 
       background-color: utils.$c-willpower;
-      height:20px;
     }
   }
 }

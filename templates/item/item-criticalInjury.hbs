@@ -1,0 +1,33 @@
+{{! Critical Injury Tab }}
+<section class='tab sheet-body item-criticalInjury {{tab.cssClass}}' data-group='primary' data-tab='main'>
+  <div class="resource-grid ">
+    {{!-- Death Mod --}}
+    <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.DeathMod'}}:</label>
+    <input type='number' step="1" name='system.deathMod' value='{{system.deathMod}}' data-dtype='Number'/>
+
+    {{!-- Healing Time Formula --}}
+    <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Formula'}}:</label>
+    <input class='flexshrink' type='text' name='system.healingTime.formula' value='{{system.healingTime.formula}}'/>
+
+    {{!-- Healing Time --}}
+    {{#if system.healingTime.value includeZero=true}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Label'}}:</label>
+      <input class='flexshrink' type='text' name='system.healingTime.value' value='{{system.healingTime.value}}'/>
+    {{/if}}
+  </div>
+  <hr>
+  <div class="form-group editor">
+    {{#if editable}}
+      <prose-mirror
+        name="system.description"
+        value="{{system.description}}"
+        button="true"
+        toggled="true"
+      >
+        {{{enrichedDescription}}}
+      </prose-mirror>
+    {{else}}
+      {{{enrichedDescription}}}
+    {{/if}}
+  </div>
+</section>

@@ -1,0 +1,38 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="description">
+  <div class="grid grid-2col">
+
+    {{!-- Bio --}}
+    <div class="panel">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Bio.Description'}}</div>
+      <prose-mirror name="system.bio.description" toggled="true" button="true">{{{enrichedDescription}}}</prose-mirror>
+    </div>
+
+    {{!-- NPC-specific bio fields --}}
+    <div class="flex-column flex-group-center flex-align-stretch">
+      <div class="panel">
+        <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Bio.Traits'}}</div>
+        <div class="panel-content grid grid-1col">
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Appearance'}}</div>
+          <textarea class="trait-text" name="system.bio.appearance" rows="3">{{system.bio.appearance}}</textarea>
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Quote'}}</div>
+          <textarea class="trait-text" name="system.bio.quote" rows="3">{{system.bio.quote}}</textarea>
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Shadow'}}</div>
+          <textarea class="trait-text" name="system.bio.shadow" rows="3">{{system.bio.shadow}}</textarea>
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Manner'}}</div>
+          <textarea class="trait-text" name="system.bio.manner" rows="3">{{system.bio.manner}}</textarea>
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Resistance'}}</div>
+          <textarea class="trait-text" name="system.bio.resistance" rows="3">{{system.bio.resistance}}</textarea>
+
+          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Tactics'}}</div>
+          <textarea class="trait-text" name="system.bio.tactics" rows="3">{{system.bio.tactics}}</textarea>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

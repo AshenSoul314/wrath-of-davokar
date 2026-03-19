@@ -9,11 +9,12 @@
     width: fit-content;
     background: utils.$c-dark;
     color: utils.$c-light-text;
+    transition: box-shadow 0.3s ease, font-weight 0.3 ease;
   }
 
   .die-roll:hover, .die-roll:focus, .interactive:hover, .interactive:focus  {
     cursor: pointer;
-    box-shadow: 0 0 8px 0 rgba(255, 0, 0, 0.2), 0 0 20px 0 rgba(255, 0, 0, 0.19);
+    box-shadow: 0 0 10px 0 utils.$c-shadow-red;
     font-weight: bold;
   }
 }

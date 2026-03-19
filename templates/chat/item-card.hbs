@@ -47,7 +47,7 @@
 
   {{#if system.grip}}
     <div>
-      <b>{{ localize "WRATH_OF_DAVOKAR.Grip.Label" }}:</b>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Weapon.Grip.Label" }}:</b>
       {{#if (eq system.grip "oneHanded")}}
         {{localize "WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long"}}
       {{else}}
@@ -152,7 +152,7 @@
           data-item-id="{{../_id}}"
           {{#if ../actorId}} data-actor-id="{{../actorId}}" {{/if}}
           data-item-effect-id="{{@key}}"
-          title="'{{localize "DOCUMENT.Delete" type=(localize "Types.Item.itemEffect")}}">
+          title="'{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}">
           <i class="fa-solid fa-trash"></i>
         </button>
       </div>

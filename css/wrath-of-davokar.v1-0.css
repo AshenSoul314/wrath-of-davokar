@@ -11,12 +11,15 @@
   --wod-color-gold: #b8860b;
   --wod-color-gold-light: #daa520;
   --wod-color-gold-bright: #fcc200;
+  --wod-color-green: #428a32;
+  --wod-color-red: #9f1e49;
   --wod-color-corruption: #630eb8;
   --wod-color-corruption-light: #c187c2;
   --wod-color-toughness: #9f1e49;
   --wod-color-willpower: #00bfff;
   --wod-color-border: #7a7971;
   --wod-color-light-text: #ddd;
+  --wod-color-shadow-red: rgba(255, 0, 0, 0.5019607843);
 }
 
 /* Global styles */
@@ -30,6 +33,26 @@
 
 .indent {
   padding-left: 10%;
+}
+
+.hidden {
+  display: none;
+}
+
+.wrath-of-davokar.sheet .window-content {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.wrath-of-davokar.sheet .sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.wrath-of-davokar.sheet .tab {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .grid,
@@ -267,16 +290,34 @@
 .wrath-of-davokar .attributes-grid {
   grid-template-rows: max-content;
 }
+.wrath-of-davokar .attributes-grid .attr-physique-section {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-finesse-section {
+  margin-bottom: 1em;
+  margin-left: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-wits-section {
+  margin-top: 1em;
+  margin-right: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-empathy-section {
+  margin-top: 1em;
+  margin-left: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-header {
+  border-bottom: 1px solid #7a7971;
+}
 .wrath-of-davokar .attributes-grid .text-attribute {
   font-weight: bold;
   text-transform: uppercase;
-  border-bottom: 1px solid #191813;
   text-align: left;
   width: 80%;
   cursor: pointer;
 }
 .wrath-of-davokar .attributes-grid .text-attribute:hover {
-  text-shadow: 0 0 4px orangered;
+  text-shadow: 0 0 4px rgba(255, 0, 0, 0.5019607843);
 }
 .wrath-of-davokar .attributes-grid .text-skill {
   text-align: left;
@@ -285,7 +326,7 @@
   cursor: pointer;
 }
 .wrath-of-davokar .attributes-grid .text-skill:hover {
-  text-shadow: 0 0 4px orangered;
+  text-shadow: 0 0 4px rgba(255, 0, 0, 0.5019607843);
 }
 .wrath-of-davokar .attributes-grid .input-attribute,
 .wrath-of-davokar .attributes-grid .input-skill {
@@ -320,14 +361,17 @@
   font-weight: bold;
 }
 
+.wrath-of-davokar .willpower-token-hud-input {
+  border: 1px solid #00bfff;
+}
 .wrath-of-davokar .progress-bar {
   border-width: 1px;
   border-style: solid;
   border-color: #7a7971;
-  border-radius: 10px;
+  border-radius: 0.5em;
   background-color: rgba(0, 0, 0, 0.01);
   width: 100%;
-  height: 20px;
+  height: 1em;
   display: flex;
   overflow-x: clip;
   overflow-y: clip;
@@ -345,36 +389,38 @@
   background-color: black;
   width: 3px;
   position: absolute;
-  height: 20px;
+  height: 1em;
 }
 .wrath-of-davokar .progress-bar .bar-corruption-permanent {
   border: none;
   background-color: #630eb8;
-  height: 20px;
+  height: 1em;
 }
 .wrath-of-davokar .progress-bar .bar-corruption-temporary {
   border: none;
   background-color: #c187c2;
-  height: 20px;
+  height: 1em;
 }
 .wrath-of-davokar .bar-willpower {
   margin-top: 0;
   margin-bottom: 0;
-  column-gap: 3px;
 }
+.wrath-of-davokar .bar-willpower .bar-willpower-filled,
 .wrath-of-davokar .bar-willpower .bar-willpower-empty {
-  border-width: 1px;
-  border-color: #7a7971;
-  border-style: solid;
-  background-color: rgba(0, 0, 0, 0.01);
-  height: 20px;
+  border-right: 1px #7a7971 solid;
+  flex: 1;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-filled .bar-willpower-start,
+.wrath-of-davokar .bar-willpower .bar-willpower-empty .bar-willpower-start {
+  border-radius: 0.5em 0 0 0.5em;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-filled .bar-willpower-end,
+.wrath-of-davokar .bar-willpower .bar-willpower-empty .bar-willpower-end {
+  border-radius: 0 0.5em 0.5em 0;
+  border-right: unset;
 }
 .wrath-of-davokar .bar-willpower .bar-willpower-filled {
-  border-width: 1px;
-  border-color: #7a7971;
-  border-style: solid;
   background-color: #00bfff;
-  height: 20px;
 }
 
 .wrath-of-davokar .effects .item .effect-source,
@@ -393,8 +439,8 @@
   font-family: "Roboto", sans-serif;
 }
 .wrath-of-davokar .sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
+  flex: 0;
+  overflow: visible;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -424,10 +470,13 @@
   flex: 0;
 }
 .wrath-of-davokar .sheet-body,
-.wrath-of-davokar .sheet-body .tab,
-.wrath-of-davokar .sheet-body .tab .editor {
+.wrath-of-davokar .sheet-body .editor {
   height: 100%;
   min-height: 10em;
+}
+.wrath-of-davokar .sheet-body {
+  overflow: scroll;
+  padding: 1em;
 }
 .wrath-of-davokar .tox .tox-editor-container {
   background: #fff;
@@ -443,27 +492,53 @@
   width: fit-content;
   background: #191813;
   color: #ddd;
+  transition: box-shadow 0.3s ease, font-weight 0.3 ease;
 }
 .wrath-of-davokar .die-roll:hover, .wrath-of-davokar .die-roll:focus, .wrath-of-davokar .interactive:hover, .wrath-of-davokar .interactive:focus {
   cursor: pointer;
-  box-shadow: 0 0 8px 0 rgba(255, 0, 0, 0.2), 0 0 20px 0 rgba(255, 0, 0, 0.19);
+  box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.5019607843);
   font-weight: bold;
 }
 
 .wrath-of-davokar .quality {
+  background: #9f1e49;
+  color: #ddd;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding: 0.1em 0.5em;
   text-align: center;
-  background-color: var(--color-dark);
-  color: var(--color-light-text);
-  border-radius: 20px;
-  margin-left: 5px;
-  margin-top: 5px;
-  padding: 5px;
+  border-radius: 1vh;
 }
 .wrath-of-davokar .item-send-to-chat {
   flex: 0;
   font-size: 1.5em;
   aspect-ratio: 1/1;
   margin-right: 5px;
+}
+.wrath-of-davokar .artifact-power-warning {
+  color: #9f1e49;
+}
+.wrath-of-davokar .artifact-power-list .dimmed {
+  color: #b5b3a4;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown {
+  border: #7a7971 1px solid;
+  border-top-width: 0;
+  border-radius: 0 0 1em 1em;
+  margin-top: 0;
+  margin-left: 1em;
+  margin-right: 1em;
+  padding: 1em;
+  background-color: #191813;
+  list-style-type: none;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown .artifact-power-dropdown-item {
+  text-align: left;
+  cursor: pointer;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown .already-added {
+  color: #428a32;
+  cursor: default;
 }
 .wrath-of-davokar .items-title {
   font-size: 1.25em;
@@ -502,21 +577,37 @@
 .wrath-of-davokar .items-list .item-name {
   flex: 2;
   margin: 0;
+  padding: 5px;
   overflow: hidden;
   font-size: 13px;
   text-align: left;
   align-items: center;
   display: flex;
 }
-.wrath-of-davokar .items-list .item-name h3, .wrath-of-davokar .items-list .item-name h4 {
+.wrath-of-davokar .items-list .item-name h3,
+.wrath-of-davokar .items-list .item-name h4 {
   margin: 0;
   white-space: nowrap;
   overflow-x: hidden;
+}
+.wrath-of-davokar .items-list .item-control {
+  cursor: pointer;
+  transition: text-shadow 0.3s ease;
+}
+.wrath-of-davokar .items-list .item-control:hover, .wrath-of-davokar .items-list .item-control:focus {
+  text-shadow: 0 0 0.3em rgba(255, 0, 0, 0.5019607843);
+}
+.wrath-of-davokar .items-list .item-control img {
+  transition: box-shadow 0.3s ease;
+}
+.wrath-of-davokar .items-list .item-control:hover img {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5019607843);
 }
 .wrath-of-davokar .items-list .item-controls {
   display: flex;
   flex: 0 0 100px;
   justify-content: flex-end;
+  padding: 5px;
 }
 .wrath-of-davokar .items-list .item-controls a {
   font-size: 12px;
@@ -532,7 +623,7 @@
   border-bottom: none;
 }
 .wrath-of-davokar .items-list .item .item-name {
-  color: #191813;
+  color: #ddd;
 }
 .wrath-of-davokar .items-list .item .item-name .item-image {
   flex: 0 0 30px;
@@ -543,7 +634,7 @@
 }
 .wrath-of-davokar .items-list .item .item-attribute {
   flex: 0 0 120px;
-  padding: 0 8px;
+  padding: 5px 8px;
   text-align: center;
 }
 .wrath-of-davokar .items-list .item .item-armor-rating {
@@ -564,10 +655,13 @@
   border: none;
 }
 
+.wrath-of-davokar .panel-like-item {
+  margin: 1em 0;
+}
 .wrath-of-davokar .panel,
 .wrath-of-davokar .panel-no-flex {
   border: 1px solid #7a7971;
-  margin: 5px;
+  margin: 1em;
   min-width: 200px;
 }
 .wrath-of-davokar .panel .panel-header,
@@ -606,21 +700,30 @@
   font-weight: normal;
   white-space: nowrap;
 }
-.wrath-of-davokar .resource-grid {
+.wrath-of-davokar .resource-indent {
+  padding-left: 1em;
+}
+.wrath-of-davokar .resource-grid,
+.wrath-of-davokar .resource-grid-2,
+.wrath-of-davokar .resource-grid-3,
+.wrath-of-davokar .resource-grid-4 {
   display: grid;
-  grid-template-columns: min-content auto;
   gap: 10px;
   margin: 10px 0;
   padding: 0;
   align-items: center;
 }
+.wrath-of-davokar .resource-grid {
+  grid-template-columns: min-content minmax(min-content, 1fr);
+}
 .wrath-of-davokar .resource-grid-2 {
-  display: grid;
-  grid-template-columns: min-content auto min-content auto;
-  gap: 10px;
-  margin: 10px 0;
-  padding: 0;
-  align-items: center;
+  grid-template-columns: repeat(2, min-content minmax(min-content, 1fr));
+}
+.wrath-of-davokar .resource-grid-3 {
+  grid-template-columns: repeat(3, min-content minmax(min-content, 1fr));
+}
+.wrath-of-davokar .resource-grid-4 {
+  grid-template-columns: repeat(4, min-content minmax(min-content, 1fr));
 }
 
 .wrath-of-davokar .talent-card {
@@ -629,6 +732,9 @@
   min-width: 250px;
   display: flex;
   flex-direction: column;
+}
+.wrath-of-davokar .talent-card .item-image {
+  margin: -5px;
 }
 .wrath-of-davokar .talent-card .talent-header {
   background-color: #191813;
@@ -642,6 +748,9 @@
   max-height: 200px;
   text-align: justify;
   flex: 1;
+}
+.wrath-of-davokar .talent-card .talent-text .editor-content > * {
+  width: 95%;
 }
 .wrath-of-davokar .talent-card .talent-content {
   margin: 10px;
@@ -792,6 +901,15 @@
   padding-bottom: 5px;
   padding-top: 5px;
   border-bottom: 1px solid #7a7971;
+}
+.wrath-of-davokar.chat-message .message-content .dice-buttons {
+  width: 100%;
+  margin-top: 1em;
+  flex-direction: column;
+  gap: 10px;
+}
+.wrath-of-davokar.chat-message .message-content .dice-buttons .dice-button {
+  width: 100%;
 }
 .wrath-of-davokar.chat-message .message-content .applyItemEffectButton {
   display: flex;

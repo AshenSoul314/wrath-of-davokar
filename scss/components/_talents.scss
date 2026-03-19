@@ -8,6 +8,10 @@
     display: flex;
     flex-direction: column;
 
+    .item-image {
+      margin: -5px;
+    }
+
     .talent-header {
       background-color: utils.$c-dark;
       color: utils.$c-light-text;
@@ -21,6 +25,13 @@
       max-height: 200px;
       text-align: justify;
       flex: 1;
+
+      .editor-content {
+        > * {
+          width: 95%;
+        }
+      }
+
     }
 
     .talent-content{

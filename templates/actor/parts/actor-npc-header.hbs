@@ -1,0 +1,19 @@
+<div class="sheet-header">
+  <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}" height="100" width="100"/>
+  <div class="header-fields">
+    <h1 class="charname">
+      <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
+    </h1>
+
+    <div class="resources grid grid-3col flex-group-center">
+      <label for="system.bio.archetype" class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Archetype"}}</label>
+      <label for="system.bio.heritage"  class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Heritage"}}</label>
+      <label for="system.bio.resistance" class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Bio.Resistance"}}</label>
+
+      <input class="grid-span-1" type="text" name="system.bio.archetype" value="{{system.bio.archetype}}"/>
+      <input class="grid-span-1" type="text" name="system.bio.heritage"  value="{{system.bio.heritage}}"/>
+      <input class="grid-span-1" type="text" name="system.bio.resistance"  value="{{system.bio.resistance}}"/>
+      <span class="grid-span-3"><i>{{system.bio.manner}}</i></span>
+    </div>
+  </div>
+</div>

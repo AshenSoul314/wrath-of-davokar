@@ -21,20 +21,31 @@
     white-space: nowrap;
   }
 
-  .resource-grid {
+  .resource-indent {
+    padding-left: 1em;
+  }
+
+  .resource-grid,
+  .resource-grid-2,
+  .resource-grid-3,
+  .resource-grid-4 {
     display: grid;
-    grid-template-columns: min-content auto;
     gap: 10px;
     margin: 10px 0;
     padding: 0;
     align-items: center;
   }
+
+  .resource-grid {
+    grid-template-columns: min-content minmax(min-content, 1fr);
+  }
   .resource-grid-2{
-    display: grid;
-    grid-template-columns: min-content auto min-content auto;
-    gap: 10px;
-    margin: 10px 0;
-    padding: 0;
-    align-items: center;
+    grid-template-columns: repeat(2, min-content minmax(min-content, 1fr));
+  }
+  .resource-grid-3{
+    grid-template-columns: repeat(3, min-content minmax(min-content, 1fr));
+  }
+  .resource-grid-4{
+    grid-template-columns: repeat(4, min-content minmax(min-content, 1fr));
   }
 }

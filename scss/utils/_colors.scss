@@ -8,7 +8,10 @@ $c-brown-dark: #2e2a26;
 $c-brown-light: #4c3c29;
 $c-gold: #b8860b;
 $c-gold-light: #daa520;
-$c-gold-bright: #fcc200 ;
+$c-gold-bright: #fcc200;
+$c-green: #428a32;
+$c-red: #9f1e49;
+$c-shadow-red: #ff000080;
 
 $c-corruption: #630eb8;
 $c-corruption-light: #c187c2;
@@ -17,6 +20,7 @@ $c-willpower: #00bfff;
 
 $c-border: #7a7971;
 $c-light-text: #ddd;
+
 
 :root {
   --wod-color-white: #{$c-white};
@@ -30,6 +34,8 @@ $c-light-text: #ddd;
   --wod-color-gold: #{$c-gold};
   --wod-color-gold-light: #{$c-gold-light};
   --wod-color-gold-bright: #{$c-gold-bright};
+  --wod-color-green: #{$c-green};
+  --wod-color-red: #{$c-red};
 
   --wod-color-corruption: #{$c-corruption};
   --wod-color-corruption-light: #{$c-corruption-light};
@@ -38,4 +44,5 @@ $c-light-text: #ddd;
 
   --wod-color-border: #{$c-border};
   --wod-color-light-text: #{$c-light-text};
+  --wod-color-shadow-red: #{$c-shadow-red};
 }

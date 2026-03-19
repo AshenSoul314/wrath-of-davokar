@@ -80,15 +80,33 @@ export const STATUS_EFFECTS = [
     changes: []
   },
   {
+    id: "blightMarked",
+    name: "WRATH_OF_DAVOKAR.Effect.BlightMarked",
+    img: `${EFFECT_ICON_PATH}blightMarked.svg`,
+    changes: []
+  },
+  {
+    id: "concentration",
+    name: "WRATH_OF_DAVOKAR.Effect.Concentration",
+    img: `${EFFECT_ICON_PATH}concentration.svg`,
+    changes: []
+  },
+  {
+    id: "grappled",
+    name: "WRATH_OF_DAVOKAR.Effect.Grappled",
+    img: `${EFFECT_ICON_PATH}grappled.svg`,
+    changes: []
+  },
+  {
     id: "pain",
     name: "WRATH_OF_DAVOKAR.Effect.Pain",
     img: `${EFFECT_ICON_PATH}pain.svg`,
     changes: []
   },
   {
-    id: "blightMarked",
-    name: "WRATH_OF_DAVOKAR.Effect.BlightMarked",
-    img: `${EFFECT_ICON_PATH}blightMarked.svg`,
+    id: "prone",
+    name: "WRATH_OF_DAVOKAR.Effect.Prone",
+    img: `${EFFECT_ICON_PATH}prone.svg`,
     changes: []
   },
 
