@@ -1,17 +1,21 @@
-<div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
+<div class="talent-grid">
   {{#each traits}}
-    <div class="talent-card item flexgrow" data-item-id="{{this._id}}">
+    <div class="talent-card item flex-grow draggable" data-item-id="{{this._id}}">
       <div class="talent-header flex-row flex-group-center flex-gap">
         <div class='item-image'>
-          <a class='interactive' data-action="itemRoll"><img src='{{this.img}}' title='{{this.name}}' width='40' height='40'/></a>
+          <img src='{{this.img}}' title='{{this.name}}' width='40' height='40'/>
         </div>
-        <span class="flexgrow">{{this.name}}</span>
-        <a class='item-control' data-action="itemEdit"   title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.monsterTrait")}}'><i class='fas fa-edit'></i></a>
-        <a class='item-control' data-action="itemDelete" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.monsterTrait")}}'><i class='fas fa-trash'></i></a>
+        <span class="flex-grow">{{this.name}}</span>
+        <a class='item-control' data-action="itemRoll"   title='{{localize "WRATH_OF_DAVOKAR.Item.Use"}}'><i class='fa-solid fa-dice'></i></a>
+
+        {{#if ../editMode}}
+          <a class='item-control' data-action="itemEdit"   title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.monsterTrait")}}'><i class='fas fa-edit'></i></a>
+          <a class='item-control' data-action="itemDelete" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.monsterTrait")}}'><i class='fas fa-trash'></i></a>
+        {{/if}}
       </div>
       <div class="talent-content">
         <div class="talent-text">
-          <prose-mirror name="system.description" toggled="true">{{{this.enrichedDescription}}}</prose-mirror>
+          {{{this.enrichedDescription}}}
         </div>
         <div class="resource-grid talent-bottom-row">
           <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>

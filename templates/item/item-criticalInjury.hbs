@@ -3,31 +3,37 @@
   <div class="resource-grid ">
     {{!-- Death Mod --}}
     <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.DeathMod'}}:</label>
-    <input type='number' step="1" name='system.deathMod' value='{{system.deathMod}}' data-dtype='Number'/>
+    {{#if editMode}}
+      <input type='number' step="1" name='system.deathMod' value='{{system.deathMod}}' data-dtype='Number'/>
+    {{else}}
+      <span>{{system.deathMod}}</span>
+    {{/if}}
 
     {{!-- Healing Time Formula --}}
     <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Formula'}}:</label>
-    <input class='flexshrink' type='text' name='system.healingTime.formula' value='{{system.healingTime.formula}}'/>
+    {{#if editMode}}
+      <input class='flex-shrink' type='text' name='system.healingTime.formula' value='{{system.healingTime.formula}}'/>
+    {{else}}
+      <span>{{system.healingTime.formula}}</span>
+    {{/if}}
 
     {{!-- Healing Time --}}
     {{#if system.healingTime.value includeZero=true}}
       <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Label'}}:</label>
-      <input class='flexshrink' type='text' name='system.healingTime.value' value='{{system.healingTime.value}}'/>
+      <input class='flex-shrink' type='text' name='system.healingTime.value' value='{{system.healingTime.value}}'/>
     {{/if}}
   </div>
   <hr>
-  <div class="form-group editor">
-    {{#if editable}}
-      <prose-mirror
-        name="system.description"
-        value="{{system.description}}"
-        button="true"
-        toggled="true"
-      >
-        {{{enrichedDescription}}}
-      </prose-mirror>
-    {{else}}
+  {{#if editable}}
+    <prose-mirror
+      name="system.description"
+      value="{{system.description}}"
+      button="true"
+      toggled="true"
+    >
       {{{enrichedDescription}}}
-    {{/if}}
-  </div>
+    </prose-mirror>
+  {{else}}
+    {{{enrichedDescription}}}
+  {{/if}}
 </section>

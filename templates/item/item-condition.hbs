@@ -1,17 +1,15 @@
 {{! Condition Tab }}
 <section class='tab sheet-body item-alchemical {{tab.cssClass}}' data-group='primary' data-tab='main'>
-  <div class="form-group editor">
-    {{#if editable}}
-      <prose-mirror
-        name="system.description"
-        value="{{system.description}}"
-        button="true"
-        toggled="true"
-      >
-        {{{enrichedDescription}}}
-      </prose-mirror>
-    {{else}}
+  {{#if editMode}}
+    <prose-mirror
+      name="system.description"
+      value="{{system.description}}"
+      button="true"
+      toggled="true"
+    >
       {{{enrichedDescription}}}
-    {{/if}}
-  </div>
+    </prose-mirror>
+  {{else}}
+    {{{enrichedDescription}}}
+  {{/if}}
 </section>

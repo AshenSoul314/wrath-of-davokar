@@ -1,29 +1,139 @@
-{{!-- <div class="wrath-of-davokar flexrow flex-group-right">
-    <div id="wrath-tracker" class="wrath-tracker-container flexshrink">
-    <div class="wrath-tracker-header">Wrath Points</div>
-    <div class="wrath-tracker-display">
-        <button class="wp-decrease" {{#unless isGM}}disabled{{/unless}}>-</button>
-        <span id="wrath-points-display" class="wrath-points">{{points}}</span>
-        <button class="wp-increase" {{#unless isGM}}disabled{{/unless}}>+</button>
-    </div>
-    </div>
-</div> --}}
+<div class="flex-row-reverse">
+  <div class="wrath-of-davokar wrath-container">
+    <div id="wrath-tracker" class="wrath-tracker">
+      <span id="wrath-points" class="wrath-points">{{points}}</span>
 
-<div class="wrath-of-davokar wrath-orb-container">
-  <div class="wrath-orb">
-    <img class="wrath-border" src="systems/wrath-of-davokar/assets/orb_border.png"></img>
-    <div class="wrath-liquid-container">
-      <div class="wrath-glass-bg"></div>
-      <img class="wrath-liquid" src="systems/wrath-of-davokar/assets/wrath_liquid.gif"></img>
-    </div>
-    {{!-- <div class="wrath-overlay"></div> --}}
-    <span  id="wrath-points-display" class="wrath-points">{{points}}</span>
-  </div>
+      <svg id="wrath-wave" width="100%" height="100%" id="svg" viewBox="0 0 1400 1400" xmlns="http://www.w3.org/2000/svg"
+        class="wrath-wave">
+        <defs>
+          <linearGradient id="gradient-back" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="5%" stop-color="#332e38"></stop>
+            <stop offset="95%" stop-color="#000000"></stop>
+          </linearGradient>
+          <linearGradient id="gradient-mid" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="5%" stop-color="#4e4556"></stop>
+            <stop offset="95%" stop-color="#000000"></stop>
+          </linearGradient>
+          <linearGradient id="gradient-front" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="5%" stop-color="#5E5368"></stop>
+            <stop offset="95%" stop-color="#000000"></stop>
+          </linearGradient>
+          <path
+            id="wave-tile-back"
+            stroke="none"
+            stroke-width="0"
+            fill="url(#gradient-back)"
+            fill-opacity="1"
+            d="M 0,700
+                L 0,131
+                C 71.40512820512822,141.82820512820513
+                  142.81025641025644,152.65641025641025
+                  218,155
+                C 293.18974358974356,157.34358974358975
+                  372.16410256410245,151.2025641025641
+                  459,131
+                C 545.8358974358976,110.79743589743589
+                  640.5333333333335,76.53333333333332
+                  737,93
+                C 833.4666666666665,109.46666666666668
+                  931.7025641025641,176.66410256410256
+                  1003,188
+                C 1074.297435897436,199.33589743589744
+                  1118.6564102564103,154.81025641025641
+                  1187,136
+                C 1255.3435897435897,117.18974358974359
+                  1347.6717948717949,124.09487179487179
+                  1440,131
+                L 1440,700
+                L 0,700
+                Z"
+            />
+          <path
+            id="wave-tile-mid"
+            stroke="none"
+            stroke-width="0"
+            fill="url(#gradient-mid)"
+            fill-opacity="1"
+            d="M 0,700
+                L 0,306
+                C 100.03076923076924,330.93589743589746
+                  200.06153846153848,355.87179487179486
+                  281,332
+                C 361.9384615384615,308.12820512820514
+                  423.78461538461545,235.44871794871796
+                  482,244
+                C 540.2153846153846,252.55128205128204
+                  594.8,342.3333333333333
+                  680,355
+                C 765.2,367.6666666666667
+                  881.0153846153846,303.2179487179487
+                  972,301
+                C 1062.9846153846154,298.7820512820513
+                  1129.1384615384616,358.7948717948718
+                  1203,370
+                C 1276.8615384615384,381.2051282051282
+                  1358.4307692307693,343.6025641025641
+                  1440,306
+                L 1440,700
+                L 0,700
+                Z"
+          />
+          <path
+            id="wave-tile-front"
+            stroke="none"
+            stroke-width="0"
+            fill="url(#gradient-front)"
+            fill-opacity="1"
+            d="M 0,700
+                L 0,481
+                C 65.68205128205128,516.9846153846154
+                  131.36410256410255,552.9692307692308
+                  208,540
+                C 284.63589743589745,527.0307692307692
+                  372.22564102564104,465.10769230769233
+                  449,450
+                C 525.774358974359,434.89230769230767
+                  591.7333333333333,466.59999999999997
+                  686,481
+                C 780.2666666666667,495.40000000000003
+                  902.8410256410257,492.49230769230763
+                  985,475
+                C 1067.1589743589743,457.50769230769237
+                  1108.9025641025642,425.4307692307692
+                  1178,424
+                C 1247.0974358974358,422.5692307692308
+                  1343.548717948718,451.7846153846154
+                  1440,481
+                L 1440,700
+                L 0,700
+                Z"
+              />
+        </defs>
+        <g class="wave-layer wave-back">
+          <use href="#wave-tile-back" x="-1440"/>
+          <use href="#wave-tile-back" x="0"/>
+          <use href="#wave-tile-back" x="1440"/>
+        </g>
+        <g class="wave-layer wave-mid">
+          <use href="#wave-tile-mid" x="-1440"/>
+          <use href="#wave-tile-mid" x="0"/>
+          <use href="#wave-tile-mid" x="1440"/>
 
-  {{#isGM}}
+        </g>
+        <g class="wave-layer wave-front">
+          <use href="#wave-tile-front" x="-1440"/>
+          <use href="#wave-tile-front" x="0"/>
+          <use href="#wave-tile-front" x="1440"/>
+        </g>
+        <rect x="0" width="1440" height="700" fill="#000" y="0700"/>
+      </svg>
+    </div>
+
+    {{#isGM}}
     <div class="wrath-controls">
       <button class="wp-decrease">–</button>
       <button class="wp-increase">+</button>
     </div>
-  {{/isGM}}
+    {{/isGM}}
+  </div>
 </div>

@@ -1,9 +1,16 @@
-<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="powers">
+<section class="tab {{tab.cssClass}} powers-tab " data-group="primary" data-tab="powers">
 
-  {{> "templates/generic/tab-navigation.hbs" tabs=powerTabs}}
+  <div class="sticky">
+    {{> "templates/generic/tab-navigation.hbs" tabs=powerTabs}}
+
+    {{!-- Search Bar --}}
+    <div class='search-bar flex-row'>
+      <i class='fa-solid fa-magnifying-glass search-icon'></i>
+      <input class="search-input" type='text'>
+    </div>
+  </div>
 
   <div class="powers-body">
-
     <section class="tab {{subTabs.mysticalPowers.cssClass}}" data-group="powers" data-tab="mysticalPowers">
       {{> "systems/wrath-of-davokar/templates/actor/parts/powers/powers-mysticalPowers.hbs"}}
     </section>
@@ -15,6 +22,5 @@
     <section class="tab {{subTabs.artifacts.cssClass}}" data-group="powers" data-tab="artifacts">
       {{> "systems/wrath-of-davokar/templates/actor/parts/powers/powers-artifacts.hbs"}}
     </section>
-
   </div>
 </section>

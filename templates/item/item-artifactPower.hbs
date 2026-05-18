@@ -4,27 +4,27 @@
 
     {{!-- Corruption --}}
     <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}:</label>
-    <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+    {{#if editMode}}
+      <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+    {{else}}
+      <span>{{system.corruption}}</span>
+    {{/if}}
 
     {{!-- Action(s) --}}
     <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
     <span>{{localizeActions system.action}}</span>
-
   </div>
-
   <hr>
-  <div class="form-group editor">
-    {{#if editable}}
-      <prose-mirror
-        name="system.description"
-        value="{{system.description}}"
-        button="true"
-        toggled="true"
-      >
-        {{{enrichedDescription}}}
-      </prose-mirror>
-    {{else}}
+  {{#if editMode}}
+    <prose-mirror
+      name="system.description"
+      value="{{system.description}}"
+      button="true"
+      toggled="true"
+    >
       {{{enrichedDescription}}}
-    {{/if}}
-  </div>
+    </prose-mirror>
+  {{else}}
+    {{{enrichedDescription}}}
+  {{/if}}
 </section>

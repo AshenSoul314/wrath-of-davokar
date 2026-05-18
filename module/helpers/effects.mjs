@@ -109,6 +109,12 @@ export const STATUS_EFFECTS = [
     img: `${EFFECT_ICON_PATH}prone.svg`,
     changes: []
   },
+  {
+    id: "over-encumbered",
+    name: "WRATH_OF_DAVOKAR.Effect.OverEncumbered",
+    img: `${EFFECT_ICON_PATH}over-encumbered.svg`,
+    changes: []
+  },
 
   // Dynamically generated groups
   ...generateRankedEffectGroup("acid"),
@@ -116,40 +122,64 @@ export const STATUS_EFFECTS = [
   ...generateRankedEffectGroup("poison"),
 ];
 
+/* -------------------------------------------- */
+/*  Active Effect CRUD Helpers                  */
+/* -------------------------------------------- */
+
 /**
- * Manage Active Effect instances through an Actor or Item Sheet via effect control buttons.
- * @param {MouseEvent} event      The left-click event on the effect control
- * @param {Actor|Item} owner      The owning document which manages this effect
+ * Create a new ActiveEffect on the owner document.
+ *
+ * @param {Actor|Item}  owner
+ * @param {'temporary'|'passive'|'inactive'} [effectType='passive']
+ * @returns {Promise<ActiveEffect[]>}
  */
-export function onManageActiveEffect(event, owner) {
-  event.preventDefault();
-  const a = event.currentTarget;
-  const li = a.closest('li');
-  const effect = li.dataset.effectId
-    ? owner.effects.get(li.dataset.effectId)
-    : null;
-  switch (a.dataset.action) {
-    case 'create':
-      return owner.createEmbeddedDocuments('ActiveEffect', [
-        {
-          name: game.i18n.format('DOCUMENT.New', {
-            type: game.i18n.localize('DOCUMENT.ActiveEffect'),
-          }),
-          icon: 'icons/svg/aura.svg',
-          origin: owner.uuid,
-          'duration.rounds':
-            li.dataset.effectType === 'temporary' ? 1 : undefined,
-          disabled: li.dataset.effectType === 'inactive',
-        },
-      ]);
-    case 'edit':
-      return effect.sheet.render(true);
-    case 'delete':
-      return effect.delete();
-    case 'toggle':
-      return effect.update({ disabled: !effect.disabled });
-  }
+export function createActiveEffect(owner, effectType = 'passive') {
+  return owner.createEmbeddedDocuments('ActiveEffect', [
+    {
+      name: game.i18n.format('DOCUMENT.New', {
+        type: game.i18n.localize('DOCUMENT.ActiveEffect'),
+      }),
+      icon: 'icons/svg/aura.svg',
+      origin: owner.uuid,
+      'duration.rounds': effectType === 'temporary' ? 1 : undefined,
+      disabled:          effectType === 'inactive',
+    },
+  ]);
 }
+
+/**
+ * Open the sheet for an existing ActiveEffect.
+ *
+ * @param {ActiveEffect} effect
+ * @returns {ApplicationV2}
+ */
+export function editActiveEffect(effect) {
+  return effect?.sheet.render(true);
+}
+
+/**
+ * Delete an existing ActiveEffect.
+ *
+ * @param {ActiveEffect} effect
+ * @returns {Promise<ActiveEffect>}
+ */
+export function deleteActiveEffect(effect) {
+  return effect?.delete();
+}
+
+/**
+ * Toggle the disabled state of an existing ActiveEffect.
+ *
+ * @param {ActiveEffect} effect
+ * @returns {Promise<ActiveEffect>}
+ */
+export function toggleActiveEffect(effect) {
+  return effect?.update({ disabled: !effect.disabled });
+}
+
+/* -------------------------------------------- */
+/*  Effect Category Preparation                 */
+/* -------------------------------------------- */
 
 /**
  * Prepare the data structure for Active Effects which are currently embedded in an Actor or Item.
@@ -185,41 +215,44 @@ export function prepareActiveEffectCategories(effects) {
   return categories;
 }
 
+/* -------------------------------------------- */
+/*  Effect Creation Hook                        */
+/* -------------------------------------------- */
 
 export async function handleEffectCreation(effect, options, userId) {
-  // Only run for players or GMs (avoid remote duplication)
-  if (!game.users.get(userId)?.isGM && userId !== game.user.id) return;
+  // Only run for the initiating user to avoid remote duplication
+  if (userId !== game.user.id) return;
 
-  // Only handle effect creation on Actors
+  // Only handle effects created on Actors
   const actor = effect.parent;
   if (!(actor instanceof Actor)) return;
 
   // Only handle effects with WOD flags
-  const flags = foundry.utils.getProperty(effect, "flags.wod") || null;
-  if (flags === null) return
+  const flags = foundry.utils.getProperty(effect, 'flags.wod') ?? null;
+  if (flags === null) return;
 
-  // Get the flag values or the defaults
-  const type = foundry.utils.getProperty(existing, "flags.wod.type") ?? null;
-  const value =  foundry.utils.getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
-  const single = foundry.utils.getProperty(existing, "flags.wod.single") ?? false;
+  // Read flag values from the newly created effect
+  const type   = foundry.utils.getProperty(effect, 'flags.wod.type')   ?? null;
+  const value  = foundry.utils.getProperty(effect, 'flags.wod.value')  ?? Number.NEGATIVE_INFINITY;
+  const single = foundry.utils.getProperty(effect, 'flags.wod.single') ?? false;
 
-  // Only care about singular, managed effects
-  if (!single || (type === null)) return;
+  // Only care about singular, typed effects
+  if (!single || type === null) return;
 
-  // Check if there is a copy of this effect already in the actor data
-  const existing = actor.effects.find(e => foundry.utils.getProperty(e, "flags.wod.type") === type);
+  // Check if a copy of this effect type already exists on the actor
+  const existing = actor.effects.find(
+    e => e.id !== effect.id && foundry.utils.getProperty(e, 'flags.wod.type') === type
+  );
   if (!existing) return;
 
-  const existingValue = foundry.utils.getProperty(existing, "flags.wod.value") ?? Number.NEGATIVE_INFINITY;
+  const existingValue = foundry.utils.getProperty(existing, 'flags.wod.value') ?? Number.NEGATIVE_INFINITY;
 
-  // Handle singular same-type effect
-  if (existing) {
-    if (value > existingValue) {
-      await existing.delete(); // Allow new effect to replace it
-    } else {
-      // Block the weaker or equal effect
-      ui.notifications.info(`${actor.name} already has a stronger or equal ${type} effect.`);
-      return false; // Cancel creation
-    }
+  if (value > existingValue) {
+    // New effect is stronger — remove the old one
+    await existing.delete();
+  } else {
+    // New effect is weaker or equal — remove it and notify
+    await effect.delete();
+    ui.notifications.info(`${actor.name} already has a stronger or equal ${type} effect.`);
   }
 }

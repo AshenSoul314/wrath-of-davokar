@@ -38,6 +38,7 @@
       },
       "Rating": {
         "long": "Armor Rating",
+        "short": "Armor",
         "abbv": "AR",
         "Total": "Total Armor Rating"
       }
@@ -132,30 +133,34 @@
     "Condition": "Condition",
     "Container": {
       "NumSubSlots": "Item Capacity",
-      "MaxItemWeight": "Maximum Weight Of Any Carried Item"
+      "MaxItemWeight": "Maximum Weight"
     },
     "Corruption": {
       "Label": "Corruption",
-      "Total": "Total Corruption",
+      "Total": {
+        "long": "Total Corruption",
+        "short": "Total",
+        "abbv": "Total"
+      },
       "Max": {
         "long": "Corruption Maximum",
         "short": "Maximum",
-        "abbv": "Corr. Max"
+        "abbv": "Max"
       },
       "Threshold": {
         "long": "Corruption Threshold",
         "short": "Threshold",
-        "abbv": "Corr.Thr."
+        "abbv": "Thr"
       },
       "Temporary": {
         "long": "Temporary Corruption",
         "short": "Temporary",
-        "abbv": "Temp. Corr."
+        "abbv": "Temp"
       },
       "Permanent": {
         "long": "Permanent Corruption",
         "short": "Permanent",
-        "abbv": "Perm. Corr."
+        "abbv": "Perm"
       }
     },
     "CriticalInjury": {
@@ -183,8 +188,13 @@
           "PermissionErrorTitle": "Error: Cannot Auto-Remove Artifact Powers",
           "PermissionErrorBody": "You do not have permission to auto-remove this item's artifact powers. The following powers will need to be removed manually: "
         }
+      },
+      "Items": {
+        "Delete": {
+          "Title": "Delete: {itemName}",
+          "Body": "Do you wish to delete {itemName} from {actorName}?"
+        }
       }
-
     },
     "Effect": {
       "Source": "Source",
@@ -195,7 +205,9 @@
       "BlightMarked": "Blight Marked",
       "Broken": "Broken",
       "Concentration": "Concentrating",
+      "Duration": "Duration",
       "Grappled": "Grappled",
+      "OverEncumbered": "Over Encumbered",
       "Pain": "In Pain",
       "Prone": "Prone",
       "Acid": {
@@ -268,11 +280,13 @@
       "Description": "Description",
       "IsArtifact": "Artifact",
       "ItemSlots": {
-        "label": "Weapons & Equipped Items",
+        "label": "At-Hand Items",
         "EmptySlot": "Empty",
-        "SlotRequired": "Requires an Open Equip Slot to be Equipped"
+        "SlotRequired": "Requires an open At-Hand Slot to be Equipped",
+        "NoValidSlot": "No At-Hand Slots are valid for this item's weight and/or type"
       },
       "Modifiers": "Modifiers",
+      "Other": "Other",
       "SupplyPoints": "Supply Points",
       "Type": "Item Type",
       "UnequipItem": "Unequip {type}",
@@ -416,7 +430,10 @@
       "Supply":         "Wrath Of Davokar - Supply Sheet",
       "Talent":         "Wrath Of Davokar - Talent Sheet",
       "Trap":           "Wrath Of Davokar - Trap Sheet",
-      "Weapon":         "Wrath Of Davokar - Weapon Sheet"
+      "Weapon":         "Wrath Of Davokar - Weapon Sheet",
+
+      "Edit": "Edit Sheet",
+      "LockSheet": "Lock Editing"
     },
     "Skills": {
       "Label": "Skill",
@@ -474,8 +491,8 @@
         "abbr": "Isi"
       },
       "Instinct": {
-        "long": "Instinct",
-        "abbr": "Ist"
+        "long": "Impulse",
+        "abbr": "Imp"
       },
       "Persuasion": {
         "long": "Persuasion",
@@ -487,7 +504,7 @@
       },
       "Spellcasting": {
         "long": "Spellcasting",
-        "abbr": "Spl"
+        "abbr": "Spell"
       }
     },
     "Time": {
@@ -569,16 +586,18 @@
         "Push": "Push",
         "Corruption": "Temporary Corruption",
         "Wrath": "Wrath",
-        "WodWillpower": "Willpower"
+        "WodWillpower": "Willpower",
+        "WodRuleFlavor": "Minimum of one Skill"
       },
       "Successes": "Successes"
     },
     "DIETERMS": {
-      "BaseDie": "Skill Dice",
+      "BaseDie": "Base Dice",
       "DavokarSkillDie": "Skill Dice",
       "D8DavokarDie": "D8 Artifact Dice",
       "D10DavokarDie": "D10 Artifact Dice",
-      "D12DavokarDie": "D12 Artifact Dice"
+      "D12DavokarDie": "D12 Artifact Dice",
+      "DavokarArmorDie": "Armor Dice"
     }
   },
   "TYPES": {

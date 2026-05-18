@@ -14,7 +14,26 @@
 
   .die-roll:hover, .die-roll:focus, .interactive:hover, .interactive:focus  {
     cursor: pointer;
-    box-shadow: 0 0 10px 0 utils.$c-shadow-red;
+    box-shadow: 0 0 10px 0 white;
     font-weight: bold;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .search-bar {
+    position: relative;
+    padding: 1em 0;
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      padding: 0.5em;
+      pointer-events: none;
+    }
+    .search-input {
+      padding: 0.5em 0.5em 0.5em 2em;
+    }
+
   }
 }

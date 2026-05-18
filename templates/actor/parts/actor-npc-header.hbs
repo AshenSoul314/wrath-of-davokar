@@ -1,18 +1,42 @@
 <div class="sheet-header">
   <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}" height="100" width="100"/>
   <div class="header-fields">
-    <h1 class="charname">
-      <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
-    </h1>
+    <div class="flex-row flex-gap">
+      <h1 class="charname flex-grow">
+        {{#if editMode}}
+          <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
+        {{else}}
+          <span class="charname-display">{{actor.name}}</span>
+        {{/if}}
+      </h1>
+
+      {{#if canToggleEdit}}
+        <button
+          type="button"
+          class="edit-mode-toggle flex-shrink {{#if editMode}}active{{/if}}"
+          data-action="toggleEditMode"
+          title="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.EditSheet'}}{{/if}}"
+          aria-label="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.EditSheet'}}{{/if}}"
+        >
+          <i class="fas {{#if editMode}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+        </button>
+      {{/if}}
+    </div >
 
     <div class="resources grid grid-3col flex-group-center">
       <label for="system.bio.archetype" class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Archetype"}}</label>
       <label for="system.bio.heritage"  class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Heritage"}}</label>
       <label for="system.bio.resistance" class="resource-label grid-span-1">{{localize "WRATH_OF_DAVOKAR.Bio.Resistance"}}</label>
 
-      <input class="grid-span-1" type="text" name="system.bio.archetype" value="{{system.bio.archetype}}"/>
-      <input class="grid-span-1" type="text" name="system.bio.heritage"  value="{{system.bio.heritage}}"/>
-      <input class="grid-span-1" type="text" name="system.bio.resistance"  value="{{system.bio.resistance}}"/>
+      {{#if editMode }}
+        <input class="grid-span-1" type="text" name="system.bio.archetype" value="{{system.bio.archetype}}"/>
+        <input class="grid-span-1" type="text" name="system.bio.heritage"  value="{{system.bio.heritage}}"/>
+        <input class="grid-span-1" type="text" name="system.bio.resistance"  value="{{system.bio.resistance}}"/>
+      {{else}}
+      <span class="grid-span-1"><i>{{system.bio.archetype}}</i></span>
+      <span class="grid-span-1"><i>{{system.bio.heritage}}</i></span>
+      <span class="grid-span-1"><i>{{system.bio.resistance}}</i></span>
+      {{/if}}
       <span class="grid-span-3"><i>{{system.bio.manner}}</i></span>
     </div>
   </div>

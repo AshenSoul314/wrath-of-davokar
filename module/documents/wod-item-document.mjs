@@ -7,7 +7,40 @@ export class WoDItemDocument extends Item {
    * Augment the basic Item data model with additional dynamic data.
    */
   prepareData() {
+    // Prepare data for the item. Calling the super version of this executes
+    // the following, in order: data reset (to clear active effects),
+    // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
+    // prepareDerivedData().
     super.prepareData();
+  }
+
+  /**
+   * @override
+   * Data modifications before active effects have been applied
+  */
+  prepareBaseData() {
+    const itemData = this;
+    const systemData = itemData.system;
+
+    // Setup the noQuality Quality
+    if (systemData.qualities) {
+      let noQuality = true;
+      for (let qualityKey in systemData.qualities) {
+        if (systemData.qualities[qualityKey]) {
+          noQuality = false;
+          break;
+        }
+      }
+      systemData.qualities.noQuality = noQuality;
+    }
+  }
+
+  /**
+   * @override
+   * Data modifications after active effects have been applied
+   */
+  prepareDerivedData() {
+    // Pass
   }
 
   /**
@@ -160,7 +193,7 @@ export class WoDItemDocument extends Item {
   /** @override */
   async _onDelete(options, userId) {
     await super._onDelete(options, userId);
-    await autoRemoveArtifactPowers();
+    await this.autoRemoveArtifactPowers();
   }
 
   async executeMacro() {
@@ -190,7 +223,6 @@ export class WoDItemDocument extends Item {
   }
 
   async autoImportArtifactPowers() {
-    if (game.user.id !== userId) return;
     if (!this.actor || !('artifactPowers' in this.system)) return;
     if (!this.system.artifactPowers.length) return;
 
@@ -278,7 +310,6 @@ export class WoDItemDocument extends Item {
   }
 
   async autoRemoveArtifactPowers() {
-    if (game.user.id !== userId) return;
     if (!this.actor || !('artifactPowers' in this.system)) return;
     if (!this.system.artifactPowers.length) return;
 

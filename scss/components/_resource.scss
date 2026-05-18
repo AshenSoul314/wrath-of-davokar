@@ -37,15 +37,15 @@
   }
 
   .resource-grid {
-    grid-template-columns: min-content minmax(min-content, 1fr);
+    grid-template-columns: max-content minmax(min-content, 1fr);
   }
   .resource-grid-2{
-    grid-template-columns: repeat(2, min-content minmax(min-content, 1fr));
+    grid-template-columns: repeat(2, max-content minmax(min-content, 1fr));
   }
   .resource-grid-3{
-    grid-template-columns: repeat(3, min-content minmax(min-content, 1fr));
+    grid-template-columns: repeat(3, max-content minmax(min-content, 1fr));
   }
   .resource-grid-4{
-    grid-template-columns: repeat(4, min-content minmax(min-content, 1fr));
+    grid-template-columns: repeat(4, max-content minmax(min-content, 1fr));
   }
 }

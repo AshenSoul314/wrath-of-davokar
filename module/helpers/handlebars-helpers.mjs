@@ -7,7 +7,9 @@ import {localizeActions,
         localizeSkill,
         localizeTraditions,
         localizeWeaponType,
-        localizeQuality} from "./localize.mjs";
+        localizeWeaponTypes,
+        localizeQuality,
+        localizeCost } from "./localize.mjs";
 
 
 /**
@@ -46,6 +48,12 @@ Handlebars.registerHelper('isIn', function (value, ...args) {
   return args.includes(value);
 });
 
+
+Handlebars.registerHelper('abs', function (value) {
+  return Math.abs(value)
+});
+
+
 /**
  * --------------------------------------------
  * Localization Helpers
@@ -71,6 +79,10 @@ Handlebars.registerHelper('localizeQuality', localizeQuality);
 
 Handlebars.registerHelper('localizeWeaponType', localizeWeaponType);
 
+Handlebars.registerHelper('localizeWeaponTypes', localizeWeaponTypes);
+
+Handlebars.registerHelper('localizeCost', localizeCost);
+
 /**
  * --------------------------------------------
  * Access Helpers
@@ -91,6 +103,12 @@ Handlebars.registerHelper("isTrusted", function (options) {
  * HTML Generator Helpers
  * --------------------------------------------
  */
+
+Handlebars.registerHelper("generateQualities", function(qualities, options) {
+  const includeNoQuality = options?.hash?.includeNoQuality ?? false;
+  const html = generateQualities(qualities, includeNoQuality);
+  return new Handlebars.SafeString(html);
+});
 
 Handlebars.registerHelper("generateWillpowerBar", function (actorId) {
   const actor = game.actors.get(actorId);
@@ -124,6 +142,12 @@ Handlebars.registerHelper("generateItemSlotsHTML", function (actorId) {
     } else {
       const item = actor.items.get(slot.itemId);
 
+      if (!item) {
+        actor.system.encumbrance.atHandSlots[slotKey]
+        html += `<li class='item flex-row max-width'>${game.i18n.localize("WRATH_OF_DAVOKAR.Item.ItemSlots.EmptySlot")}</li>`;
+        continue;
+      }
+
       switch (item.type) {
         case "armorHead":
         case "armorBody":
@@ -149,25 +173,56 @@ Handlebars.registerHelper("generateItemSlotsHTML", function (actorId) {
 
 Handlebars.registerHelper("generateWornItemsHTML", function (actorId) {
   const actor = game.actors.get(actorId);
-  let html = `<ol class='panel-content items-list'>`;
+  let html = `
+    <div class="panel">
+      <div class="panel-header">${game.i18n.localize("WRATH_OF_DAVOKAR.Item.WornItems")}</div>
+      <ol class='panel-content items-list'>`;
 
+  let foundWornItem = false;
   actor.items.forEach(item => {
     if (!item.system.equip) return;
     if (item.system?.equip.requiresEquipSlot || !item.system?.equip.isEquipped) return;
     if (['armorBody', 'armorHead', 'armorShield'].includes(item.type)) return;
-    html += generateGeneralItemSlot(item);
+    foundWornItem = true;
+
+    switch (item.type) {
+      case "alchemicalItem":
+      case "equipment":
+      case "trap":
+        html += generateGeneralItemSlot(item);
+        break;
+      case "weapon":
+        html += generateWeaponSlot(item);
+        break;
+      default:
+        html += generateGeneralItemSlot(item);
+        break;
+    }
   });
 
-  html += '</ol>';
+  html += '</ol></div>';
+
+  if (!foundWornItem) return new Handlebars.SafeString('');
   return new Handlebars.SafeString(html);
 });
+
+function generateQualities(qualities, includeNoQuality=false) {
+  let html = '';
+  for (const quality in qualities) {
+    if (quality === "noQuality" && !includeNoQuality) continue;
+    if (qualities[quality]) {
+      html += `<span class="quality">${localizeQuality(quality)}</span>`;
+    }
+  }
+  return html;
+}
 
 function generateWeaponSlot(item) {
   const itemTypeLocalized = game.i18n.localize("TYPES.Item.weapon");
   let html = `
-    <li class='item flex-column' data-item-id='${item.id}'>
+    <li class='item flex-column draggable' data-item-id='${item.id}'>
         <div class="flex-row max-width">
-          <div class='item-name item-control item-edit'>
+          <div class='item-name'>
             <div class='item-image'>
               <img  src='${item.img}'  title='${item.name}' width='24' height='24'/>
             </div>
@@ -211,28 +266,16 @@ function generateWeaponSlot(item) {
   html += `
           </div>
           <div class='item-controls'>
-            <a class='item-control item-equip' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
-              <img
-                src='systems/wrath-of-davokar/assets/icons/battle-gear.svg'
-                title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Equipped")}'
-                width='24'
-                height='24'
-              />
+            <a class='item-control' data-action="itemEquip" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
+              <i class="fa-solid fa-hand"></i>
             </a>
-            <a class='item-control rollable' data-roll-type='item' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
-              <i class='fa-solid fa-dice fa-xl'></i>
+            <a class='item-control' data-action="itemRoll" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
+              <i class='fa-solid fa-dice'></i>
             </a>
           </div>
         </div>
         <div class="flex-row quality-list-row"> `;
-
-  for (let qualityKey in item.system.qualities) {
-    const quality = item.system.qualities[qualityKey];
-    if (quality) {
-      html += `<span class='quality'>${localizeQuality(qualityKey)}</span>`;
-    }
-  }
-
+  html += generateQualities(item.system.qualities, false);
   html += `
         </div>
       </li>`;
@@ -240,20 +283,11 @@ function generateWeaponSlot(item) {
 }
 
 function generateGeneralItemSlot(item) {
-  let itemTypeLocalized;
-
-  if (item.type === 'alchemicalItem') {
-    itemTypeLocalized = game.i18n.localize("TYPES.Item.alchemicalItem");
-  } else if (item.type === 'equipment') {
-    itemTypeLocalized = game.i18n.localize("TYPES.Item.equipment");
-  } else if (item.type === 'trap') {
-    itemTypeLocalized = game.i18n.localize("TYPES.Item.trap");
-  }
-
+  const itemTypeLocalized = game.i18n.localize(`TYPES.Item.${item.type}`);
   let html = `
-    <li class='item flex-column' data-item-id='{{item._id}}'>
+    <li class='item flex-column draggable' data-item-id='${item.id}'>
       <div class="flex-row max-width">
-        <div class='item-name item-control item-edit'>
+        <div class='item-name'>
           <div class='item-image'>
             <img  src='${item.img}'  title='${item.name}' width='24' height='24'/>
           </div>
@@ -276,28 +310,16 @@ function generateGeneralItemSlot(item) {
           ${itemTypeLocalized}
         </div>
         <div class='item-controls'>
-          <a class='item-control item-equip' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
-            <img
-              src='systems/wrath-of-davokar/assets/icons/battle-gear.svg'
-              title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Equipped")}'
-              width='24'
-              height='24'
-            />
+          <a class='item-control' data-action="itemEquip" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
+            <i class="fa-solid fa-hand"></i>
           </a>
-          <a class='item-control rollable' data-roll-type='item' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
-            <i class='fa-solid fa-dice fa-xl'></i>
+          <a class='item-control' data-action="itemRoll" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
+            <i class='fa-solid fa-dice'></i>
           </a>
         </div>
       </div>
       <div class="flex-row quality-list-row">`;
-
-  for (let qualityKey in item.system.qualities) {
-    const quality = item.system.qualities[qualityKey];
-    if (quality.value === true) {
-      html += ` <label class='quality flexshrink'>${game.i18n.localize(quality.localize)}</label>`;
-    }
-  }
-
+  html += generateQualities(item.system.qualities, false);
   html += `
         </div>
       </li>`;
@@ -309,9 +331,9 @@ function generateContainerSlot(item, slotKey, actor) {
   const itemTypeLocalized = game.i18n.localize("TYPES.Item.container");
 
   let html = `
-    <li class='item flex-column' data-item-id='{{item._id}}'>
+    <li class='item flex-column draggable' data-item-id='${item.id}'>
       <div class="flex-row max-width">
-        <div class='item-name item-control item-edit'>
+        <div class='item-name'>
           <div class='item-image'>
             <img  src='${item.img}'  title='${item.name}' width='24' height='24'/>
           </div>
@@ -334,16 +356,11 @@ function generateContainerSlot(item, slotKey, actor) {
           ${itemTypeLocalized}
         </div>
         <div class='item-controls'>
-          <a class='item-control item-equip' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
-            <img
-              src='systems/wrath-of-davokar/assets/icons/battle-gear.svg'
-              title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Equipped")}'
-              width='24'
-              height='24'
-            />
+          <a class='item-control' data-action="itemEquip" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.UnequipItem", {type: itemTypeLocalized})}'>
+            <i class="fa-solid fa-hand"></i>
           </a>
-          <a class='item-control rollable' data-roll-type='item' title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
-            <i class='fa-solid fa-dice fa-xl'></i>
+          <a class='item-control' data-action="itemRoll" title='${game.i18n.localize("WRATH_OF_DAVOKAR.Item.Use")}'>
+            <i class='fa-solid fa-dice'></i>
           </a>
         </div>
       </div>`;
@@ -361,13 +378,11 @@ function generateContainerSlot(item, slotKey, actor) {
         case "armorBody":
         case "armorShield":
           break;
-        case "alchemicalItem":
-        case "equipment":
-        case "trap":
-          html += generateGeneralItemSlot(item);
-          break;
         case "weapon":
           html += generateWeaponSlot(item);
+          break;
+        default:
+          html += generateGeneralItemSlot(item);
           break;
       }
     }

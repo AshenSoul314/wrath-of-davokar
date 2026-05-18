@@ -1,5 +1,8 @@
 import {
-  onManageActiveEffect,
+  createActiveEffect,
+  deleteActiveEffect,
+  editActiveEffect,
+  toggleActiveEffect,
   prepareActiveEffectCategories,
 } from '../helpers/effects.mjs';
 
@@ -9,7 +12,6 @@ import { sortRankedItems } from '../helpers/utils.mjs';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
-const { DialogV2 } = foundry.applications.api;
 const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 // ---------------------------------------------------------------------------
@@ -17,6 +19,14 @@ const TextEditor = foundry.applications.ux.TextEditor.implementation;
 // ---------------------------------------------------------------------------
 
 export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  #editMode = false;
+  #itemSearchQuery = '';
+  #talentSearchQuery = ''
+  #powerSearchQuery = ''
+  #activeTooltip = null;
+  #hideTooltipTimer = null;
+  #isHoveringTooltipOrParent = false;
+  #enrichedDescriptions = new Map();
 
   static DEFAULT_OPTIONS = {
     classes: ['wrath-of-davokar', 'sheet', 'actor'],
@@ -24,21 +34,24 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     form: { submitOnChange: true },
     window: { resizable: true },
     actions: {
-      editImage:          WoDActorSheet.#onEditImage,
-      itemCreate:         WoDActorSheet.#onItemCreate,
-      itemEdit:           WoDActorSheet.#onItemEdit,
-      itemDelete:         WoDActorSheet.#onItemDelete,
-      itemEquip:          WoDActorSheet.#onItemEquip,
-      itemRoll:           WoDActorSheet.#onItemRoll,
-      rollSkill:          WoDActorSheet.#onRollSkill,
-      showArtifactCard:   WoDActorSheet.#onShowArtifactCard,
-      effectCreate:       WoDActorSheet.#onEffectCreate,
-      effectEdit:         WoDActorSheet.#onEffectEdit,
-      effectDelete:       WoDActorSheet.#onEffectDelete,
-      effectToggle:       WoDActorSheet.#onEffectToggle,
-      tempCorruptionChange:  WoDActorSheet.#onTempCorruptionChange,
-      permCorruptionChange:  WoDActorSheet.#onPermCorruptionChange,
-      armorRatingChange:     WoDActorSheet.#onArmorRatingChange,
+      editImage:            WoDActorSheet.#onEditImage,
+      itemCreate:           WoDActorSheet.#onItemCreate,
+      itemEdit:             WoDActorSheet.#onItemEdit,
+      itemDelete:           WoDActorSheet.#onItemDelete,
+      itemEquip:            WoDActorSheet.#onItemEquip,
+      itemRoll:             WoDActorSheet.#onItemRoll,
+      rollSkill:            WoDActorSheet.#onRollSkill,
+      showArtifactCard:     WoDActorSheet.#onShowArtifactCard,
+      'effect:create':      WoDActorSheet.#onEffectCreate,
+      'effect:edit':        WoDActorSheet.#onEffectEdit,
+      'effect:delete':      WoDActorSheet.#onEffectDelete,
+      'effect:toggle':      WoDActorSheet.#onEffectToggle,
+      tempCorruptionChange: WoDActorSheet.#onTempCorruptionChange,
+      permCorruptionChange: WoDActorSheet.#onPermCorruptionChange,
+      armorRatingChange:    WoDActorSheet.#onArmorRatingChange,
+      gearDurabilityChange: WoDActorSheet.#onGearDurabilityChange,
+      supplyChange:         WoDActorSheet.#onSupplyChange,
+      toggleEditMode:       WoDActorSheet.#onToggleEditMode,
     },
   };
 
@@ -73,6 +86,89 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    // Items Search Bar
+    const searchInputItems = this.element.querySelector('.items-tab .search-input');
+    if (searchInputItems) {
+      // Restore previous search
+      searchInputItems.value = this.#itemSearchQuery;
+      if (this.#itemSearchQuery) {
+        this.#filterItems(this.element, this.#itemSearchQuery);
+      }
+
+      searchInputItems.addEventListener('input', (event) => {
+        this.#itemSearchQuery = event.target.value;
+        this.#filterItems(this.element, this.#itemSearchQuery);
+      });
+    }
+
+    // Talents Search Bar
+    const searchInputTalents = this.element.querySelector('.talents-tab .search-input');
+    if (searchInputTalents) {
+      // Restore previous search
+      searchInputTalents.value = this.#talentSearchQuery;
+      if (this.#talentSearchQuery) {
+        this.#filterTalents(this.element, this.#talentSearchQuery);
+      }
+
+      searchInputTalents.addEventListener('input', (event) => {
+        this.#talentSearchQuery = event.target.value;
+        this.#filterTalents(this.element, this.#talentSearchQuery);
+      });
+    }
+
+    // Powers Search Bar
+    const searchInputPowers = this.element.querySelector('.powers-tab .search-input');
+    if (searchInputPowers) {
+      // Restore previous search
+      searchInputPowers.value = this.#powerSearchQuery;
+      if (this.#talentSearchQuery) {
+        this.#filterPowers(this.element, this.#powerSearchQuery);
+      }
+
+      searchInputPowers.addEventListener('input', (event) => {
+        this.#powerSearchQuery = event.target.value;
+        this.#filterPowers(this.element, this.#powerSearchQuery);
+      });
+    }
+
+    // Item hover tooltips
+    this.#activeTooltip?.remove();
+    this.#activeTooltip = null;
+
+    for (const row of this.element.querySelectorAll('li[data-item-id]')) {
+      let hoverTimer = null;
+
+      row.addEventListener('mouseenter', (event) => {
+        console.log('ROW: Mouse Enter');
+        this.#isHoveringTooltipOrParent = true;
+
+        // Cancel any pending hide when re-entering a row
+        clearTimeout(this.#hideTooltipTimer);
+        this.#hideTooltipTimer = null;
+
+        hoverTimer = setTimeout(async () => {
+          console.log('ROW: Hover Timer Expired');
+          const itemId = row.dataset.itemId;
+          const item = this.actor.items.get(itemId);
+          if (!item) return;
+          await this.#showItemTooltip(item, row);
+        }, 200);
+      });
+
+      row.addEventListener('mouseleave', () => {
+        console.log('ROW: Mouse Leave');
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+
+        this.#isHoveringTooltipOrParent = false;
+        this.#scheduleHideTooltip();
+      });
+    }
+  }
+
   /* -------------------------------------------- */
   /*  Context Preparation                          */
   /* -------------------------------------------- */
@@ -87,8 +183,11 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.actor       = this.actor;
     context.config      = CONFIG.WRATH_OF_DAVOKAR;
     context.isOwner     = this.document.isOwner;
-    context.isEditable  = this.isEditable;
     context.editable    = this.isEditable;
+
+    // Edit mode: owners can toggle; non-owners are always locked
+    context.canToggleEdit = this.document.isOwner;
+    context.editMode      = context.canToggleEdit ? this.#editMode : false;
 
     // Tab contexts
     context.tabs        = this._prepareTabs('primary');
@@ -96,13 +195,14 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.powerTabs   = this._prepareTabs('powers');
 
     // Build enriched item display objects
-    context.enrichedItems = new Map();
+    this.#enrichedDescriptions = new Map();
     for (const item of this.actor.items) {
-      context.enrichedItems.set(item.id, await TextEditor.enrichHTML(
+      this.#enrichedDescriptions.set(item.id, await TextEditor.enrichHTML(
         item.system.description ?? '',
         { secrets: this.document.isOwner, rollData: this.actor.getRollData(), relativeTo: this.actor }
       ));
     }
+    context.enrichedItems = this.#enrichedDescriptions;
 
     // Items
     this._prepareItems(context);
@@ -133,9 +233,6 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     // Active effects
     context.effects = prepareActiveEffectCategories(this.actor.allApplicableEffects());
-
-    // Clean up — no longer needed after _prepareItems
-    delete context.enrichedItems;
 
     return context;
   }
@@ -169,22 +266,25 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /* -------------------------------------------- */
 
   _prepareItems(context) {
-    const equipment       = [];
-    const armorHead       = [];
-    const armorBody       = [];
-    const armorShield     = [];
-    const weapons         = [];
-    const mysticalPowers  = [];
-    const rituals         = [];
-    const talents         = [];
-    const traits          = [];
-    const boons           = [];
-    const burdens         = [];
-    const conditions      = [];
+    const equipment        = [];
+    const armorHead        = [];
+    const armorBody        = [];
+    const armorShield      = [];
+    const weapons          = [];
+    const mysticalPowers   = [];
+    const rituals          = [];
+    const talents          = [];
+    const traits           = [];
+    const boons            = [];
+    const burdens          = [];
+    const conditions       = [];
     const criticalInjuries = [];
-    const artifacts       = [];
-    const gear            = [];
-    const supplies        = [];
+    const artifacts        = [];
+    const gear             = [];
+    const supplies         = [];
+    const alchemicalItems  = [];
+    const containers       = [];
+    const artifactPowersMap= {};
 
     for (const item of this.actor.items) {
       const d = item.toObject(false);
@@ -192,43 +292,58 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       d.img = d.img || Item.DEFAULT_ICON;
       d.enrichedDescription = context.enrichedItems.get(item.id) ?? '';
 
-      if (d.system.isArtifact) artifacts.push(d);
-
-      switch (d.type) {
-        case 'armorBody':      armorBody.push(d);        break;
-        case 'armorHead':      armorHead.push(d);        break;
-        case 'armorShield':    armorShield.push(d);      break;
-        case 'boon':           boons.push(d);            break;
-        case 'burden':         burdens.push(d);          break;
-        case 'condition':      conditions.push(d);       break;
-        case 'gear':           gear.push(d);             break;
-        case 'criticalInjury': criticalInjuries.push(d); break;
-        case 'monsterTrait':   traits.push(d);           break;
-        case 'mysticalPower':  mysticalPowers.push(d);   break;
-        case 'ritual':         rituals.push(d);          break;
-        case 'supply':         supplies.push(d);         break;
-        case 'talent':         talents.push(d);          break;
-        case 'weapon':         weapons.push(d);          break;
-        default:               equipment.push(d);        break;
+      switch (item.type) {
+        case 'weapon':          weapons.push(d);          break;
+        case 'armorBody':       armorBody.push(d);        break;
+        case 'armorHead':       armorHead.push(d);        break;
+        case 'armorShield':     armorShield.push(d);      break;
+        case 'equipment':       equipment.push(d);        break;
+        case 'mysticalPower':   mysticalPowers.push(d);   break;
+        case 'ritual':          rituals.push(d);          break;
+        case 'talent':          talents.push(d);          break;
+        case 'monsterTrait':    traits.push(d);           break;
+        case 'boon':            boons.push(d);            break;
+        case 'burden':          burdens.push(d);          break;
+        case 'condition':       conditions.push(d);       break;
+        case 'criticalInjury':  criticalInjuries.push(d); break;
+        case 'alchemicalItem':  alchemicalItems.push(d);  break;
+        case 'gear':            gear.push(d);             break;
+        case 'supply':          supplies.push(d);         break;
+        case 'container':       containers.push(d);       break;
+        case 'artifactPower':
+          artifactPowersMap[d.system.artifactPowerId] = d;
+          break;
+      }
+      if (item.system.isArtifact) {
+        artifacts.push(d);
       }
     }
 
+    // After all items are categorized, attach resolved powers to each artifact
+    for (const artifact of artifacts) {
+      artifact.resolvedPowers = (artifact.system.artifactPowers ?? [])
+        .map(powerId => artifactPowersMap[powerId])
+        .filter(Boolean);
+    }
+
+    context.weapons          = weapons.sort((a, b) => a.name.localeCompare(b.name));
+    context.armorBody        = armorBody.sort((a, b) => a.name.localeCompare(b.name));
+    context.armorHead        = armorHead.sort((a, b) => a.name.localeCompare(b.name));
+    context.armorShield      = armorShield.sort((a, b) => a.name.localeCompare(b.name));
+    context.equipment        = equipment.sort((a, b) => a.name.localeCompare(b.name));
     context.mysticalPowers   = sortRankedItems(mysticalPowers);
     context.rituals          = sortRankedItems(rituals);
     context.talents          = sortRankedItems(talents);
     context.traits           = sortRankedItems(traits);
     context.boons            = sortRankedItems(boons);
-    context.equipment        = equipment.sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
-    context.armorHead        = armorHead.sort((a, b) => a.name.localeCompare(b.name));
-    context.armorBody        = armorBody.sort((a, b) => a.name.localeCompare(b.name));
-    context.armorShield      = armorShield.sort((a, b) => a.name.localeCompare(b.name));
-    context.weapons          = weapons.sort((a, b) => a.name.localeCompare(b.name));
     context.burdens          = burdens.sort((a, b) => a.name.localeCompare(b.name));
     context.conditions       = conditions.sort((a, b) => a.name.localeCompare(b.name));
     context.criticalInjuries = criticalInjuries.sort((a, b) => a.name.localeCompare(b.name));
+    context.artifacts        = artifacts.sort((a, b) => a.name.localeCompare(b.name));
     context.gear             = gear.sort((a, b) => a.name.localeCompare(b.name));
     context.supplies         = supplies.sort((a, b) => a.name.localeCompare(b.name));
-    context.artifacts        = artifacts.sort((a, b) => a.name.localeCompare(b.name));
+    context.alchemicalItems  = alchemicalItems.sort((a, b) => a.name.localeCompare(b.name));
+    context.containers       = containers.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   /* -------------------------------------------- */
@@ -261,95 +376,160 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   /* -------------------------------------------- */
-  /*  Actions                                      */
+  /*  Tool Tips                                   */
   /* -------------------------------------------- */
+  async #showItemTooltip(item, anchorRow) {
+    this.#hideItemTooltip(); // ensure no duplicate
 
-  static async #onEditImage(_event, _target) {
-    const attr = this.document.img ? 'img' : 'prototypeToken.texture.src';
-    const current = foundry.utils.getProperty(this.document, attr);
-    const fp = new FilePicker({
-      type: 'image',
-      current,
-      callback: path => this.document.update({ [attr]: path }),
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('wrath-of-davokar', 'item-tooltip');
+    const enrichedDescription = this.#enrichedDescriptions.get(item.id)
+    tooltip.innerHTML = await foundry.applications.handlebars.renderTemplate('systems/wrath-of-davokar/templates/item/parts/item-tooltip.hbs', {item: item, enrichedDescription:enrichedDescription});
+
+    // Position off-screen BEFORE appending so layout is never affected
+    tooltip.style.top  = '-9999px';
+    tooltip.style.left = '-9999px';
+
+    document.body.appendChild(tooltip);
+    this.#activeTooltip = tooltip;
+
+    // Keep the tooltip alive while the cursor is inside it
+    tooltip.addEventListener('mouseenter', () => {
+      console.log('TOOLTIP: Mouse Enter');
+      this.#isHoveringTooltipOrParent = true;
+
+      clearTimeout(this.#hideTooltipTimer);
+      this.#hideTooltipTimer = null;
     });
-    fp.browse();
+    tooltip.addEventListener('mouseleave', () => {
+      console.log('TOOLTIP: Mouse Leave');
+      this.#isHoveringTooltipOrParent = false;
+      this.#scheduleHideTooltip();
+    });
+
+    // Measure after append (now the browser knows its dimensions)
+    const boundingRect    = anchorRow.getBoundingClientRect();
+    const toolTipRect = tooltip.getBoundingClientRect();
+    const margin  = 0;
+
+    let x = boundingRect.left - margin - toolTipRect.width;
+    let y  = boundingRect.top;
+
+    if (x < margin) {
+      x = margin
+      y = boundingRect.top - toolTipRect.height
+    }
+
+    tooltip.style.top  = `${Math.max(margin, y)}px`;
+    tooltip.style.left = `${Math.max(margin, x)}px`;
   }
 
-  static async #onItemCreate(event, target) {
+  #scheduleHideTooltip() {
+    console.log('#scheduleHideTooltip: ENTER');
+    clearTimeout(this.#hideTooltipTimer);
+    this.#hideTooltipTimer = setTimeout(() => {
+      if (!this.#isHoveringTooltipOrParent) {
+        this.#hideItemTooltip();
+      }
+    }, 200);
+    console.log('#scheduleHideTooltip: EXIT');
+  }
+
+  #hideItemTooltip() {
+    console.log('#hideItemTooltip: ENTER');
+    clearTimeout(this.#hideTooltipTimer);
+    this.#hideTooltipTimer = null;
+    this.#activeTooltip?.remove();
+    this.#activeTooltip = null;
+    console.log('#hideItemTooltip: EXIT');
+  }
+
+  /* -------------------------------------------- */
+  /*  Actions                                     */
+  /* -------------------------------------------- */
+
+  static #onToggleEditMode(_event, _target) {
+    this.#editMode = !this.#editMode;
+    this.render();
+  }
+
+  static async #onEditImage(_event, target) {
+    const attr = target.dataset.edit;
+    const current = foundry.utils.getProperty(this.document, attr);
+    const fp = new FilePicker({
+      current,
+      type: 'image',
+      callback: path => this.document.update({'img': path }),
+      top: this.position.top + 40,
+      left: this.position.left + 10,
+    });
+    return fp.browse();
+  }
+
+  static async #onItemCreate(_event, target) {
     const type = target.dataset.type;
-    const name = `New ${type.capitalize()}`;
-    await Item.create({ name, type, system: {} }, { parent: this.actor });
+    const itemData = { name: `New ${type}`, type };
+    await Item.create(itemData, { parent: this.actor });
   }
 
   static #onItemEdit(_event, target) {
-    const itemId = target.closest('[data-item-id]').dataset.itemId;
-    this.actor.items.get(itemId)?.sheet.render(true);
+    const li = target.closest('[data-item-id]');
+    const item = this.actor.items.get(li?.dataset.itemId);
+    item?.sheet.render(true);
   }
 
   static async #onItemDelete(_event, target) {
-    const itemId = target.closest('[data-item-id]').dataset.itemId;
-    const item   = this.actor.items.get(itemId);
+    const li = target.closest('[data-item-id]');
+    const item = this.actor.items.get(li?.dataset.itemId);
+
     if (!item) return;
 
-    const proceed = await DialogV2.confirm({
-      content: `Are you sure you want to delete ${item.name} from ${this.actor.name}?`,
-      rejectClose: false,
-      modal: true,
-    });
-    if (!proceed) return;
+    const deleteItem = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.format('WRATH_OF_DAVOKAR.Dialog.Items.Delete.Title', {itemName: item.name}) },
+      content: game.i18n.format('WRATH_OF_DAVOKAR.Dialog.Items.Delete.Body', {itemName: item.name, actorName:this.actor.name})
+    })
 
-    if (item.system.equip?.isEquipped) {
-      await this._unequipItem(item);
+    if (deleteItem) {
+      this.unequipItem(item);
+      await item.delete();
     }
-    item.delete();
   }
 
   static async #onItemEquip(_event, target) {
-    const itemId    = target.closest('[data-item-id]').dataset.itemId;
-    const item      = this.actor.items.get(itemId);
+    const li = target.closest('[data-item-id]');
+    const item = this.actor.items.get(li?.dataset.itemId);
     if (!item) return;
-    item.system.equip?.isEquipped ? await this._unequipItem(item) : await this._equipItem(item);
+    if (item.system.equip?.isEquipped) await this.unequipItem(item);
+    else await this.equipItem(item);
   }
 
-  static #onItemRoll(_event, target) {
-    const itemId = target.closest('[data-item-id]').dataset.itemId;
-    this.actor.items.get(itemId)?.roll();
+  static async #onItemRoll(_event, target) {
+    const li = target.closest('[data-item-id]');
+    const item = this.actor.items.get(li?.dataset.itemId);
+    item?.roll();
   }
 
-  static async #onRollSkill(event, target) {
-    let attribute   = target.dataset.attribute ?? null;
-    let skill       = target.dataset.skill ?? null;
-    let spellcasting = false;
+  static async #onRollSkill(_event, target) {
+    const attribute    = target.dataset.attribute ?? null;
+    const skill        = target.dataset.skill     ?? null;
+    const modifier     = target.dataset.modifier  ?? null;
+    const title        = target.dataset.title     ?? null;
+    const spellcasting = target.dataset.spellcasting === 'true';
 
-    if (skill === 'spellcasting') {
-      attribute    = this.actor.system.skills.spellcasting.attribute;
-      skill        = this.actor.system.skills.spellcasting.skill;
-      spellcasting = true;
-    }
+    if (attribute === null && skill === null) return;
 
-    // Default attribute from skill
-    if (attribute === null) {
-      const attrMap = {
-        endurance: 'physique', force: 'physique', melee: 'physique',
-        dexterity: 'finesse',  discreet: 'finesse', marksmanship: 'finesse', mobility: 'finesse',
-        crafting: 'wits',      lore: 'wits', medicus: 'wits', survival: 'wits', vigilance: 'wits',
-        insight: 'empathy',    instinct: 'empathy', persuasion: 'empathy', volition: 'empathy',
-      };
-      attribute = attrMap[skill] ?? 'physique';
-    }
-
-    // Default skill from attribute
-    if (skill === null) {
+    let resolvedSkill = skill;
+    if (resolvedSkill === null) {
       const skillMap = { physique: 'force', finesse: 'dexterity', wits: 'crafting', empathy: 'insight' };
-      skill = skillMap[attribute] ?? 'force';
+      resolvedSkill = skillMap[attribute] ?? 'force';
     }
 
-    const result = await selectSkillRoll(this.actor, [attribute, skill], spellcasting);
+    const result = await selectSkillRoll(this.actor, [attribute, resolvedSkill], spellcasting, modifier, title);
     if (result !== null) this.actor.buildRoll(result);
   }
 
   static #onShowArtifactCard(_event, target) {
-    const card   = target.closest('[data-item-id]');
+    const card    = target.closest('[data-item-id]');
     const itemId  = card?.dataset.itemId;
     const powerId = card?.dataset.powerId;
     if (!itemId || !powerId) return;
@@ -357,82 +537,155 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     item?.buildChatCardArtifactPower(powerId);
   }
 
-  static async #onEffectCreate(_event, target) {
-    onManageActiveEffect({ currentTarget: target, type: 'create' }, this.actor);
+  #filterItems (element, query) {
+    const term = query.trim().toLocaleLowerCase();
+    for (const list of element.querySelectorAll('.items-tab .items-list')) {
+      let anyVisible = false;
+
+      for (const listElement of list.querySelectorAll('li[data-item-id]')) {
+        const item = this.actor.items.get(listElement.dataset.itemId);
+        const name = item.name.toLocaleLowerCase() ?? '';
+        const visible = !term || name.includes(term);
+        listElement.style.display = visible ? '' : 'none';
+        if (visible) anyVisible = true;
+      }
+
+      // Hide the whole section (including its header) when nothing matches
+      list.style.display = anyVisible ? '' : 'none';
+    }
+  }
+
+  #filterTalents (element, query) {
+    const term = query.trim().toLocaleLowerCase();
+    for (const grid of element.querySelectorAll('.talents-tab .talent-grid')) {
+      for (const card of grid.querySelectorAll('div[data-item-id]')) {
+        const item = this.actor.items.get(card.dataset.itemId);
+        console.log(item)
+        const name = item.name.toLocaleLowerCase() ?? '';
+        const visible = !term || name.includes(term);
+        card.style.display = visible ? '' : 'none';
+      }
+    }
+  }
+
+  #filterPowers (element, query) {
+    const term = query.trim().toLocaleLowerCase();
+    for (const grid of element.querySelectorAll('.powers-tab .talent-grid')) {
+      for (const card of grid.querySelectorAll('div[data-item-id]')) {
+        const item = this.actor.items.get(card.dataset.itemId);
+        console.log(item)
+        const name = item.name.toLocaleLowerCase() ?? '';
+        const visible = !term || name.includes(term);
+        card.style.display = visible ? '' : 'none';
+      }
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Active Effect Actions                        */
+  /* -------------------------------------------- */
+
+  static #onEffectCreate(_event, target) {
+    const effectType = target.closest('[data-effect-type]')?.dataset.effectType ?? 'passive';
+    createActiveEffect(this.actor, effectType);
   }
 
   static #onEffectEdit(_event, target) {
-    onManageActiveEffect({ currentTarget: target, type: 'edit' }, this.#getEffectParent(target, actor));
+    const row      = target.closest('[data-effect-id]');
+    const parentId = row?.dataset.parentId;
+    const owner    = (parentId && parentId !== this.actor.id)
+      ? this.actor.items.get(parentId) ?? this.actor
+      : this.actor;
+    const effectId = target.closest('[data-effect-id]')?.dataset.effectId;
+    const effect   = owner.effects.get(effectId);
+    editActiveEffect(effect);
   }
 
-  static async #onEffectDelete(_event, target) {
-    onManageActiveEffect({ currentTarget: target, type: 'delete' }, this.#getEffectParent(target, actor));
+  static #onEffectDelete(_event, target) {
+    const row      = target.closest('[data-effect-id]');
+    const parentId = row?.dataset.parentId;
+    const owner    = (parentId && parentId !== this.actor.id)
+      ? this.actor.items.get(parentId) ?? this.actor
+      : this.actor;
+    const effectId = target.closest('[data-effect-id]')?.dataset.effectId;
+    const effect   = owner.effects.get(effectId);
+    deleteActiveEffect(effect);
   }
 
   static #onEffectToggle(_event, target) {
-    onManageActiveEffect({ currentTarget: target, type: 'toggle' }, this.#getEffectParent(target, actor));
+    const row      = target.closest('[data-effect-id]');
+    const parentId = row?.dataset.parentId;
+    const owner    = (parentId && parentId !== this.actor.id)
+      ? this.actor.items.get(parentId) ?? this.actor
+      : this.actor;
+    const effectId = target.closest('[data-effect-id]')?.dataset.effectId;
+    const effect   = owner.effects.get(effectId);
+    toggleActiveEffect(effect);
   }
 
-  static #getEffectParent(target, actor) {
-    const row = target.closest('[data-effect-id]');
-    return row?.dataset.parentId === actor.id
-      ? actor
-      : actor.items.get(row?.dataset.parentId);
-  }
+  /* -------------------------------------------- */
+  /*  Corruption & Stat Changes                    */
+  /* -------------------------------------------- */
 
   static async #onTempCorruptionChange(event, target) {
     let val = parseInt(target.value, 10);
-    if (isNaN(val) || val < 0) val = 0;
+    if (isNaN(val)) return;
+    if (val < 0) val = 0;
     await this.actor.update({ 'system.corruption.temporary.value': val });
   }
 
   static async #onPermCorruptionChange(event, target) {
     let newPerm = parseInt(target.value, 10);
-    if (isNaN(newPerm) || newPerm < 0) newPerm = 0;
-    await this.actor.update({
-      'system.corruption.permanent.value': newPerm
-    });
+    if (isNaN(newPerm)) return;
+    if (newPerm < 0) newPerm = 0;
+    await this.actor.update({ 'system.corruption.permanent.value': newPerm });
   }
 
   static async #onArmorRatingChange(event, target) {
     const itemId = target.dataset.itemId;
     const item   = this.actor.items.get(itemId);
     if (!item) return;
-    await item.update({ 'system.rating.value': parseInt(target.value, 10) });
+
+    let newValue = parseInt(target.value, 10);
+    if (isNaN(newValue)) return;
+
+    newValue = Math.clamp(newValue, 0, item.system.armorRating.max);
+    await item.update({ 'system.rating.value': newValue });
+  }
+
+  static async #onGearDurabilityChange(event, target) {
+    const itemId = target.dataset.itemId;
+    const item   = this.actor.items.get(itemId);
+    if (!item) return;
+
+    let newValue = parseInt(target.value, 10);
+    if (isNaN(newValue)) return;
+
+    newValue = Math.clamp(newValue, 0, item.system.durability.max);
+    await item.update({ 'system.durability.value': newValue });
+  }
+
+  static async #onSupplyChange(event, target) {
+    const itemId = target.dataset.itemId;
+    const item   = this.actor.items.get(itemId);
+    if (!item) return;
+
+    let newValue = parseInt(target.value, 10);
+    if (isNaN(newValue)) return;
+
+    if (newValue < 0) newValue = 0;
+    await item.update({ 'system.supply': newValue });
   }
 
   /* -------------------------------------------- */
-  /*  Equip / Unequip                              */
+  /*  Equip / Unequip                             */
   /* -------------------------------------------- */
 
-  async _unequipItem(item) {
+  async unequipItem(item) {
     if (!item.system?.equip) return;
 
     if (item.system.equip.requiresEquipSlot) {
-      const slots = this.actor.system.encumbrance.atHandSlots;
-      let itemSlotKey     = null;
-      let originalSlotData = {};
-
-      outer: for (const key in slots) {
-        if (slots[key].itemId === item.id) {
-          itemSlotKey      = `system.encumbrance.atHandSlots.${key}`;
-          originalSlotData = slots[key];
-          break;
-        }
-        for (const subKey in slots[key].subslots) {
-          if (slots[key].subslots[subKey].itemId === item.id) {
-            itemSlotKey      = `system.encumbrance.atHandSlots.${key}.subslots.${subKey}`;
-            originalSlotData = slots[key].subslots[subKey];
-            break outer;
-          }
-        }
-      }
-
-      if (itemSlotKey) {
-        const updatedSlot = { itemId: null, maxItemWeight: originalSlotData.maxItemWeight };
-        if ('subslots' in originalSlotData) updatedSlot.subslots = {};
-        await this.actor.update({ [itemSlotKey]: updatedSlot });
-      }
+      this.clearSlot(item.id);
     }
 
     if (!item.system.equip.alwaysTransferEffects) {
@@ -442,7 +695,34 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     await item.update({ 'system.equip.isEquipped': false });
   }
 
-  async _equipItem(item) {
+  async clearSlot(itemId) {
+    const slots = this.actor.system.encumbrance.atHandSlots;
+    let itemSlotKey      = null;
+    let originalSlotData = {};
+
+    outer: for (const key in slots) {
+      if (slots[key].itemId === itemId) {
+        itemSlotKey      = `system.encumbrance.atHandSlots.${key}`;
+        originalSlotData = slots[key];
+        break;
+      }
+      for (const subKey in slots[key].subslots) {
+        if (slots[key].subslots[subKey].itemId === itemId) {
+          itemSlotKey      = `system.encumbrance.atHandSlots.${key}.subslots.${subKey}`;
+          originalSlotData = slots[key].subslots[subKey];
+          break outer;
+        }
+      }
+    }
+
+    if (itemSlotKey) {
+      const updatedSlot = { itemId: null, maxItemWeight: originalSlotData.maxItemWeight };
+      if ('subslots' in originalSlotData) updatedSlot.subslots = {};
+      await this.actor.update({ [itemSlotKey]: updatedSlot });
+    }
+  }
+
+  async equipItem(item) {
     if (item.system.equip?.requiresEquipSlot) {
       const slots     = this.actor.system.encumbrance.atHandSlots;
       const selection = await selectAtHandSlot(this.actor, item);
@@ -459,13 +739,13 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (selectedSlot.subslots) {
         for (const subKey in selectedSlot.subslots) {
           const subitem = this.actor.items.get(selectedSlot.subslots[subKey].itemId);
-          if (subitem) await this._unequipItem(subitem);
+          if (subitem) await this.unequipItem(subitem);
         }
         updatedSlot.subslots = {};
       }
       if (selectedSlot.itemId) {
         const occupant = this.actor.items.get(selectedSlot.itemId);
-        if (occupant) await this._unequipItem(occupant);
+        if (occupant) await this.unequipItem(occupant);
       }
 
       // Containers create subslots
@@ -489,7 +769,7 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         armorShield: this.actor.equippedArmorShield,
       };
       const existing = slotMap[item.type];
-      if (existing) await this._unequipItem(existing);
+      if (existing) await this.unequipItem(existing);
     }
 
     if (!item.system.equip.alwaysTransferEffects) {
@@ -506,14 +786,14 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
 export class WoDCharacterSheet extends WoDActorSheet {
   static PARTS = {
-    header:         { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-header.hbs'},
-    tabs:           { template: 'templates/generic/tab-navigation.hbs' },
-    main:           { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',        scrollable: [''] },
-    description:    { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-description.hbs', scrollable: [''] },
-    items:          { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-items.hbs',       scrollable: [''] },
-    talents:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',     scrollable: [''] },
-    powers:         { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-powers.hbs',      scrollable: [''] },
-    effects:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-effects.hbs',     scrollable: [''] },
+    header:      { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-header.hbs' },
+    tabs:        { template: 'templates/generic/tab-navigation.hbs' },
+    main:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',        scrollable: [''] },
+    description: { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-description.hbs', scrollable: [''] },
+    items:       { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-items.hbs',       scrollable: [''] },
+    talents:     { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',     scrollable: [''] },
+    powers:      { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-powers.hbs',      scrollable: [''] },
+    effects:     { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs',    scrollable: [''] },
   };
 }
 
@@ -523,13 +803,13 @@ export class WoDCharacterSheet extends WoDActorSheet {
 
 export class WoDNPCSheet extends WoDActorSheet {
   static PARTS = {
-    header:         { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-npc-header.hbs' },
-    tabs:           { template: 'templates/generic/tab-navigation.hbs' },
-    main:           { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',            scrollable: [''] },
-    description:    { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-npc-description.hbs', scrollable: [''] },
-    items:          { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-items.hbs',           scrollable: [''] },
-    talents:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',         scrollable: [''] },
-    powers:         { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-powers.hbs',          scrollable: [''] },
-    effects:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-effects.hbs',         scrollable: [''] },
+    header:      { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-npc-header.hbs' },
+    tabs:        { template: 'templates/generic/tab-navigation.hbs' },
+    main:        { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-main.hbs',            scrollable: [''] },
+    description: { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-npc-description.hbs', scrollable: [''] },
+    items:       { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-items.hbs',           scrollable: [''] },
+    talents:     { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-talents.hbs',         scrollable: [''] },
+    powers:      { template: 'systems/wrath-of-davokar/templates/actor/parts/actor-powers.hbs',          scrollable: [''] },
+    effects:     { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs',        scrollable: [''] },
   };
 }

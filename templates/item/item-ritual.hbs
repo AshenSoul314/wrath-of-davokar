@@ -3,40 +3,50 @@
   <div class="resource-grid ">
     {{!-- Tradition --}}
     <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Power.Tradition.Label'}}:</label>
-    <div class="flex-row flex-group-left flex-align-center flex-wrap">
-      {{#each system.tradition}}
-        <div class="flex-row flex-group-left flex-align-center">
-          <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
-          <input  id="system.tradition.{{@key}}.value"
-                  name="system.tradition.{{@key}}.value"
-                  type="checkbox"
-                  data-dtype="Boolean"
-                  {{checked this.value}}/>
-        </div>
-      {{/each}}
-    </div>
+    {{#if editMode}}
+      <div class="flex-row flex-group-left flex-align-center flex-wrap">
+        {{#each system.tradition}}
+          <div class="flex-row flex-group-left flex-align-center">
+            <label for="system.tradition.{{@key}}.value">{{this.label}}</label>
+            <input  id="system.tradition.{{@key}}.value"
+                    name="system.tradition.{{@key}}.value"
+                    type="checkbox"
+                    data-dtype="Boolean"
+                    {{checked this.value}}/>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <span>{{localizeTraditions system.tradition}}</span>
+    {{/if}}
 
     {{!-- Corruption --}}
     <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}:</label>
-    <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+    {{#if editMode}}
+      <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+    {{else}}
+      <span>{{system.corruption}}</span>
+    {{/if}}
 
     {{!-- Component --}}
     <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Power.Component'}}:</label>
-    <input type='text' name='system.component' value='{{system.component}}'/>
+    {{#if editMode}}
+      <input type='text' name='system.component' value='{{system.component}}'/>
+    {{else}}
+      <span>{{system.component}}</span>
+    {{/if}}
 
   </div>
-  <div class="form-group editor">
-    {{#if editable}}
-      <prose-mirror
-        name="system.description"
-        value="{{system.description}}"
-        button="true"
-        toggled="true"
-      >
-        {{{enrichedDescription}}}
-      </prose-mirror>
-    {{else}}
+  {{#if editMode}}
+    <prose-mirror
+      name="system.description"
+      value="{{system.description}}"
+      button="true"
+      toggled="true"
+    >
       {{{enrichedDescription}}}
-    {{/if}}
-  </div>
+    </prose-mirror>
+  {{else}}
+    {{{enrichedDescription}}}
+  {{/if}}
 </div>

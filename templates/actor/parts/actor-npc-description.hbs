@@ -14,22 +14,38 @@
         <div class="panel-content grid grid-1col">
 
           <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Appearance'}}</div>
-          <textarea class="trait-text" name="system.bio.appearance" rows="3">{{system.bio.appearance}}</textarea>
+          {{#if editMode}}
+            <textarea class="trait-text" name="system.bio.appearance" rows="3">{{system.bio.appearance}}</textarea>
+          {{else}}
+            <p class="trait-text">{{system.bio.appearance}}</p>
+          {{/if}}
 
           <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Quote'}}</div>
-          <textarea class="trait-text" name="system.bio.quote" rows="3">{{system.bio.quote}}</textarea>
+          {{#if editMode}}
+            <textarea class="trait-text" name="system.bio.quote" rows="3">{{system.bio.quote}}</textarea>
+          {{else}}
+            <p class="trait-text">{{system.bio.quote}}</p>
+          {{/if}}
 
           <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Shadow'}}</div>
-          <textarea class="trait-text" name="system.bio.shadow" rows="3">{{system.bio.shadow}}</textarea>
-
+          {{#if editMode}}
+            <textarea class="trait-text" name="system.bio.shadow" rows="3">{{system.bio.shadow}}</textarea>
+          {{else}}
+            <p class="trait-text">{{system.bio.shadow}}</p>
+          {{/if}}
           <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Manner'}}</div>
-          <textarea class="trait-text" name="system.bio.manner" rows="3">{{system.bio.manner}}</textarea>
-
-          <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Resistance'}}</div>
-          <textarea class="trait-text" name="system.bio.resistance" rows="3">{{system.bio.resistance}}</textarea>
+          {{#if editMode}}
+            <textarea class="trait-text" name="system.bio.manner" rows="3">{{system.bio.manner}}</textarea>
+          {{else}}
+            <p class="trait-text">{{system.bio.manner}}</p>
+          {{/if}}
 
           <div class="resource-title">{{localize 'WRATH_OF_DAVOKAR.Bio.Tactics'}}</div>
-          <textarea class="trait-text" name="system.bio.tactics" rows="3">{{system.bio.tactics}}</textarea>
+          {{#if editMode}}
+            <textarea class="trait-text" name="system.bio.tactics" rows="3">{{system.bio.tactics}}</textarea>
+          {{else}}
+            <p class="trait-text">{{system.bio.tactics}}</p>
+          {{/if}}
 
         </div>
       </div>

@@ -19,7 +19,6 @@ export class WoDToken extends foundry.canvas.placeables.Token {
     // Redraw any bar assigned to corruption using our composite renderer
     for (const barName of ["bar1", "bar2"]) {
       const attr = this.document[barName]?.attribute;
-      console.warn(attr);
       if (attr === "corruption") {
         this.#drawCorruptionBar(barName);
       }
@@ -108,9 +107,8 @@ export class WoDToken extends foundry.canvas.placeables.Token {
     // Only draw willpower if it isn't already occupying a standard bar slot
     const bar1Attr = this.document.bar1?.attribute;
     const bar2Attr = this.document.bar2?.attribute;
-    if (bar1Attr === "system.willpower" || bar2Attr === "system.willpower") return;
-
-    this.#drawWillpowerBar();
+    if (bar1Attr !== "willpower" && bar2Attr !== "willpower") this.#drawWillpowerBar();
+    if (bar1Attr !== "armorRating" && bar2Attr !== "armorRating") this.#drawArmorRatingBar();
   }
 
   /**
@@ -139,7 +137,7 @@ export class WoDToken extends foundry.canvas.placeables.Token {
     }
 
     const bar = this.bars[key];
-    const yOffset = height + BAR_GAP * barHeight;
+    const yOffset = 0 - (BAR_GAP * barHeight) - barHeight;
 
     bar.clear();
 
@@ -156,6 +154,44 @@ export class WoDToken extends foundry.canvas.placeables.Token {
         break;
       }
     }
+
+    bar.position.set(0, yOffset);
+  }
+
+  /**
+   * Draw the extra bar below the standard bars.
+   */
+  #drawArmorRatingBar() {
+    const key = 'armorRating';
+    const armorRating = this.actor?.system?.armorRating;
+    if (!armorRating) return;
+
+    const {width, height} = this.document.getSize();
+    const scale = canvas.dimensions.uiScale;
+    const barWidth = width;
+    const barHeight = 8 * (this.document.height >= 2 ? 1.5 : 1) * scale;
+
+    const armorColor = getCssColor('--wod-color-armorRating');
+    const value = armorRating.value ?? 0;
+    const max = armorRating.max || 1;
+    const barLength = Math.min(Math.round((value/max) * barWidth), barWidth);
+
+    // Reuse or create a Graphics object for this bar
+    if (!this.bars[key]) {
+      this.bars[key] = this.bars.addChild(new PIXI.Graphics());
+    }
+
+    const bar = this.bars[key];
+    const yOffset = height + BAR_GAP * barHeight;
+
+    bar.clear();
+
+    // Background
+    bar.lineStyle(scale, 0x000000, 1.0);
+    bar.beginFill(0x000000, 0.5).drawRoundedRect(0, 0, barWidth, barHeight, 3 * scale);
+
+    // Draw the Bar
+    bar.beginFill(armorColor, 1.0).drawRoundedRect(0, 0, barLength, barHeight, 2 * scale);
 
     bar.position.set(0, yOffset);
   }

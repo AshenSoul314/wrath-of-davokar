@@ -19,7 +19,7 @@ Regardless of which method you choose, think carefully about your system's name.
 This system includes a generator CLI in `package.json`. To use it, you must have [node.js](https://nodejs.org) installed, and it's recommended that you install node 20 or later.
 
 > **Python Generator**
-> 
+>
 > If you would rather use Python than node, there’s an excellent Python-based generator created by Cussa at https://github.com/Cussa/fvtt-wrath-of-davokar-initializator. Give it a shot!
 
 Once you have npm installed, you can run the following in your terminal or command prompt:
@@ -65,10 +65,10 @@ Note: Tutorial may be out of date, so look out for the Foundry compatibility bad
 
 This system includes a handful of helper CSS classes to help you lay out your sheets if you're not comfortable diving into CSS fully. Those are:
 
-- `flexcol`: Included by Foundry itself, this lays out the child elements of whatever element you place this on vertically.
-- `flexrow`: Included by Foundry itself, this lays out the child elements of whatever element you place this on horizontally.
-- `flex-center`: When used on something that's using flexrow or flexcol, this will center the items and text.
-- `flex-between`: When used on something that's using flexrow or flexcol, this will attempt to place space between the items. Similar to "justify" in word processors.
+- `flex-column`: Included by Foundry itself, this lays out the child elements of whatever element you place this on vertically.
+- `flex-row`: Included by Foundry itself, this lays out the child elements of whatever element you place this on horizontally.
+- `flex-center`: When used on something that's using flex-row or flex-column, this will center the items and text.
+- `flex-between`: When used on something that's using flex-row or flex-column, this will attempt to place space between the items. Similar to "justify" in word processors.
 - `flex-group-center`: Add a border, padding, and center all items.
 - `flex-group-left`: Add a border, padding, and left align all items.
 - `flex-group-right`: Add a border, padding, and right align all items.

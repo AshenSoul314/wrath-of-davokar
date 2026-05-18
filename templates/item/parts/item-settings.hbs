@@ -2,7 +2,7 @@
 <section class='tab sheet-body item-settings settings {{tab.cssClass}}' data-group='primary' data-tab='settings'>
 
   {{!-- Automation Settings  --}}
-  {{#if (hasProperty system "automationId")}}
+  {{#if system.automationId}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.Automation.label'}}</div>
       <p class="panel-like-item notification warning">
@@ -16,7 +16,7 @@
   {{/if}}
 
   {{!-- Actions Settings  --}}
-  {{#if (hasProperty system "action")}}
+  {{#if system.action}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</div>
       <div class="panel-content align-left resource-grid-3">
@@ -30,7 +30,7 @@
 
   {{!-- Artifact Settings  --}}
   {{!-- Items cannot be both an artifact and an artifact power, that would cause circular references --}}
-  {{#if (hasProperty system "artifactPowerId")}}
+  {{#if (hasProperty system 'artifactPowerId')}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Artifact.Label'}}</div>
       <div class="panel-content">
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-  {{else if (hasProperty system "isArtifact")}}
+  {{else if (hasProperty system 'isArtifact')}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Artifact.Label'}}</div>
       <div class="panel-content">
@@ -60,12 +60,12 @@
           {{!-- Existing power entries --}}
           <ul class="artifact-power-list flex-column">
             {{#each artifactPowerEntries}}
-              <li class="artifact-power-entry flexrow flex-gap flex-align-center" data-power-id="{{this.artifactPowerId}}">
+              <li class="artifact-power-entry flex-row flex-gap flex-align-center" data-power-id="{{this.artifactPowerId}}">
                 {{#if this.missing}}
                   <i class="fas fa-triangle-exclamation artifact-power-warning"
                       data-tooltip="{{localize 'WRATH_OF_DAVOKAR.Artifact.PowerMissing'}}"></i>
                 {{/if}}
-                <span class="artifact-power-name flexgrow">
+                <span class="artifact-power-name flex-grow">
                   {{this.name}}
                   <span class="artifact-power-id dimmed">({{this.artifactPowerId}})</span>
                 </span>
@@ -80,7 +80,7 @@
 
           {{!-- Search / Add new power --}}
           <div class="artifact-power-search">
-            <div class="flexrow flex-gap">
+            <div class="flex-row flex-gap">
               <input
                 type="text"
                 class="artifact-power-search-input"
@@ -96,7 +96,7 @@
   {{/if}}
 
   {{!-- Equipment Slot Settings  --}}
-  {{#if (hasProperty system "equip")}}
+  {{#if system.equip}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.EquipSettings'}}</div>
       <div class="panel-content align-left flex-column">
@@ -113,7 +113,7 @@
   {{/if}}
 
   {{!-- Weapon Type --}}
-  {{#if (hasProperty  system "weaponType")}}
+  {{#if system.weaponType}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Weapon.Type.Label'}}</div>
       <div class="panel-content align-left resource-grid-3">
@@ -126,7 +126,7 @@
   {{/if}}
 
   {{!-- Qualities --}}
-  {{#if (hasProperty  system "qualities")}}
+  {{#if system.qualities}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</div>
       <div class="panel-content align-left resource-grid-3">
@@ -141,7 +141,7 @@
   {{/if}}
 
   {{!-- Effects --}}
-  {{#if (hasProperty  system "effectData")}}
+  {{#if system.effectData}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize "TYPES.Item.itemEffect"}} </div>
       <div class="panel-content">

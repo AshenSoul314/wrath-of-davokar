@@ -9,7 +9,7 @@
 }
 
 .indent {
-  padding-left: 10%;
+  padding-left: 2em !important;
 }
 
 .hidden {
@@ -31,6 +31,10 @@
   .tab {
     height: 100%;
     overflow-y: auto;
+  }
+
+  .tab.items-tab {
+    padding: 1em;
   }
 }
 

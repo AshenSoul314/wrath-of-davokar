@@ -76,8 +76,9 @@ export function localizeSkill(skill) {
     case "spellcasting":
       result = game.i18n.localize("WRATH_OF_DAVOKAR.Skills.Spellcasting.long");
       break;
+    case "corruption":
     case "totalCorruption":
-      result = game.i18n.localize("WRATH_OF_DAVOKAR.Corruption.Total");
+      result = game.i18n.localize("WRATH_OF_DAVOKAR.Corruption.Total.long");
       break;
 
   }
@@ -134,13 +135,13 @@ export function localizeTraditions(traditionsObj) {
   if (traditions.length === 0) {
     traditions.push(game.i18n.localize("WRATH_OF_DAVOKAR.Power.Tradition.None"));
   }
-  const result = traditions.join(', ');
+  const result = traditions.sort().join(', ');
   return result;
 }
 
 export function localizeRange(range, area=null) {
   let result = `${range}`
-  if (this.system.range == 0) {
+  if (this.system.range == -1) {
     result = game.i18n.localize("WRATH_OF_DAVOKAR.Range.Self");
   }else if (this.system.range == 0) {
     result = game.i18n.localize("WRATH_OF_DAVOKAR.Range.Engaged");
@@ -203,4 +204,35 @@ export function localizeQuality(quality) {
 export function localizeWeaponType(weaponType) {
   const capitalized = weaponType.charAt(0).toUpperCase() + weaponType.slice(1);
   return game.i18n.localize(`WRATH_OF_DAVOKAR.Weapon.Type.${capitalized}`);
+}
+
+export function localizeWeaponTypes(weaponTypesObj) {
+
+  let weaponTypes = [];
+  for (let key in weaponTypesObj) {
+    if (weaponTypesObj[key]) {
+      weaponTypes.push(localizeWeaponType(key));
+    }
+  }
+  const result = weaponTypes.sort().join(', ');
+  return result;
+}
+
+export function localizeCost(costObj) {
+  let cost = []
+  if (costObj.thaler) {
+    cost.push(`${costObj.thaler} ${game.i18n.localize('WRATH_OF_DAVOKAR.Money.Thaler')}`);
+  }
+  if (costObj.shilling) {
+    cost.push(`${costObj.shilling} ${game.i18n.localize('WRATH_OF_DAVOKAR.Money.Shilling')}`);
+  }
+  if (costObj.orteg) {
+    cost.push(`${costObj.orteg} ${game.i18n.localize('WRATH_OF_DAVOKAR.Money.Orteg')}`);
+  }
+
+  if (!cost.length) {
+    cost.push(`0 ${game.i18n.localize('WRATH_OF_DAVOKAR.Money.Thaler')}`);
+  }
+  const result = cost.join(', ');
+  return result;
 }

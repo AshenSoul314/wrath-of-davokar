@@ -1,9 +1,28 @@
 <div class="sheet-header">
-  <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}" height="100" width="100"/>
+  <img class="profile-img" src="{{actor.img}}" {{#if editMode}}data-action="editImage"{{/if}} title="{{actor.name}}" height="100" width="100"/>
   <div class="header-fields">
-    <h1 class="charname">
-      <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
-    </h1>
+
+    <div class="flex-row flex-gap">
+      <h1 class="charname flex-grow">
+        {{#if editMode}}
+          <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
+        {{else}}
+          {{actor.name}}
+        {{/if}}
+      </h1>
+
+      {{#if canToggleEdit}}
+        <button
+          type="button"
+          class="edit-mode-toggle flex-shrink {{#if editMode}}active{{/if}}"
+          data-action="toggleEditMode"
+          title="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.EditSheet'}}{{/if}}"
+          aria-label="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.SheetLabel.EditSheet'}}{{/if}}"
+        >
+          <i class="fas {{#if editMode}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+        </button>
+      {{/if}}
+    </div >
 
     <div class="resources grid grid-6col flex-group-center">
       <label for="system.bio.archetype" class="resource-label grid-span-2">{{localize "WRATH_OF_DAVOKAR.Archetype"}}</label>
@@ -11,9 +30,15 @@
       <label class="resource-label">{{localize "WRATH_OF_DAVOKAR.Experience.Label.long"}}</label>
       <label class="resource-label">{{localize "WRATH_OF_DAVOKAR.Experience.Unspent.short"}}</label>
 
-      <input class="grid-span-2" type="text"   name="system.bio.archetype"    value="{{system.bio.archetype}}"/>
-      <input class="grid-span-2" type="text"   name="system.bio.heritage"     value="{{system.bio.heritage}}"/>
-      <input                     type="number" name="system.experience.total" value="{{system.experience.total}}" step="1" data-dtype="Number"/>
+      {{#if editMode}}
+        <input class="grid-span-2" type="text"   name="system.bio.archetype"    value="{{system.bio.archetype}}"/>
+        <input class="grid-span-2" type="text"   name="system.bio.heritage"     value="{{system.bio.heritage}}"/>
+        <input                     type="number" name="system.experience.total" value="{{system.experience.total}}" step="1" data-dtype="Number"/>
+      {{else}}
+        <span class="grid-span-2 header-field-display">{{system.bio.archetype}}</span>
+        <span class="grid-span-2 header-field-display">{{system.bio.heritage}}</span>
+        <span class="header-field-display">{{system.experience.total}}</span>
+      {{/if}}
       <span>{{system.experience.unspent}}</span>
     </div>
   </div>

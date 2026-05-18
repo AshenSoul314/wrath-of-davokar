@@ -16,12 +16,10 @@
     }
 
     .attr-wits-section {
-      margin-top: 1em;
       margin-right: 1em;
     }
 
     .attr-empathy-section {
-      margin-top: 1em;
       margin-left: 1em;
     }
 
@@ -37,7 +35,8 @@
       cursor: pointer;
 
       &:hover {
-        text-shadow: 0 0 4px utils.$c-shadow-red;
+        text-shadow: 0 0 4px white;
+        transition: all 0.2s ease-in-out;
       }
     }
 
@@ -48,7 +47,8 @@
       cursor: pointer;
 
       &:hover {
-        text-shadow: 0 0 4px utils.$c-shadow-red;
+        text-shadow: 0 0 4px white;
+        transition: all 0.2s ease-in-out;
       }
     }
 
@@ -66,25 +66,37 @@
       width: 30px;
     }
 
-    .spellcasting-row {
-      justify-content: space-around;
-      align-content: center;
+    .spellcasting-grid {
+      display: grid;
+      margin: 10px 0;
+      padding: 0;
       text-align: center;
-      gap: 10px;
-      border-top: 1px solid utils.$c-border;
-      padding-top: 10px;
+      grid-template-columns: minmax(min-content, 1fr) 
+                             minmax(min-content, 1fr) 
+                             minmax(min-content, 2em) 
+                             minmax(min-content, 1fr) 
+                             minmax(min-content, 2em) 
+                             minmax(min-content, 3em) 
+                             minmax(min-content, 2em) 
+                             minmax(min-content, 4em);
 
       .spellcasting-title {
         font-weight: bold;
         text-transform: uppercase;
-        min-width: 20%;
+        min-width: 8em;
         cursor: pointer;
+        text-align: left;
 
         &:hover {
-          text-shadow: 0 0 4px orangered;
+          text-shadow: 0 0 4px white;
+          transition: all 0.2s ease-in-out;
         }
       }
 
+      .spellcasting-term {
+        border-top: 1px solid utils.$c-border;
+        padding: 10px;
+      }
       .spellcasting-total {
         font-weight: bold;
       }

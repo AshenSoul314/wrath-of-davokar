@@ -22,21 +22,17 @@
         },
         "corruption": {
           "temporary": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "permanent": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "min": 0,
           "threshold": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "thresholdMax": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           }
         },
         "willpower": {
@@ -46,99 +42,77 @@
         },
         "attributes": {
           "physique": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "finesse": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "wits": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "empathy": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           }
         },
         "skills": {
           "endurance": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "force": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "melee": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "dexterity": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "discreet": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "marksmanship": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "mobility": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "crafting": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "medicus": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "lore": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "survival": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "vigilance": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "insight": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "instinct": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "persuasion": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "volition": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "spellcasting": {
             "attribute": "empathy",
-            "skill": "volition",
-            "bonus": 0
+            "skill": "volition"
           }
         },
         "experience": {
           "total": 0
         },
         "movement": {
-          "value": 30,
-          "bonus": 0
+          "value": 30
         },
         "money": {
           "thaler": 0,
@@ -149,8 +123,29 @@
           "obsidian": 0
         },
         "encumbrance": {
-          "bonus": 0,
-          "physMult": 2
+          "physMult": 2,
+          "atHandSlots": {
+            "slot_0": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_1": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_2": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_3": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            }
+          }
         },
         "initiative": {
           "tempo": 1,
@@ -158,6 +153,16 @@
         },
         "speed": {
           "value": 30
+        },
+        "dodge": {
+          "value": 0,
+          "attribute": "finesse",
+          "skill": "mobility"
+        },
+        "parry": {
+          "value": 0,
+          "attribute": "physique",
+          "skill": "melee"
         }
       }
     },
@@ -268,6 +273,13 @@
       },
       "rank": {
         "rank": { "value": 1 }
+      },
+      "stackable": {
+        "stack": {
+          "quantity": 1,
+          "isStackable": true,
+          "numEquipped": 0
+        }
       },
       "tradition": {
         "tradition": {

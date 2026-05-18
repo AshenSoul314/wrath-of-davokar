@@ -17,5 +17,7 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/wrath-of-davokar/templates/dice/roll.hbs',
     'systems/wrath-of-davokar/templates/dice/infos.hbs',
     'systems/wrath-of-davokar/templates/dice/tooltip.hbs',
+    // Item Tooltip Partial
+    'systems/wrath-of-davokar/templates/item/parts/item-tooltip.hbs',
   ]);
 };

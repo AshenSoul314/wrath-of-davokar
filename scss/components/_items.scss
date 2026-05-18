@@ -1,6 +1,8 @@
 @use "../utils" as utils;
 
 .wrath-of-davokar {
+
+
   .quality {
     background: utils.$c-toughness;
     color: utils.$c-light-text;
@@ -19,7 +21,7 @@
   }
 
   .artifact-power-warning {
-    color: utils.$c-red;
+    color: utils.$c-red-dark;
   }
 
   .artifact-power-list {
@@ -65,21 +67,17 @@
   // Section Header
   .items-header {
     height: fit-content;
-    margin: 2px 0;
-    padding: 0;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.05);
-    border: utils.$border-groove;
     font-weight: bold;
+    background-image: linear-gradient(to right, utils.$c-red-dark, utils.$c-red);
+    color: utils.$c-light-text;
 
     >* {
-      font-size: 14px;
       text-align: center;
+      color: utils.$c-light-text;
     }
 
     .item-name {
       font-weight: bold;
-      padding-left: 5px;
       text-align: left;
       display: flex;
     }
@@ -91,19 +89,14 @@
 
   .items-list {
     list-style: none;
-    margin: 0;
-    padding: 0;
     overflow-y: auto;
     scrollbar-width: thin;
-    color: utils.$c-tan;
+    padding: 0;
 
     // Item Name
     .item-name {
       flex: 2;
-      margin: 0;
-      padding: 5px;
       overflow: hidden;
-      font-size: 13px;
       text-align: left;
       align-items: center;
       display: flex;
@@ -111,8 +104,7 @@
       h3,
       h4 {
         margin: 0;
-        white-space: nowrap;
-        overflow-x: hidden;
+        white-space: wrap;
       }
     }
 
@@ -123,24 +115,21 @@
 
       &:hover,
       &:focus {
-        text-shadow: 0 0 0.3em utils.$c-shadow-red;
-      }
-
-      img {
-        transition: box-shadow 0.3s ease; // baseline
-      }
-
-      &:hover img {
-        box-shadow: 0 0 10px utils.$c-shadow-red;
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
       }
     }
 
     // Control Buttons Div
     .item-controls {
       display: flex;
-      flex: 0 0 100px;
+      flex: 0 0 60px;
       justify-content: flex-end;
       padding: 5px;
+
+      &.edit-mode{
+        flex: 0 0 110px;
+      }
 
       a {
         font-size: 12px;
@@ -159,22 +148,36 @@
         border-bottom: none;
       }
 
-      .item-name {
-        color: utils.$c-light-text;
-
-        .item-image {
-          flex: 0 0 30px;
-          height: 30px;
-          background-size: 30px;
-          border: none;
-          margin-right: 5px;
-        }
+      .item-image {
+        flex: 0 0 30px;
+        height: 30px;
+        background-size: 30px;
+        border: none;
+        margin-right: 5px;
       }
 
       .item-attribute {
-        flex: 0 0 120px;
-        padding: 5px 8px;
+        flex: 0 0 8em;
+        padding: 5px;
         text-align: center;
+      }
+
+      .item-attribute.base-damage,
+      .item-attribute.armor-rating,
+      .item-attribute.impeding,
+      .item-attribute.parry-bonus,
+      .item-attribute.vision-penalty,
+      .item-attribute.type {
+        flex: 0 0 8em;
+      }
+
+      .item-attribute.grip {
+        flex: 0 0 4em;
+      }
+
+      .item-attribute.range,
+      .item-attribute.weight {
+        flex: 0 0 5em;
       }
 
       .item-armor-rating {

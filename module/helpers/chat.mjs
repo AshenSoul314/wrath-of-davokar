@@ -55,9 +55,9 @@ export function applyMessageHeader(message, html) {
     const sender = header.querySelector(".message-sender");
     if (sender) {
       const customSender = document.createElement("div");
-      customSender.className = "message-sender flexrow flex-nowrap flex-gap";
+      customSender.className = "message-sender flex-row flex-nowrap flex-gap";
       customSender.innerHTML = `
-        <img src="${tokenImg}" width="30" height="30" class="flexshrink" style="border: none;" />
+        <img src="${tokenImg}" width="30" height="30" class="flex-shrink" style="border: none;" />
         <div class="flex-column">
           <span class="message-speaker">${actorName}</span>
           <span class="message-user">${userName}</span>

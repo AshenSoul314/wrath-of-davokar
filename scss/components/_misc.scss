@@ -1,5 +1,29 @@
 @use "../utils" as utils;
 
+@keyframes wodRedPulse {
+  0% {
+    text-shadow:
+      0 0 2px  rgba(255, 0, 0, 0.6),
+      0 0 6px  rgba(255, 0, 0, 0.5),
+      0 0 12px rgba(255, 0, 0, 0.4),
+      0 0 20px rgba(255, 0, 0, 0.25);
+  }
+  50% {
+    text-shadow:
+      0 0 4px  rgba(255, 0, 0, 1),
+      0 0 10px rgba(255, 0, 0, 1),
+      0 0 20px rgba(255, 0, 0, 1),
+      0 0 32px rgba(255, 0, 0, 1);
+
+  }
+  100% {
+    text-shadow:
+      0 0 2px  rgba(255, 0, 0, 0.6),
+      0 0 6px  rgba(255, 0, 0, 0.5),
+      0 0 12px rgba(255, 0, 0, 0.4),
+      0 0 20px rgba(255, 0, 0, 0.25);
+  }
+}
 .wrath-of-davokar {
   hr {
     border: 1px solid utils.$c-border;
@@ -7,6 +31,43 @@
 
   img.icon {
     border: none;
+  }
+
+  .tab.items-tab {
+    padding: 2em;
+  }
+
+  .red-pulse {
+    color: red;
+    font-weight: bold;
+    animation: wodRedPulse 3s infinite ease-in-out;
+  }
+
+  .tab {
+    .sticky,
+    .mid-sticky {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      background: var(--background);
+      border-bottom: 1px solid utils.$c-border;
+      backdrop-filter: blur(10px);
+    }
+
+    .mid-sticky {
+      top: calc(-1em - 1px);
+      padding-top: 0.5em;
+      border-top: 1px solid utils.$c-border;
+    }
+
+  }
+
+  body.theme-light & {
+    .tab .sticky,
+    .tab .mid-sticky {
+      background: url(../../../ui/parchment.jpg) repeat;
+      backdrop-filter: unset;
+    }
   }
 
 }
