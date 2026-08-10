@@ -11,11 +11,6 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 
 const TEMPLATES = 'systems/wrath-of-davokar/templates/item';
 
-/**
- * Base item sheet for Wrath of Davokar.
- * All item type sheets inherit from this class.
- * PARTS must be declared in each subclass.
- */
 export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   #editMode = false;
 
@@ -25,13 +20,14 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     position: { width: 520, height: 480 },
     window: { resizable: true },
     form: { submitOnChange: true },
+    dragDrop: [{dragSelector: '.draggable', dropSelector: null}],
     actions: {
       editImage:           WoDItemSheet.#onEditImage,
       rollCorruption:      WoDItemSheet.#onRollCorruption,
-      'effect:create':     WoDItemSheet.#onEffectCreate,
-      'effect:edit':       WoDItemSheet.#onEffectEdit,
-      'effect:delete':     WoDItemSheet.#onEffectDelete,
-      'effect:toggle':     WoDItemSheet.#onEffectToggle,
+      effectCreate:        WoDItemSheet.#onEffectCreate,
+      effectEdit:          WoDItemSheet.#onEffectEdit,
+      effectDelete:        WoDItemSheet.#onEffectDelete,
+      effectToggle:        WoDItemSheet.#onEffectToggle,
       artifactPowerCreate: WoDItemSheet.#onArtifactPowerCreate,
       artifactPowerEdit:   WoDItemSheet.#onArtifactPowerEdit,
       artifactPowerDelete: WoDItemSheet.#onArtifactPowerDelete,
@@ -43,6 +39,22 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       toggleEditMode:      WoDItemSheet.#onToggleEditMode,
     },
   };
+
+  static PARTS = {
+    header: {
+      template: `${TEMPLATES}/item-header.hbs`,
+    },
+    tabs: {
+      template: 'templates/generic/tab-navigation.hbs',
+      classes: ['wrath-of-davokar'],
+    },
+    main:    { template: `${TEMPLATES}/item-main.hbs`,  scrollable: [''] },
+    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
+    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
+    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
+  };
+
+  
 
   /** @override */
   static TABS = {
@@ -170,8 +182,8 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       }
     }
 
-    // Add AOE Radio Button Data for Weapons
-    if (itemData.type === 'weapon') {
+    // Add AOE Radio Button to ranged items
+    if ('area' in context.system) {
       context.system.area.radio = {
         none:   'WRATH_OF_DAVOKAR.Weapon.AreaEffect.None',
         cone:   'WRATH_OF_DAVOKAR.Weapon.AreaEffect.Cone',
@@ -247,7 +259,31 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   }
 
   /* -------------------------------------------- */
-  /*  Actions                                      */
+  /*  Drag Drop                                   */
+  /* -------------------------------------------- */
+  /** @override */
+  _onDragStart(event) {
+    const el = event.currentTarget;
+    const effectId = el.dataset.effectId;
+
+    if (effectId) {
+      const effect = this.item.effects.get(effectId);
+      if (!effect) return;
+
+      event.dataTransfer.setData('text/plain', JSON.stringify({
+        type: 'ActiveEffect',
+        uuid: effect.uuid,
+      }));
+      return;
+    }
+
+    super._onDragStart(event);
+  }
+
+
+
+  /* -------------------------------------------- */
+  /*  Actions                                     */
   /* -------------------------------------------- */
 
   static #onToggleEditMode(_event, _target) {
@@ -420,6 +456,8 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const itemEffects = this.item.system.effectData;
     const effectID    = Object.keys(itemEffects).length;
 
+    console.warn('CREATING EFFECT');
+
     itemEffects[effectID] = {
       name:        game.i18n.localize('EFFECT.Name'),
       duration:    { rounds: null, turns: null },
@@ -456,7 +494,7 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   }
 
   /* -------------------------------------------- */
-  /*  Chat & Search Actions                        */
+  /*  Chat Actions                                */
   /* -------------------------------------------- */
 
   /**
@@ -467,6 +505,10 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   static async #onSendToChat(event, target) {
     await this.item.buildChatCard();
   }
+
+  /* -------------------------------------------- */
+  /*  Artifact Power Actions                      */
+  /* -------------------------------------------- */
 
   /**
    * Filter available artifactPower items as the user types and populate dropdown.
@@ -579,348 +621,4 @@ export class WoDItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     await this.item.update({ 'system.artifactPowers': updated });
   }
-}
-
-// ---------------------------------------------------------------------------
-// Armor
-// ---------------------------------------------------------------------------
-
-export class WoDArmorBodySheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-armorBody.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDArmorHeadSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-armorHead.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDArmorShieldSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-armorShield.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Weapons
-// ---------------------------------------------------------------------------
-
-export class WoDWeaponSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-weapon.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Abilities & Powers
-// ---------------------------------------------------------------------------
-
-export class WoDTalentSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-talent.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDMysticalPowerSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-mysticalPower.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDRitualSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-ritual.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDMonsterTraitSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-monsterTrait.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDBoonSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-boon.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDBurdenSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-burden.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Conditions & Status
-// ---------------------------------------------------------------------------
-
-export class WoDConditionSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-condition.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDCriticalInjurySheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-criticalInjury.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Inventory & Gear
-// ---------------------------------------------------------------------------
-
-export class WoDAlchemicalItemSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-alchemicalItem.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDContainerSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-container.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDEquipmentSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-equipment.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDGearSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-gear.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDSupplySheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-supply.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDTrapSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-trap.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Miscellaneous
-// ---------------------------------------------------------------------------
-
-export class WoDArtifactPowerSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-artifactPower.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
-}
-
-export class WoDLanguageSheet extends WoDItemSheet {
-  static PARTS = {
-    header: {
-      template: `${TEMPLATES}/item-header.hbs`,
-    },
-    tabs: {
-      template: 'templates/generic/tab-navigation.hbs',
-      classes: ['wrath-of-davokar'],
-    },
-    main:    { template: `${TEMPLATES}/item-language.hbs`,  scrollable: [''] },
-    effects: { template: 'systems/wrath-of-davokar/templates/shared/parts/sheet-effects.hbs', scrollable: [''] },
-    artifactPowers: { template: `${TEMPLATES}/parts/item-artifact-powers.hbs`, scrollable: [''] },
-    settings: { template: `${TEMPLATES}/parts/item-settings.hbs`, scrollable: [''] },
-  };
 }

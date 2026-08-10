@@ -155,7 +155,7 @@
               </div>
               <input type='text' name='system.effectData.{{@key}}.name' value='{{this.name}}'/>
 
-              <a class='item-control item-effect-delete' data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
+              <a class='item-control' data-action="effectDelete" data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
                 <i class='fas fa-trash'></i>
               </a>
             </div>
@@ -192,7 +192,7 @@
 
       </div>
       <div class="item-controls">
-          <a class="item-effect-create" data-action="create" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}">
+          <a class="item-effect-create" data-action="effectCreate" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}">
           <i class="fas fa-plus"></i> {{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}
         </a>
       </div>

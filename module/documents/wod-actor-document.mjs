@@ -1,4 +1,5 @@
 import {chooseAttackerToken, selectSkillRoll} from '../helpers/dialog.mjs'
+import { capitalize } from '../helpers/utils.mjs';
 
 const OVER_ENCUMBERED_EFFECT_ID = 'over-encumbered';
 
@@ -67,6 +68,8 @@ export class WoDActorDocument extends Actor {
     systemData.encumbrance.physMultBonus = 0;
     systemData.visionPenalty.bonus = 0;
     systemData.impedingPenalty.bonus = 0;
+
+    systemData.armorRating = { "max": 0, "bonus": 0, "value": 0 };
 
     systemData.dodge.bonus = 0;
     systemData.parry.bonus = 0;
@@ -165,9 +168,8 @@ export class WoDActorDocument extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
-
-    if (actorData.type === 'character') this._prepareCharacterData(context);
-    if (actorData.type === 'npc')       this._prepareNpcData(context);
+    if (actorData.type === 'character') this._prepareCharacterData(actorData);
+    if (actorData.type === 'npc')       this._prepareNpcData(actorData);
 
     /** ----------------------------------------
      *  SET TOTALS
@@ -204,7 +206,7 @@ export class WoDActorDocument extends Actor {
 
     // Set Dodge
     systemData.dodge.total = systemData.skills[systemData.dodge.skill].total +
-      systemData.attributes[systemData.dodge.attribute].total+ 
+      systemData.attributes[systemData.dodge.attribute].total+
       systemData.dodge.bonus;
     // Set Parry
     systemData.parry.total = systemData.skills[systemData.parry.skill].total +
@@ -227,22 +229,30 @@ export class WoDActorDocument extends Actor {
     const systemData = actorData.system;
   }
 
-    /**
+  /**
    * Override getRollData() that's supplied to rolls.
    */
   getRollData() {
     // Starts off by populating the roll data with a shallow copy of `this.system`
     const data = { ...this.system };
 
+    function formatRollName(str) {
+      let words = str.split(/\s+/);
+      words = words.map((word) => {
+        return word.charAt(0).toLocaleUpperCase()  + word.substring(1);
+      });
+      return words.join("");
+    }
+
     // Attribute Values
     for (let [attributeName, attributeValue] of Object.entries(data.attributes)) {
-      const attributeLabel = game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[attributeName])
+
+      const attributeLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Attributes.${capitalize(attributeName)}.long`)
       let formula = `${attributeValue.total}ds[${attributeLabel} (${attributeValue.total})]`
       if (attributeValue.total < 0) {
         formula = `${Math.abs(attributeValue.total)}dn[${attributeLabel} (${attributeValue.total})]`
       }
-      data[attributeLabel] = formula;
-      data[attributeLabel.toLocaleLowerCase()] = formula
+      data[formatRollName(attributeLabel)] = formula;
     }
 
     // Skill Values
@@ -250,102 +260,58 @@ export class WoDActorDocument extends Actor {
 
       if (skillName === 'spellcasting') continue;
 
-      const skillLabel = game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.skills[skillName])
+      const skillLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Skills.${capitalize(skillName)}.long`)
       let formula = `${skillValue.total}ds[${skillLabel} (${skillValue.total})]`
       if (skillValue.total < 0) {
         formula = `${Math.abs(skillValue.total)}dn[${skillLabel} (${skillValue.total})]`
       }
-      data[skillLabel] = formula;
-      data[skillLabel.toLocaleLowerCase()] = formula
+      data[formatRollName(skillLabel)] = formula;
     }
 
     // Spellcasting
-    const spellLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Skills.Spellcastig.long');
-    const spellShortLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Skills.Spellcastig.abbr');
+    const spellLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Skills.Spellcasting.long');
 
     if (data.skills.spellcasting.total < 0) {
-      data[spellLabel] = `${Math.abs(data.skills.spellcasting.total)}dn[${spellLabel} (${data.skills.spellcasting.total})]`;
+      data[formatRollName(spellLabel)] = `${Math.abs(data.skills.spellcasting.total)}dn[${spellLabel} (${data.skills.spellcasting.total})]`;
     } else {
-      data[spellLabel] = `${data.skills.spellcasting.total}ds[${spellLabel} (${data.skills.spellcasting.total})]`;
+      data[formatRollName(spellLabel)] = `${data.skills.spellcasting.total}ds[${spellLabel} (${data.skills.spellcasting.total})]`;
     }
-
-    data[spellLabel.toLocaleLowerCase()] = data[spellLabel];
-    data[spellShortLabel] = data[spellLabel];
-    data[spellShortLabel.toLocaleLowerCase()] = data[spellLabel];
 
     // Dodge
     const dodgeLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Combat.Dodge');
     if (data.dodge.total < 0) {
-      data[dodgeLabel] = `${Math.abs(data.dodge.total)}dn[${dodgeLabel} (${data.dodge.total})]`;
+      data[formatRollName(dodgeLabel)] = `${Math.abs(data.dodge.total)}dn[${dodgeLabel} (${data.dodge.total})]`;
     } else {
-      data[dodgeLabel] = `${data.dodge.total}ds[${dodgeLabel} (${data.dodge.total})]`;
+      data[formatRollName(dodgeLabel)] = `${data.dodge.total}ds[${dodgeLabel} (${data.dodge.total})]`;
     }
-    data[dodgeLabel.toLocaleLowerCase()] = data[dodgeLabel];
 
     // Parry
     const parryLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Combat.Parry');
     if (data.parry.total < 0) {
-      data[parryLabel] = `${Math.abs(data.parry.total)}dn[${parryLabel} (${data.parry.total})]`;
+      data[formatRollName(parryLabel)] = `${Math.abs(data.parry.total)}dn[${parryLabel} (${data.parry.total})]`;
     } else {
-      data[parryLabel] = `${data.parry.total}ds[${parryLabel} (${data.parry.total})]`;
+      data[formatRollName(parryLabel)] = `${data.parry.total}ds[${parryLabel} (${data.parry.total})]`;
     }
-    data[parryLabel.toLocaleLowerCase()] = data[parryLabel];
 
     // Armor
     const armorLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Armor.Rating.long')
-    const armorLabelLong = armorLabel.replace(/\s+/g, '');
-    const armorLabelShort = game.i18n.localize('WRATH_OF_DAVOKAR.Armor.Rating.short');
-    const armorLabelAbbv = game.i18n.localize('WRATH_OF_DAVOKAR.Armor.Rating.abbv');
     const armorFormula =  `${data.armorRating.value}danp[${armorLabel} (${data.armorRating.value}/${data.armorRating.max})]`;
-    data[armorLabelLong] = armorFormula;
-    data[armorLabelLong.toLocaleLowerCase()] = armorFormula;
-    data[`${armorLabelLong.charAt(0).toLocaleLowerCase() + armorLabelLong.slice(1)}`] = armorFormula;
-    data[armorLabelShort] = armorFormula;
-    data[armorLabelShort.toLocaleLowerCase()] = armorFormula;
-    data[armorLabelAbbv] = armorFormula;
-    data[armorLabelAbbv.toLocaleLowerCase()] = armorFormula;
+    data[formatRollName(armorLabel)] = armorFormula;
 
     // Temporary Corruption
     const tempCorruptionLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Temporary.long');
-    const tempCorrLabelLong = tempCorruptionLabel.replace(/\s+/g, '');
-    const tempCorrLabelShort = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Temporary.short');
-    const tempCorrLabelAbbv = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Temporary.abbv');
     const tempCorrFormula =  `${data.corruption.temporary.value}ds[${tempCorruptionLabel} (${data.corruption.temporary.value})]`;
-    data[tempCorrLabelLong] = tempCorrFormula;
-    data[tempCorrLabelLong.toLocaleLowerCase()] = tempCorrFormula;
-    data[`${tempCorrLabelLong.charAt(0).toLocaleLowerCase() + tempCorrLabelLong.slice(1)}`] = tempCorrFormula;
-    data[tempCorrLabelShort] = tempCorrFormula;
-    data[tempCorrLabelShort.toLocaleLowerCase()] = tempCorrFormula;
-    data[tempCorrLabelAbbv] = tempCorrFormula;
-    data[tempCorrLabelAbbv.toLocaleLowerCase()] = tempCorrFormula;
+    data[formatRollName(tempCorruptionLabel)] = tempCorrFormula;
 
     // Permanent Corruption
     const permCorruptionLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Permanent.long');
-    const permCorrLabelLong = permCorruptionLabel.replace(/\s+/g, '');
-    const permCorrLabelShort = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Permanent.short');
-    const permCorrLabelAbbv = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Permanent.abbv');
     const permCorrFormula =  `${data.corruption.permanent.value}ds[${permCorruptionLabel} (${data.corruption.permanent.value})]`;
-    data[permCorrLabelLong] = permCorrFormula;
-    data[permCorrLabelLong.toLocaleLowerCase()] = permCorrFormula;
-    data[`${permCorrLabelLong.charAt(0).toLocaleLowerCase() + permCorrLabelLong.slice(1)}`] = permCorrFormula;
-    data[permCorrLabelShort] = permCorrFormula;
-    data[permCorrLabelShort.toLocaleLowerCase()] = permCorrFormula;
-    data[permCorrLabelAbbv] = permCorrFormula;
-    data[permCorrLabelAbbv.toLocaleLowerCase()] = permCorrFormula;
+    data[formatRollName(permCorruptionLabel)] = permCorrFormula;
 
     // Total Corruption
     const totalCorruptionLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Total.long');
-    const totalCorrLabelLong = totalCorruptionLabel.replace(/\s+/g, '');
-    const totalCorrLabelShort = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Total.short');
-    const totalCorrLabelAbbv = game.i18n.localize('WRATH_OF_DAVOKAR.Corruption.Total.abbv');
     const totalCorrFormula =  `${data.corruption.value}ds[${totalCorruptionLabel} (${data.corruption.value})]`;
-    data[totalCorrLabelLong] = totalCorrFormula;
-    data[totalCorrLabelLong.toLocaleLowerCase()] = totalCorrFormula;
-    data[`${totalCorrLabelLong.charAt(0).toLocaleLowerCase() + totalCorrLabelLong.slice(1)}`] = totalCorrFormula;
-    data[totalCorrLabelShort] = totalCorrFormula;
-    data[totalCorrLabelShort.toLocaleLowerCase()] = totalCorrFormula;
-    data[totalCorrLabelAbbv] = totalCorrFormula;
-    data[totalCorrLabelAbbv.toLocaleLowerCase()] = totalCorrFormula;
+    data[formatRollName(totalCorruptionLabel)] = totalCorrFormula;
 
     return data;
   }
@@ -381,7 +347,12 @@ export class WoDActorDocument extends Actor {
    */
   async _onUpdate(changed, options, userId) {
     await super._onUpdate(changed, options, userId);
-    if (game.user.isGM || this.isOwner) {
+
+    // Only sync encumbrance effect if encumbrance-relevant fields actually changed
+    const encumbranceChanged = foundry.utils.hasProperty(changed, 'system.encumbrance')
+      || foundry.utils.hasProperty(changed, 'system.attributes.physique');
+
+    if (encumbranceChanged && (game.user.isGM || this.isOwner)) {
       await this._syncOverencumberedEffect();
     }
   }
@@ -392,6 +363,8 @@ export class WoDActorDocument extends Actor {
    */
   async _onEmbeddedDocumentOperation(embeddedName, operation, documents, result, options, userId) {
     await super._onEmbeddedDocumentOperation?.(embeddedName, operation, documents, result, options, userId);
+    
+    // Only sync for Item changes (equip/unequip/add/remove), not ActiveEffect changes
     if (embeddedName === 'Item' && (game.user.isGM || this.isOwner)) {
       await this._syncOverencumberedEffect();
     }

@@ -271,6 +271,13 @@
           "alwaysTransferEffects": false
         }
       },
+      "range": {
+        "range": 0,
+        "area": {
+          "hasArea": false,
+          "type": "none"
+        }
+      },
       "rank": {
         "rank": { "value": 1 }
       },
@@ -481,6 +488,7 @@
         "base",
         "action",
         "corruption",
+        "range",
         "rank",
         "tradition",
         "xpCost"
@@ -489,7 +497,6 @@
         "chain": false,
         "concentration": false
       },
-      "range": 0,
       "component": ""
     },
     "ritual": {
@@ -527,6 +534,7 @@
       "templates": [
         "base",
         "artifact",
+        "range",
         "rank",
         "equip"
       ],
@@ -551,14 +559,10 @@
         "artifact",
         "cost",
         "equip",
+        "range",
         "weight"
       ],
       "damage": 0,
-      "range": 0,
-      "area": {
-        "hasArea": false,
-        "type": "none"
-      },
       "grip": "",
       "qualities": {
         "balanced": false,

@@ -15,6 +15,10 @@ export function getCssColor(varName) {
   return parseInt(hex.replace(/^#/, '0x'), 16);
 }
 
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 /**
  * Sorts items by their base name and then by their system.rank.value
  *

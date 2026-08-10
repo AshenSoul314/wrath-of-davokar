@@ -460,7 +460,7 @@
       },
       "Marksmanship": {
         "long": "Marksmanship",
-        "abbr": "Mrk"
+        "abbr": "Mar"
       },
       "Mobility": {
         "long": "Mobility",
@@ -468,7 +468,7 @@
       },
       "Crafting": {
         "long": "Crafting",
-        "abbr": "Crf"
+        "abbr": "Cra"
       },
       "Medicus": {
         "long": "Medicus",
@@ -480,7 +480,7 @@
       },
       "Survival": {
         "long": "Survival",
-        "abbr": "Srv"
+        "abbr": "Sur"
       },
       "Vigilance": {
         "long": "Vigilance",
@@ -488,7 +488,7 @@
       },
       "Insight": {
         "long": "Insight",
-        "abbr": "Isi"
+        "abbr": "Ins"
       },
       "Instinct": {
         "long": "Impulse",

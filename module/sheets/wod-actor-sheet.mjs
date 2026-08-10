@@ -42,10 +42,10 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       itemRoll:             WoDActorSheet.#onItemRoll,
       rollSkill:            WoDActorSheet.#onRollSkill,
       showArtifactCard:     WoDActorSheet.#onShowArtifactCard,
-      'effect:create':      WoDActorSheet.#onEffectCreate,
-      'effect:edit':        WoDActorSheet.#onEffectEdit,
-      'effect:delete':      WoDActorSheet.#onEffectDelete,
-      'effect:toggle':      WoDActorSheet.#onEffectToggle,
+      effectCreate:         WoDActorSheet.#onEffectCreate,
+      effectEdit:           WoDActorSheet.#onEffectEdit,
+      effectDelete:         WoDActorSheet.#onEffectDelete,
+      effectToggle:         WoDActorSheet.#onEffectToggle,
       tempCorruptionChange: WoDActorSheet.#onTempCorruptionChange,
       permCorruptionChange: WoDActorSheet.#onPermCorruptionChange,
       armorRatingChange:    WoDActorSheet.#onArmorRatingChange,
@@ -688,8 +688,9 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       this.clearSlot(item.id);
     }
 
-    if (!item.system.equip.alwaysTransferEffects) {
-      for (const effect of item.effects) await effect.update({ transfer: false });
+    for (const effect of item.effects) {
+      const transferOnEquip = effect.getFlag("wrath-of-davokar", "transferOnEquipOverride");
+      if (transferOnEquip) await effect.update({ transfer: false });
     }
 
     await item.update({ 'system.equip.isEquipped': false });
@@ -772,11 +773,53 @@ export class WoDActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       if (existing) await this.unequipItem(existing);
     }
 
-    if (!item.system.equip.alwaysTransferEffects) {
-      for (const effect of item.effects) await effect.update({ transfer: true });
+    for (const effect of item.effects) {
+      const transferOnEquip = effect.getFlag("wrath-of-davokar", "transferOnEquipOverride");
+      if (transferOnEquip) await effect.update({ transfer: true });
     }
 
     await item.update({ 'system.equip.isEquipped': true });
+  }
+
+  /* -------------------------------------------- */
+  /*  Drag and Drop                               */
+  /* -------------------------------------------- */
+  /** @override */
+  async _onDrop(event) {
+    const data = TextEditor.getDragEventData(event);
+
+    if (data.type === 'ActiveEffect') {
+      return this.#onDropActiveEffect(data);
+    }
+
+    return super._onDrop(event);
+  }
+
+  async #onDropActiveEffect(data) {
+    if (!this.actor.isOwner) return false;
+
+    // Resolve the source effect
+    const effect = await fromUuid(data.uuid);
+    if (!effect) return false;
+
+    // If it's already directly on this actor, let Foundry handle it (reordering etc.)
+    if (effect.parent === this.actor) return super._onDrop(event);
+
+    // Build creation data from the source effect, setting origin to the source item
+    const effectData = effect.toObject();
+    effectData.origin = effect.parent?.uuid ?? null;
+
+    // Optional: prevent duplicate from same origin
+    const existing = this.actor.effects.find(e => e.origin === effectData.origin && e.name === effectData.name);
+    if (existing) {
+      ui.notifications.warn(game.i18n.format(
+        'WRATH_OF_DAVOKAR.Notifications.EffectAlreadyApplied',
+        { name: effectData.name }
+      ));
+      return false;
+    }
+
+    return ActiveEffect.create(effectData, { parent: this.actor });
   }
 }
 

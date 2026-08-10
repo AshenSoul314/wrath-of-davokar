@@ -9,28 +9,7 @@ import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons } from 
 // import { wrapDrawBars } from './helpers/token.mjs';
 import './helpers/handlebars-helpers.mjs'
 
-import {
-  WoDAlchemicalItemSheet,
-  WoDArmorBodySheet,
-  WoDArmorHeadSheet,
-  WoDArmorShieldSheet,
-  WoDArtifactPowerSheet,
-  WoDBoonSheet,
-  WoDBurdenSheet,
-  WoDConditionSheet,
-  WoDContainerSheet,
-  WoDCriticalInjurySheet,
-  WoDEquipmentSheet,
-  WoDGearSheet,
-  WoDLanguageSheet,
-  WoDMonsterTraitSheet,
-  WoDMysticalPowerSheet,
-  WoDRitualSheet,
-  WoDSupplySheet,
-  WoDTalentSheet,
-  WoDTrapSheet,
-  WoDWeaponSheet,
-} from './sheets/wod-item-sheet.mjs';
+import { WoDItemSheet } from './sheets/wod-item-sheet.mjs';
 
 import {
   WoDCharacterSheet,
@@ -123,121 +102,121 @@ Hooks.once('init', function () {
   });
 
   // Register Item sheet application classes
-  Items.registerSheet('wrath-of-davokar', WoDAlchemicalItemSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['alchemicalItem'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.AlchemicalItem',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDArmorBodySheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['armorBody'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorBody',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDArmorHeadSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['armorHead'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorHead',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDArmorShieldSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['armorShield'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorShield',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDArtifactPowerSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['artifactPower'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.ArtifactPower',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDBoonSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['boon'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Boon',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDBurdenSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['burden'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Burden',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDConditionSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['condition'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Condition',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDContainerSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['container'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Container',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDCriticalInjurySheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['criticalInjury'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.CriticalInjury',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDEquipmentSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['equipment'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Equipment',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDGearSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['gear'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Gear',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDLanguageSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['language'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Language',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDMonsterTraitSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['monsterTrait'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.MonsterTrait',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDMysticalPowerSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['mysticalPower'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.MysticalPower',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDRitualSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['ritual'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Ritual',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDSupplySheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['supply'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Supply',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDTalentSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['talent'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Talent',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDTrapSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['trap'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Trap',
   });
 
-  Items.registerSheet('wrath-of-davokar', WoDWeaponSheet, {
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
     types: ['weapon'],
     makeDefault: true,
     label: 'WRATH_OF_DAVOKAR.SheetLabel.Weapon',
@@ -561,3 +540,34 @@ async function rollItemMacro(itemUuid, powerId) {
     }
   });
 }
+
+/* -------------------------------------------- */
+/*  Active Effect Injection                     */
+/* -------------------------------------------- */
+
+Hooks.on("renderActiveEffectConfig", (app, html, context, options) => {
+
+  const effect = app.document;
+  const checked = effect.getFlag("wrath-of-davokar", "transferOnEquipOverride");
+
+  const field = document.createElement("div");
+  field.classList.add("form-group");
+
+  field.innerHTML = `
+    <label for="wod-transferOnEquipOverride">Transfer on Equip Override</label>
+    <div class="form-fields">
+      <input type="checkbox" name="flags.wrath-of-davokar.transferOnEquipOverride" id="wod-transferOnEquipOverride" ${checked ? "checked" : ""}>
+    </div>
+    <p class="hint">Always transfer this effect when the parent item is equipped.</p>
+  `;
+
+  let detailsTab = html.querySelector('.tab[data-tab="details"]');
+  
+  if (detailsTab) {
+    detailsTab.appendChild(field);
+  } else {
+    // last-resort fallback
+    html.querySelector("section.window-content")?.appendChild(field);
+  }
+
+});
