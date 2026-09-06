@@ -1120,6 +1120,22 @@ body.theme-light .wrath-of-davokar.item-tooltip {
 }
 .wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button {
   flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #7a7971;
+  border-radius: 3px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button[aria-pressed=true] {
+  opacity: 1;
+  background: var(--button-hover-background-color);
+  color: var(--button-hover-text-color);
+  border-color: var(--button-hover-border-color);
+  font-weight: bold;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button:not([aria-pressed=true]):hover {
+  opacity: 0.85;
+  cursor: pointer;
 }
 .wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets {
   display: flex;

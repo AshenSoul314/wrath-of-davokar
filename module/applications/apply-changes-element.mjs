@@ -9,10 +9,26 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
   /** @type {ApplyData} */
   applyData;
 
+  /**
+   * UUIDs of targets the user has explicitly unchecked. Absence from this set means checked (the default).
+   * @type {Set<string>}
+   */
+  uncheckedTargets = new Set();
+
   /** @override */
   get shouldBuildTargetList() {
     return super.shouldBuildTargetList && this.open && this.visible;
   }
+
+  /**
+   * This element should always be displayed, regardless of whether the user has an active target.
+   * @override
+   */
+  get hidden() {
+    return false;
+  }
+
+  set hidden(_value) {}
 
   /* -------------------------------------------- */
 
@@ -62,7 +78,7 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
    * @returns {boolean}
    */
   targetChecked(uuid) {
-    return true;
+    return !this.uncheckedTargets.has(uuid);
   }
 
   /* -------------------------------------------- */
@@ -71,7 +87,6 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
     const actor = fromUuidSync(uuid);
     if ( !actor?.isOwner ) return;
 
-    const disabled = this.targetingMode === "selected" ? " disabled" : "";
     const checked = this.targetChecked(uuid) ? " checked" : "";
 
     const li = document.createElement("li");
@@ -83,11 +98,15 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
         <span class="title"></span>
       </div>
       <div class="checkbox">
-        <dnd5e-checkbox name="${uuid}"${checked}${disabled}></dnd5e-checkbox>
+        <input type="checkbox" name="${uuid}"${checked}>
       </div>
     `;
     Object.assign(li.querySelector(".gold-icon"), { alt: name, src: actor.img });
     li.querySelector(".name-stacked .title").append(name);
+    li.querySelector('input[type="checkbox"]').addEventListener("change", event => {
+      if ( event.currentTarget.checked ) this.uncheckedTargets.delete(uuid);
+      else this.uncheckedTargets.add(uuid);
+    });
 
     return li;
   }
@@ -96,9 +115,20 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
 
   async _onApply(event) {
     event.preventDefault();
+    const applied = [];
     for ( const li of this.targetList.querySelectorAll(".target") ) {
+      if ( li.querySelector('input[type="checkbox"]')?.checked === false ) continue;
       const actor = await fromUuid(li.dataset.targetUuid);
-      if ( actor ) await this._applyToActor(actor);
+      if ( actor ) {
+        await this._applyToActor(actor);
+        applied.push(actor.name);
+      }
+    }
+
+    if ( applied.length ) {
+      ui.notifications.info(game.i18n.format("WRATH_OF_DAVOKAR.Chat.Apply.Applied", { targets: applied.join(", ") }));
+    } else {
+      ui.notifications.warn(game.i18n.localize("WRATH_OF_DAVOKAR.Chat.Apply.NoTargets"));
     }
   }
 
@@ -116,7 +146,18 @@ export default class ApplyChangesElement extends TargetedApplicationMixin(HTMLEl
     if ( this.applyData.deltaPhy ) {
       updates["system.attributes.physique.value"] = Math.min(actor.system.attributes.physique.max, Math.max(0, (actor.system.attributes.physique.value) + this.applyData.deltaPhy));
     }
-    // ... deltaPhy, deltaFin, etc. following the same pattern
+    if ( this.applyData.deltaFin ) {
+      updates["system.attributes.finesse.value"] = Math.min(actor.system.attributes.finesse.max, Math.max(0, (actor.system.attributes.finesse.value) + this.applyData.deltaFin));
+    }
+    if ( this.applyData.deltaWit ) {
+      updates["system.attributes.wits.value"] = Math.min(actor.system.attributes.wits.max, Math.max(0, (actor.system.attributes.wits.value) + this.applyData.deltaWit));
+    }
+    if ( this.applyData.deltaEmp ) {
+      updates["system.attributes.empathy.value"] = Math.min(actor.system.attributes.empathy.max, Math.max(0, (actor.system.attributes.empathy.value) + this.applyData.deltaEmp));
+    }
+    if ( this.applyData.deltaWP ) {
+      updates["system.willpower.value"] = Math.min(actor.system.willpower.max, Math.max(0, (actor.system.willpower.value) + this.applyData.deltaWP));
+    }
     if ( Object.keys(updates).length ) await actor.update(updates);
   }
 
@@ -151,5 +192,6 @@ export class ApplyData {
     this.deltaTempCorruption = null;
     this.deltaPermCorruption = null;
     this.deltaArmor= null;
+    this.deltaWP = null;
   }
 }

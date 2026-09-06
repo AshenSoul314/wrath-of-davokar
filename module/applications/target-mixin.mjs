@@ -178,7 +178,9 @@ export function TargetedApplicationMixin(BaseClass) {
       const targetedTokens = new Map();
       switch ( this.targetingMode ) {
         case "targeted":
-          this.chatMessage?.getFlag("wrath-of-davokar", "targets")?.forEach(t => targetedTokens.set(t.uuid, t.name));
+          game.user.targets.forEach(t => {
+            if ( t.actor ) targetedTokens.set(t.actor.uuid, t.name);
+          });
           break;
         case "selected":
           canvas.tokens?.controlled?.forEach(t => {
@@ -222,8 +224,8 @@ export function TargetedApplicationMixin(BaseClass) {
     }
 
     /**
-     * Handle a token being targeted or untargeted, updating this element's visibility if it concerns the
-     * current user.
+     * Handle a token being targeted or untargeted, updating this element's visibility and, if the "Targeted"
+     * source mode is active, rebuilding the target list to reflect the change.
      * @param {User} user
      * @param {Token} token
      * @param {boolean} targeted
@@ -231,6 +233,7 @@ export function TargetedApplicationMixin(BaseClass) {
     _onTargetToken(user, token, targeted) {
       if ( user !== game.user ) return;
       this.visible = this._hasActiveTargets();
+      if ( this.targetingMode === "targeted" ) this.buildTargetsList();
     }
 
     /**

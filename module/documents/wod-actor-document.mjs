@@ -280,18 +280,24 @@ export class WoDActorDocument extends Actor {
 
     // Dodge
     const dodgeLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Combat.Dodge');
+    const dodgeAttributeLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Attributes.${capitalize(data.dodge.attribute)}.long`);
+    const dodgeSkillLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Skills.${capitalize(data.dodge.skill)}.long`);
+    const dodgeDescription = `${dodgeLabel} (${dodgeAttributeLabel} + ${dodgeSkillLabel}: ${data.dodge.total})`;
     if (data.dodge.total < 0) {
-      data[formatRollName(dodgeLabel)] = `${Math.abs(data.dodge.total)}dn[${dodgeLabel} (${data.dodge.total})]`;
+      data[formatRollName(dodgeLabel)] = `${Math.abs(data.dodge.total)}dn[${dodgeDescription}]`;
     } else {
-      data[formatRollName(dodgeLabel)] = `${data.dodge.total}ds[${dodgeLabel} (${data.dodge.total})]`;
+      data[formatRollName(dodgeLabel)] = `${data.dodge.total}ds[${dodgeDescription}]`;
     }
 
     // Parry
     const parryLabel = game.i18n.localize('WRATH_OF_DAVOKAR.Combat.Parry');
+    const parryAttributeLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Attributes.${capitalize(data.parry.attribute)}.long`);
+    const parrySkillLabel = game.i18n.localize(`WRATH_OF_DAVOKAR.Skills.${capitalize(data.parry.skill)}.long`);
+    const parryDescription = `${parryLabel} (${parryAttributeLabel} + ${parrySkillLabel}: ${data.parry.total})`;
     if (data.parry.total < 0) {
-      data[formatRollName(parryLabel)] = `${Math.abs(data.parry.total)}dn[${parryLabel} (${data.parry.total})]`;
+      data[formatRollName(parryLabel)] = `${Math.abs(data.parry.total)}dn[${parryDescription}]`;
     } else {
-      data[formatRollName(parryLabel)] = `${data.parry.total}ds[${parryLabel} (${data.parry.total})]`;
+      data[formatRollName(parryLabel)] = `${data.parry.total}ds[${parryDescription}]`;
     }
 
     // Armor
@@ -471,23 +477,30 @@ export class WoDActorDocument extends Actor {
    * Distribute an armor rating change (positive or negative) across equipped
    * armor items one point at a time, re-sorting after each point.
    *
-   * The sort order prioritizes items that are cheaper, non-artifact, and most
-   * damaged — these are targeted first on a decrease. On an increase the sorted
-   * array is searched from the back, so expensive artifacts with the most
-   * remaining capacity are restored first.
+   * The sort order prioritizes natural-quality items above all else, then items
+   * that are cheaper, non-artifact, and most damaged — these are targeted first
+   * on a decrease. On an increase the sorted array is searched from the back,
+   * so expensive artifacts with the most remaining capacity are restored first.
    *
    * Decreases are floored at 0 per item. Increases are capped at rating.max.
    *
    * @param {number}          delta - Signed change to distribute (negative =
    *                                  damage, positive = repair/increase)
    * @param {"value"|"max"}   field - Which item rating field to modify
+   * @param {boolean}         [ignoreNatural=false] - If true, armor with the
+   *                                  natural quality is excluded and left
+   *                                  unaffected
    */
-  async distributeArmorRatingChange(delta, field) {
-    const armorPieces = [
+  async distributeArmorRatingChange(delta, field, ignoreNatural = false) {
+    let armorPieces = [
       ...this.equippedArmorBody,
       ...this.equippedArmorHead,
       ...this.equippedArmorShield,
     ];
+
+    if (ignoreNatural) {
+      armorPieces = armorPieces.filter(item => !item.system.qualities?.natural);
+    }
 
     if (armorPieces.length === 0) return;
 
@@ -503,11 +516,16 @@ export class WoDActorDocument extends Actor {
     /**
      * Sort by damage priority (ascending — front of array takes changes first
      * on a decrease; back of array takes changes first on an increase):
-     *   1. Non-artifact first — artifacts are spared until last
-     *   2. Cost ascending — cheap pieces absorb changes first
-     *   3. Highest current value last — most-remaining capacity changes last
+     *   1. Natural quality first — natural armor absorbs changes above all else
+     *   2. Non-artifact next — artifacts are spared until last
+     *   3. Cost ascending — cheap pieces absorb changes first
+     *   4. Highest current value last — most-remaining capacity changes last
      */
     const sortPieces = () => [...armorPieces].sort((a, b) => {
+      const naturalA = a.system.qualities?.natural ? 0 : 1;
+      const naturalB = b.system.qualities?.natural ? 0 : 1;
+      if (naturalA !== naturalB) return naturalA - naturalB;
+
       const artifactA = a.system.isArtifact ? 1 : 0;
       const artifactB = b.system.isArtifact ? 1 : 0;
       if (artifactA !== artifactB) return artifactA - artifactB;

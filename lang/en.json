@@ -123,7 +123,9 @@
       "Apply": {
         "Label": "Apply",
         "TooltipTargeted": "Apply this roll to the targeted token(s)",
-        "TooltipSelected": "Apply this roll to the selected token(s)"
+        "TooltipSelected": "Apply this roll to the selected token(s)",
+        "Applied": "Applied changes to {targets}",
+        "NoTargets": "No targets selected to apply changes to"
       }
     },
     "Combat": {

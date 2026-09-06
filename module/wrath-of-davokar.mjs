@@ -402,7 +402,8 @@ async function _onDicePush(event) {
   await roll.push({ async: true });
 
   let applyData = new ApplyData()
-  applyData.corruption = 1;
+  applyData.deltaTempCorruption = 1;
+  applyData.deltaWP = 1;
   roll.options.applyData = applyData;
 
   // Capture the tokens targeted at push time so the "Targeted" apply mode has something to show.
@@ -411,7 +412,9 @@ async function _onDicePush(event) {
     .map(t => ({ uuid: t.actor.uuid, name: t.name }));
 
   await roll.toMessage({
-    flags: { 'wrath-of-davokar': { applyData: applyData, targets: targets } }
+    // Foundry's flags field rejects non-plain-object values (it silently replaces them with {}),
+    // so the ApplyData class instance has to be flattened to a plain object before being stored.
+    flags: { 'wrath-of-davokar': { applyData: { ...applyData }, targets: targets } }
   });
 }
 
