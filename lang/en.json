@@ -119,6 +119,11 @@
     "Chat": {
       "Roll": {
         "Keep": "Keep Roll"
+      },
+      "Apply": {
+        "Label": "Apply",
+        "TooltipTargeted": "Apply this roll to the targeted token(s)",
+        "TooltipSelected": "Apply this roll to the selected token(s)"
       }
     },
     "Combat": {
@@ -506,6 +511,12 @@
         "long": "Spellcasting",
         "abbr": "Spell"
       }
+    },
+    "Tokens": {
+      "NoneSelected": "No Tokens Selected",
+      "NoneTargeted": "No Tokens Targeted",
+      "Selected": "Selected",
+      "Targeted": "Targeted"
     },
     "Time": {
       "Rounds": "Rounds",

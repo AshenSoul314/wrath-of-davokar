@@ -5,7 +5,8 @@ import { WRATH_OF_DAVOKAR } from './helpers/config.mjs';
 import { STATUS_EFFECTS, handleEffectCreation } from './helpers/effects.mjs';
 import { YearZeroRollManager } from '../lib/yzur.js';
 import { initWrathTracker, updateWrathSettings } from './helpers/wrath-tracker.mjs';
-import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons } from './helpers/chat.mjs';
+import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons, initApplySection } from './helpers/chat.mjs';
+import {ApplyData} from './applications/apply-changes-element.mjs'
 // import { wrapDrawBars } from './helpers/token.mjs';
 import './helpers/handlebars-helpers.mjs'
 
@@ -317,18 +318,28 @@ Hooks.once('ready', async () => {
 /*  Migrations                                  */
 /* -------------------------------------------- */
 Hooks.once('ready', async () => {
-  // Migrate legacy corruption scalar fields to objects
   for (const actor of game.actors) {
-    const corruption = actor.system?.corruption;
-    if (!corruption) continue;
-
     const updates = {};
-    if (typeof corruption.threshold === "number") {
+
+    // Migrate legacy corruption scalar fields to objects
+    const corruption = actor.system?.corruption;
+    if (typeof corruption?.threshold === "number") {
       updates["system.corruption.threshold"] = { value: corruption.threshold, bonus: 0 };
     }
 
+    // Migrate legacy actors missing attribute max — default it to the
+    // attribute's current value
+    const attributes = actor.system?.attributes;
+    if (attributes) {
+      for (const [key, attribute] of Object.entries(attributes)) {
+        if (attribute.max === undefined) {
+          updates[`system.attributes.${key}.max`] = attribute.value;
+        }
+      }
+    }
+
     if (Object.keys(updates).length > 0) {
-      console.log(`WoD | Migrating corruption data for actor: ${actor.name}`);
+      console.log(`WoD | Migrating actor data for actor: ${actor.name}`);
       await actor.update(updates);
     }
   }
@@ -354,8 +365,14 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
       button.addEventListener('click', onSkillTestPipelinePush);
     });
     html.querySelectorAll('.dice-button.dice-keep').forEach(button => {
-    button.addEventListener('click', onSkillTestPipelineKeep);
-  });
+      button.addEventListener('click', onSkillTestPipelineKeep);
+    });
+  }
+
+  // Apply Section
+  const apply_section = html.querySelector('.apply-section');
+  if (apply_section) {
+    initApplySection(apply_section, message);
   }
 });
 
@@ -383,7 +400,19 @@ async function _onDicePush(event) {
 
   // Push the roll and send it.
   await roll.push({ async: true });
-  await roll.toMessage();
+
+  let applyData = new ApplyData()
+  applyData.corruption = 1;
+  roll.options.applyData = applyData;
+
+  // Capture the tokens targeted at push time so the "Targeted" apply mode has something to show.
+  const targets = Array.from(game.user.targets)
+    .filter(t => t.actor)
+    .map(t => ({ uuid: t.actor.uuid, name: t.name }));
+
+  await roll.toMessage({
+    flags: { 'wrath-of-davokar': { applyData: applyData, targets: targets } }
+  });
 }
 
 async function _onDiceKeep(event) {

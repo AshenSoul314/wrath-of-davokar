@@ -122,7 +122,12 @@
         <div class="flex-column flex-gap attr-physique-section">
           <div class="flex-row flex-align-center attr-header">
             <div class="text-attribute" data-action="rollSkill" data-attribute="physique">{{localize "WRATH_OF_DAVOKAR.Attributes.Physique.long"}}</div>
-            <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.physique.value" value="{{system.attributes.physique.value}}" data-dtype="Number"/>
+            <input class="input-attribute" type='number' step="1" min="0" max="{{system.attributes.physique.max}}" name="system.attributes.physique.value" value="{{system.attributes.physique.value}}" data-dtype="Number"/> / 
+            {{#if editMode}}
+              <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.physique.max" value="{{system.attributes.physique.max}}" data-dtype="Number"/>
+            {{else}}
+              <span>{{system.attributes.physique.max}}</span>
+            {{/if}}
             {{#if (gt system.attributes.physique.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.physique.bonus}})</span>{{/if}}
             {{#if (lt system.attributes.physique.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">({{system.attributes.physique.bonus}})</span>{{/if}}
             {{#if (eq system.attributes.physique.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(±0)</span>{{/if}}
@@ -166,7 +171,12 @@
         <div class="flex-column flex-gap attr-finesse-section">
           <div class="flex-row flex-align-center attr-header">
             <div class="text-attribute" data-action="rollSkill" data-attribute="finesse">{{localize "WRATH_OF_DAVOKAR.Attributes.Finesse.long"}}</div>
-            <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.finesse.value" value="{{system.attributes.finesse.value}}" data-dtype="Number"/>
+            <input class="input-attribute" type='number' step="1" min="0" max="{{system.attributes.finesse.max}}" name="system.attributes.finesse.value" value="{{system.attributes.finesse.value}}" data-dtype="Number"/> / 
+            {{#if editMode}}
+              <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.finesse.max" value="{{system.attributes.finesse.max}}" data-dtype="Number"/>
+            {{else}}
+              <span>{{system.attributes.finesse.max}}</span>
+            {{/if}}
             {{#if (gt system.attributes.finesse.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.finesse.bonus}})</span>{{/if}}
             {{#if (lt system.attributes.finesse.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">({{system.attributes.finesse.bonus}})</span>{{/if}}
             {{#if (eq system.attributes.finesse.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(±0)</span>{{/if}}
@@ -221,7 +231,12 @@
         <div class="flex-column flex-gap attr-wits-section">
           <div class="flex-row flex-align-center attr-header">
             <div class="text-attribute" data-action="rollSkill" data-attribute="wits">{{localize "WRATH_OF_DAVOKAR.Attributes.Wits.long"}}</div>
-            <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.wits.value" value="{{system.attributes.wits.value}}" data-dtype="Number"/>
+            <input class="input-attribute" type='number' step="1" min="0"  max="{{system.attributes.wits.max}}" name="system.attributes.wits.value" value="{{system.attributes.wits.value}}" data-dtype="Number"/> / 
+            {{#if editMode}}
+              <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.wits.max" value="{{system.attributes.wits.max}}" data-dtype="Number"/>
+            {{else}}
+              <span>{{system.attributes.wits.max}}</span>
+            {{/if}}
             {{#if (gt system.attributes.wits.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.wits.bonus}})</span>{{/if}}
             {{#if (lt system.attributes.wits.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">({{system.attributes.wits.bonus}})</span>{{/if}}
             {{#if (eq system.attributes.wits.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(±0)</span>{{/if}}
@@ -287,7 +302,12 @@
         <div class="flex-column flex-gap attr-empathy-section">
           <div class="flex-row flex-align-center attr-header">
             <div class="text-attribute" data-action="rollSkill" data-attribute="empathy">{{localize "WRATH_OF_DAVOKAR.Attributes.Empathy.long"}}</div>
-            <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.empathy.value" value="{{system.attributes.empathy.value}}" data-dtype="Number"/>
+            <input class="input-attribute" type='number' step="1" min="0" max="{{system.attributes.empathy.max}}" name="system.attributes.empathy.value" value="{{system.attributes.empathy.value}}" data-dtype="Number"/> / 
+            {{#if editMode}}
+              <input class="input-attribute" type='number' step="1" min="0" name="system.attributes.empathy.max" value="{{system.attributes.empathy.max}}" data-dtype="Number"/>
+            {{else}}
+              <span>{{system.attributes.empathy.max}}</span>
+            {{/if}}
             {{#if (gt system.attributes.empathy.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(+{{system.attributes.empathy.bonus}})</span>{{/if}}
             {{#if (lt system.attributes.empathy.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">({{system.attributes.empathy.bonus}})</span>{{/if}}
             {{#if (eq system.attributes.empathy.bonus 0)}}<span class="skill-bonus" title="{{localize 'WRATH_OF_DAVOKAR.Base.ToolTips.SkillBonus'}}">(±0)</span>{{/if}}

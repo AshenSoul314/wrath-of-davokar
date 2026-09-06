@@ -1,5 +1,22 @@
 
 /**
+ * Mounts a `<wod-apply-changes>` element into a chat message's apply section, wired to the
+ * message's `applyData` flag so users can pick targets and apply the roll's changes to them.
+ *
+ * @param {HTMLElement} section - The `.apply-section` element to populate.
+ * @param {ChatMessage} message - The chat message carrying the `applyData` flag.
+ */
+export function initApplySection(section, message) {
+  const applyData = message.getFlag("wrath-of-davokar", "applyData");
+  if (!applyData) return;
+
+  const element = document.createElement("wod-apply-changes");
+  element.chatMessage = message;
+  element.applyData = applyData;
+  section.replaceChildren(element);
+}
+
+/**
  * Adds the "wrath-of-davokar" CSS class to the message content element
  * of a Foundry VTT chat message.
  *

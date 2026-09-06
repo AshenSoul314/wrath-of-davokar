@@ -42,16 +42,20 @@
         },
         "attributes": {
           "physique": {
-            "value": 0
+            "value": 0,
+            "max": 0
           },
           "finesse": {
-            "value": 0
+            "value": 0,
+            "max": 0
           },
           "wits": {
-            "value": 0
+            "value": 0,
+            "max": 0
           },
           "empathy": {
-            "value": 0
+            "value": 0,
+            "max": 0
           }
         },
         "skills": {

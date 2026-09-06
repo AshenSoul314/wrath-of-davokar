@@ -21,6 +21,7 @@ export class WoDActorDocument extends Actor {
   prepareBaseData() {
     // Data modifications in this step occur before processing embedded
     // documents or derived data.
+    super.prepareBaseData();
 
     const actorData = this;
     const systemData = actorData.system;
@@ -91,7 +92,7 @@ export class WoDActorDocument extends Actor {
 
     // Maximum Encumbrance
     const totalEncPhysMult = systemData.encumbrance.physMult + systemData.encumbrance.physMultBonus
-    systemData.encumbrance.max = Math.max(0, Math.ceil(totalEncPhysMult * systemData.attributes.physique.value) +
+    systemData.encumbrance.max = Math.max(0, Math.ceil(totalEncPhysMult * systemData.attributes.physique.max) +
                                  systemData.encumbrance.bonus);
 
     // Total Armor Value and Encumbrance
@@ -339,6 +340,72 @@ export class WoDActorDocument extends Actor {
       if (delta !== 0) await this.distributeArmorRatingChange(delta, "value");
     }
 
+    // Handle Toughness value change — clamp to [0, max]
+    const newToughness = foundry.utils.getProperty(change, "system.toughness.value");
+    if (typeof newToughness === "number") {
+      if (newToughness < 0) {
+        foundry.utils.setProperty(change, "system.toughness.value", 0);
+      } else if (newToughness > this.system.toughness.max) {
+        foundry.utils.setProperty(change, "system.toughness.value", this.system.toughness.max);
+      }
+    }
+  
+    // Handle Temporary Corruption value change — clamp min to 0
+    const newTemporary = foundry.utils.getProperty(change, "system.corruption.temporary.value");
+    if (typeof newTemporary === "number") {
+      if (newTemporary < 0) {
+        foundry.utils.setProperty(change, "system.corruption.temporary.value", 0);
+      }
+    }
+
+    // Handle Permanent Corruption value change — clamp min to 0
+    const newPermanent = foundry.utils.getProperty(change, "system.corruption.permanent.value");
+    if (typeof newPermanent === "number") {
+      if (newPermanent < 0) {
+        foundry.utils.setProperty(change, "system.corruption.permanent.value", 0);
+      }
+    }
+
+    // Handle Physique value change — clamp to [0, max]
+    const newPhysique = foundry.utils.getProperty(change, "system.attributes.physique.value");
+    if (typeof newPhysique === "number") {
+      if (newPhysique < 0) {
+        foundry.utils.setProperty(change, "system.attributes.physique.value", 0);
+      } else if (newPhysique > this.system.attributes.physique.max) {
+        foundry.utils.setProperty(change, "system.attributes.physique.value", this.system.attributes.physique.max);
+      }
+    } 
+
+    // Handle Finesse value change — clamp to [0, max]
+    const newFinesse = foundry.utils.getProperty(change, "system.attributes.finesse.value");
+    if (typeof newFinesse === "number") {
+      if (newFinesse < 0) {
+        foundry.utils.setProperty(change, "system.attributes.finesse.value", 0);
+      } else if (newFinesse > this.system.attributes.finesse.max) {
+        foundry.utils.setProperty(change, "system.attributes.finesse.value", this.system.attributes.finesse.max);
+      }
+    } 
+
+    // Handle Wits value change — clamp to [0, max]
+    const newWits = foundry.utils.getProperty(change, "system.attributes.wits.value");
+    if (typeof newWits === "number") {
+      if (newWits < 0) {
+        foundry.utils.setProperty(change, "system.attributes.wits.value", 0);
+      } else if (newWits > this.system.attributes.wits.max) {
+        foundry.utils.setProperty(change, "system.attributes.wits.value", this.system.attributes.wits.max);
+      }
+    } 
+
+    // Handle Empathy value change — clamp to [0, max]
+    const newEmpathy = foundry.utils.getProperty(change, "system.attributes.empathy.value");
+    if (typeof newEmpathy === "number") {
+      if (newEmpathy < 0) {
+        foundry.utils.setProperty(change, "system.attributes.empathy.value", 0);
+      } else if (newEmpathy > this.system.attributes.empathy.max) {
+        foundry.utils.setProperty(change, "system.attributes.empathy.value", this.system.attributes.empathy.max);
+      }
+    }
+
     return superResult;
   }
 
@@ -350,11 +417,13 @@ export class WoDActorDocument extends Actor {
 
     // Only sync encumbrance effect if encumbrance-relevant fields actually changed
     const encumbranceChanged = foundry.utils.hasProperty(changed, 'system.encumbrance')
-      || foundry.utils.hasProperty(changed, 'system.attributes.physique');
+      || foundry.utils.hasProperty(changed, 'system.attributes.physique.max');
 
     if (encumbranceChanged && (game.user.isGM || this.isOwner)) {
-      await this._syncOverencumberedEffect();
+      // Defer the sync to the next tick so that all embedded item updates have completed first
+      setTimeout(() => this._syncOverEncumberedEffect(), 0);
     }
+
   }
 
   /**
@@ -366,7 +435,7 @@ export class WoDActorDocument extends Actor {
     
     // Only sync for Item changes (equip/unequip/add/remove), not ActiveEffect changes
     if (embeddedName === 'Item' && (game.user.isGM || this.isOwner)) {
-      await this._syncOverencumberedEffect();
+      await this._syncOverEncumberedEffect();
     }
   }
 
@@ -374,7 +443,7 @@ export class WoDActorDocument extends Actor {
    * Add or remove the overencumbered active effect based on current
    * encumbrance vs. the actor's encumbrance limit.
    */
-  async _syncOverencumberedEffect() {
+  async _syncOverEncumberedEffect() {
     const isOver = this.system.encumbrance.value > this.system.encumbrance.max;
 
     // Find an existing overencumbered effect on this actor
@@ -488,8 +557,6 @@ export class WoDActorDocument extends Actor {
   async buildRoll(rollTerms) {
     let formulaParts = [];
     let dieRolled = false;
-
-    console.warn(rollTerms);
 
     if (this.system.attributes[rollTerms.attribute].total > 0) {
       formulaParts.push(`${this.system.attributes[rollTerms.attribute].total}ds[${game.i18n.localize(CONFIG.WRATH_OF_DAVOKAR.attributes[rollTerms.attribute])}]`);
