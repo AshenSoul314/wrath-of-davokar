@@ -12,13 +12,13 @@
   "readme": "README.md",
   "bugs": "Replace this with a link to file issues or tickets",
   "changelog": "CHANGELOG.md",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "compatibility": {
-    "minimum": 12,
-    "verified": "13.347"
+    "minimum": 13,
+    "verified": "14.361"
   },
   "esmodules": ["module/wrath-of-davokar.mjs"],
-  "styles": ["css/wrath-of-davokar.v1-0.css"],
+  "styles": ["css/wrath-of-davokar.v1-1-1.css"],
   "languages": [
     {
       "lang": "en",

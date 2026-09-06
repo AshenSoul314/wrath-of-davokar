@@ -1,5 +1,22 @@
 
 /**
+ * Mounts a `<wod-apply-changes>` element into a chat message's apply section, wired to the
+ * message's `applyData` flag so users can pick targets and apply the roll's changes to them.
+ *
+ * @param {HTMLElement} section - The `.apply-section` element to populate.
+ * @param {ChatMessage} message - The chat message carrying the `applyData` flag.
+ */
+export function initApplySection(section, message) {
+  const applyData = message.getFlag("wrath-of-davokar", "applyData");
+  if (!applyData) return;
+
+  const element = document.createElement("wod-apply-changes");
+  element.chatMessage = message;
+  element.applyData = applyData;
+  section.replaceChildren(element);
+}
+
+/**
  * Adds the "wrath-of-davokar" CSS class to the message content element
  * of a Foundry VTT chat message.
  *
@@ -55,9 +72,9 @@ export function applyMessageHeader(message, html) {
     const sender = header.querySelector(".message-sender");
     if (sender) {
       const customSender = document.createElement("div");
-      customSender.className = "message-sender flexrow flex-nowrap flex-gap";
+      customSender.className = "message-sender flex-row flex-nowrap flex-gap";
       customSender.innerHTML = `
-        <img src="${tokenImg}" width="30" height="30" class="flexshrink" style="border: none;" />
+        <img src="${tokenImg}" width="30" height="30" class="flex-shrink" style="border: none;" />
         <div class="flex-column">
           <span class="message-speaker">${actorName}</span>
           <span class="message-user">${userName}</span>
@@ -86,7 +103,7 @@ export function linkEffectButtons(html) {
       const itemId = button.dataset.itemId;
       const effectKey = button.dataset.itemPowerId;
       const actorId = button.dataset.actorId;
-      
+
       let item;
       let sourceActor;
 
@@ -116,18 +133,25 @@ export function linkEffectButtons(html) {
         if (!targetActor) continue;
 
         const effect = foundry.utils.deepClone(effectData);
+        effect.transfer ??= false;
+        effect.disabled ??= false;
         effect.name ??= item.name;
         effect.img ??= item.img;
-        effect.origin = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
+        effect.origin = item.uuid;
         effect.flags ??= {};
         effect.flags["wrath-of-davokar"] = {
           itemEffectKey: effectKey
         };
+        effect.duration ??= {};
+        effect.duration.startTime ??= game.time.worldTime;
+
+        // Preload the icon to force proper sizing
+        await loadTexture(effect.img);
 
         await targetActor.createEmbeddedDocuments("ActiveEffect", [effect]);
         ui.notifications.info(`Applied "${effect.name}" to ${targetActor.name}`);
       }
-      
+
     });
   });
 
@@ -164,22 +188,15 @@ export function linkEffectButtons(html) {
         if (!targetActor) continue;
 
         // Check if the given effect originates from this item
-        const removeId = sourceActor ? `${sourceActor.uuid}.${item.uuid}` : item.uuid;
-        const toRemove = targetActor.effects.filter(effect => {
-          const flags = effect.flags?.["wrath-of-davokar"];
-          
-          return (
-            (effect.origin === removeId) &&
-            (flags?.itemEffectKey === effectKey)
-          );
-        });
+        const toRemove = targetActor.effects.filter(effect =>
+          effect.origin === item.uuid &&
+          effect.flags?.["wrath-of-davokar"]?.itemEffectKey === effectKey
+        );
 
-        // Check if the name matches this item
         if (!toRemove.length) {
           ui.notifications.info(`No matching effects on ${targetActor.name}`);
           continue;
         }
-
 
         const names = toRemove.map(e => e.name).join(', ')
         const ids = toRemove.map(e => e.id);

@@ -2,14 +2,18 @@
 
 .wrath-of-davokar {
 
+  .panel-like-item {
+    margin: 1em 0;
+  }
+
   .panel,
   .panel-no-flex {
     border: 1px solid utils.$c-border;
-    margin: 5px;
+    margin: 1em;
     min-width: 200px;
 
     .panel-header {
-      background-color: utils.$c-dark;
+      background-image: linear-gradient(to right, utils.$c-red-dark, utils.$c-red);
       color: utils.$c-light-text;
       font-weight: bold;
       padding: 5px;
@@ -28,4 +32,5 @@
   .panel {
     flex: 1;
   }
+
 }

@@ -27,11 +27,22 @@
       {{{infos}}}
       {{/if}}
 
-      {{!-- Push button --}}
-      {{#if pushable}}
-      <div class="dice-buttons">
-        <button class="dice-button push" data-action="push" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.Push"}}</button>
-      </div>
+      {{!-- Buttons --}}
+      {{#unless roll.options.keep}}
+        {{#if pushable}}
+          <div class="dice-buttons">
+            {{!-- Push Button --}}
+            <button class="dice-button dice-push" data-action="push" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.Push"}} ({{roll.pushCount}}/{{roll.maxPush}})</button>
+
+            {{!-- Accept Button --}}
+            <button class="dice-button dice-keep">{{localize "WRATH_OF_DAVOKAR.Chat.Roll.Keep"}}</button>
+          </div>
+        {{/if}}
+      {{/unless}}
+
+      {{!-- Apply Button --}}
+      {{#if roll.options.applyData}}
+        <div class="apply-section"></div>
       {{/if}}
     </div>
   </div>

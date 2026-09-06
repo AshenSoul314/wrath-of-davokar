@@ -1,19 +1,17 @@
 
-let previousWrath = 0;
-
 function updateWrathDisplay(current) {
   const max = game.settings.get("wrath-of-davokar", "overflow-wrath");
-  const fillPercent = Math.min(current / max, 1) * 100;
+  const value = 1.0 - Math.min(1, Math.max(0, current / max));
+  const result = -5 + 90 * value;
 
-  const liquid = document.querySelector('.wrath-liquid');
-  const orbContainer = document.querySelector('.wrath-orb-container');
-  const orb = document.querySelector('.wrath-orb');
-  const pointsDisplay = document.querySelector('#wrath-points-display');
+  const liquid = document.querySelector('#wrath-wave');
+  const pointsDisplay = document.querySelector('#wrath-points');
+  const wrathDisplay = document.querySelector('#wrath-tracker');
 
-  liquid.style.transform = `translateY(${100 - fillPercent}%)`;
+  liquid.style.transform = `rotate(-45deg) translateY(${result}%)`;
   pointsDisplay.textContent = `${current}`;
-  
-  previousWrath = current;
+  wrathDisplay.setAttribute('title', `${game.i18n.format('WRATH_OF_DAVOKAR.Wrath.Label')}: ${current}`);
+
 }
 
 
@@ -22,7 +20,7 @@ function updateWrathDisplay(current) {
  *
  * This function renders a Handlebars template and injects it into the DOM within the `#ui-top` header element.
  * It displays the current Wrath Points and, if the user is a GM, provides buttons to increment or decrement the value.
- * 
+ *
  * Wrath Points are retrieved and updated via the "wrath-of-davokar.wrath-points" game setting.
  *
  * @async
@@ -31,17 +29,15 @@ function updateWrathDisplay(current) {
  */
 export async function initWrathTracker() {
   const points = game.settings.get("wrath-of-davokar", "wrath-points");
-  previousWrath = points;
-
   const html = await foundry.applications.handlebars.renderTemplate("systems/wrath-of-davokar/templates/ui/wrath-tracker.hbs", {
     points
   });
 
-  const uiTop = document.getElementById("ui-top");
-  if (uiTop) {
+  const uiRight = document.getElementById("ui-right-column-1");
+  if (uiRight) {
     const wrapper = document.createElement("div");
     wrapper.innerHTML = html;
-    uiTop.appendChild(wrapper.firstElementChild);
+    uiRight.appendChild(wrapper.firstElementChild);
 
     // Add button functionality
     if (game.user.isGM) {
@@ -57,7 +53,6 @@ export async function initWrathTracker() {
     }
 
     const wrath = game.settings.get("wrath-of-davokar", "wrath-points")
-    previousWrath = wrath
     updateWrathDisplay(wrath);
   }
 }

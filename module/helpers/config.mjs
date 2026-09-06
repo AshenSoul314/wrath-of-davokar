@@ -37,6 +37,7 @@ WRATH_OF_DAVOKAR.skills = {
   instinct:     'WRATH_OF_DAVOKAR.Skills.Instinct.long',
   persuasion:   'WRATH_OF_DAVOKAR.Skills.Persuasion.long',
   volition:     'WRATH_OF_DAVOKAR.Skills.Volition.long',
+  corruption:   'WRATH_OF_DAVOKAR.Corruption.Total.long',
   spellcasting: 'WRATH_OF_DAVOKAR.Skills.Spellcasting.long'
 };
 

@@ -1,12 +1,22 @@
 // Flexbox.
 .flex-row,
-.flex-column {
+.flex-row-reverse,
+.flex-column,
+.flex-column-reverse {
   display: flex;
   flex-direction: row;
 }
 
 .flex-column {
   flex-direction: column;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex-column-reverse {
+  flex-direction: column-reverse;
 }
 
 .flex-wrap {
@@ -51,11 +61,11 @@
   justify-content: space-between;
 }
 
-.flexshrink {
+.flex-shrink {
   flex: 0;
 }
 
-.flexgrow {
+.flex-grow {
   flex: 1;
 }
 

@@ -1,0 +1,101 @@
+
+
+<div class='sheet-header'>
+  <img
+    class='profile-img'
+    src='{{item.img}}'
+    {{#if editMode}}
+      data-action='editImage'
+      data-field='img'
+      style="cursor: pointer;"
+    {{/if}}
+    title='{{item.name}}'
+  />
+  <div class='header-fields'>
+    <div class="flex-row flex-gap flex-group-left">
+      <h1 class='charname flex-grow'>
+        {{#if editMode}}
+          <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+        {{else}}
+          {{item.name}}
+        {{/if}}
+
+      </h1>
+      <button
+        type="button"
+        class="flex-shrink"
+        data-action="sendToChat"
+        title="{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}"
+        aria-label="{{localize "WRATH_OF_DAVOKAR.Base.ToolTips.SendToChat"}}"
+      >
+        <i class="fas fa-message"></i>
+      </button>
+      {{#if canToggleEdit}}
+        <button
+          type="button"
+          class="edit-mode-toggle flex-shrink {{#if editMode}}active{{/if}}"
+          data-action="toggleEditMode"
+          title="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.Sheet.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.Sheet.EditSheet'}}{{/if}}"
+          aria-label="{{#if editMode}}{{localize 'WRATH_OF_DAVOKAR.Sheet.LockSheet'}}{{else}}{{localize 'WRATH_OF_DAVOKAR.Sheet.EditSheet'}}{{/if}}"
+        >
+          <i class="fas {{#if editMode}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+        </button>
+      {{/if}}
+    </div>
+    <div class='grid grid-3col flex-align-center'>
+
+      {{!-- RANK --}}
+      {{#if system.rank includeZero=true}}
+        <div>
+          {{#if editMode}}
+            <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}</label>
+            <select name="system.rank.value">
+              {{#if (isIn  item.type "talent" "mysticalPower" "ritual")}}
+                <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Talent'}}</option>
+                <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Talent'}}</option>
+                <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Talent'}}</option>
+              {{else}}
+                <option value="1" {{#if (eq '1' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.One.Trait'}}</option>
+                <option value="2" {{#if (eq '2' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Two.Trait'}}</option>
+                <option value="3" {{#if (eq '3' system.rank.value)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Rank.Three.Trait'}}</option>
+              {{/if}}
+            </select>
+          {{else}}
+            <span class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}:</span>
+              {{#if (isIn  item.type "talent" "mysticalPower" "ritual")}}
+                <span>{{localizeRankTalent system.rank.value}}</span>
+              {{else}}
+                <span>{{localizeRankTrait system.rank.value}}</span>
+              {{/if}}
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{!-- EXPERIENCE --}}
+      {{#if system.xpCost includeZero=true}}
+        <div>
+          {{#if editMode}}
+            <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}</label>
+            <input type='number' step="5" name='system.xpCost' value='{{system.xpCost}}' data-dtype='Number'/>
+          {{else}}
+            <span class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}:</span>
+            <span>{{system.xpCost}}</span>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{!-- WEIGHT --}}
+      {{#if system.weight includeZero=true}}
+        <div>
+          {{#if editMode}}
+            <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Weight'}}</label>
+            <input type='number' step="0.5" name='system.weight' value='{{system.weight}}' data-dtype='Number'/>
+          {{else}}
+            <span class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Weight'}}</span>
+            <span>{{system.weight}}</span>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

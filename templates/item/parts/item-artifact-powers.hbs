@@ -1,72 +1,51 @@
-<div class='flex-column flex-group-center flex-align-stretch flex-gap'>
+<section class='tab item-artifact-powers {{tab.cssClass}}' data-group='primary' data-tab='artifactPowers'>
 
-  {{#each system.powers}}
-    <div class="panel artifact-power flex-group-left" data-artifact-power-id="{{@key}}">
-      <div class="panel-header flex-row flex-group-center flex-gap">
-        <div class='item-image'>
-          <a class='rollable interactive' data-roll-type='item'>
-            <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
-          </a>
+  <p class="panel-like-item notification info">
+    {{localize 'WRATH_OF_DAVOKAR.Artifact.PowersReadOnly'}}
+  </p>
+
+  <div class='flex-column flex-group-center flex-align-stretch flex-gap'>
+    {{#each artifactPowerEntries}}
+      <div class="panel artifact-power flex-group-left">
+
+        <div class="panel-header flex-row flex-group-center flex-gap">
+          {{#if this.missing}}
+            <i class="fas fa-triangle-exclamation artifact-power-warning"
+               data-tooltip="{{localize 'WRATH_OF_DAVOKAR.Artifact.PowerMissing'}}">
+            </i>
+            <span class="artifact-power-id">{{this.artifactPowerId}}</span>
+          {{else}}
+            <div class='item-image'>
+              <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
+            </div>
+            <span class="flex-grow">{{this.name}}</span>
+          {{/if}}
         </div>
-        <input type='text' name='system.powers.{{@key}}.name' value='{{this.name}}'/>
-        <a class='item-control artifact-power-delete' data-artifact-power-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.artifactPower")}}'>
-          <i class='fas fa-trash'></i>
-        </a>
+
+        {{#unless this.missing}}
+          <div class="panel-content">
+            <div class="resource-grid ">
+              {{!-- Actions --}}
+              <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+              <span>{{localizeActions this.action}}</span>
+
+              {{!-- Corruption --}}
+              <b>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}:</b>
+              <span class='die-roll rollable' data-roll="{{this.corruption}}" data-label="{{localize 'WRATH_OF_DAVOKAR.Corruption.Temporary.long'}}">
+                <i class="fa-solid fa-dice fa-xl-d20"></i> {{this.corruption}}
+              </span>
+            </div>
+
+            {{{this.enrichedDescription}}}
+          </div>
+        {{/unless}}
+
       </div>
-
-      <div class="panel-content">
-
-        <div class="resource-grid  align-left">
-
-          {{!-- Icon --}}
-          <label class='resource-label'>{{localize 'DOCUMENT.FIELDS.img.label'}}:</label>
-          <file-picker type="image" name='system.powers.{{@key}}.img' noupload="true" value="{{this.img}}"></file-picker>
-
-          {{!-- Action --}}
-          <span class="resource-label grid-span-2">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</span>
-
-          <label for="system.action.{{@key}}.reaction.value">{{localize "WRATH_OF_DAVOKAR.Action.Reaction"}}</label>
-          <input id="system.action.{{@key}}.reaction.value" name="system.action.{{@key}}.reaction.value" type="checkbox" value="true" {{checked this.reaction.value}}/>
-
-          <label for="system.action.{{@key}}.passive.value">{{localize "WRATH_OF_DAVOKAR.Action.Passive"}}</label>
-          <input id="system.action.{{@key}}.passive.value" name="system.action.{{@key}}.passive.value" type="checkbox" value="true" {{checked this.passive.value}}/>
-
-          <label for="system.action.{{@key}}.fast.value">{{localize "WRATH_OF_DAVOKAR.Action.Fast.abbr"}}</label>
-          <input id="system.action.{{@key}}.fast.value" name="system.action.{{@key}}.fast.value" type="checkbox" value="true" {{checked this.fast.value}}/>
-
-          <label for="system.action.{{@key}}.slow.value">{{localize "WRATH_OF_DAVOKAR.Action.Slow.abbr"}}</label>
-          <input id="system.action.{{@key}}.slow.value" name="system.action.{{@key}}.slow.value" type="checkbox" value="true" {{checked this.slow.value}}/>
-
-          <label for="system.action.{{@key}}.free.value">{{localize "WRATH_OF_DAVOKAR.Action.Free.abbr"}}</label>
-          <input id="system.action.{{@key}}.free.value" name="system.action.{{@key}}.free.value" type="checkbox" value="true" {{checked this.free.value}}/>
-
-          <label for="system.action.{{@key}}.special.value">{{localize "WRATH_OF_DAVOKAR.Action.Special"}}</label>
-          <input id="system.action.{{@key}}.special.value" name="system.action.{{@key}}.special.value" type="checkbox" value="true" {{checked this.special.value}}/>
-
-          {{!-- Corruption --}}
-          <span class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}</span>
-          <input type='text' name='system.powers.{{@key}}.corruption' value='{{this.corruption}}'/>
-        </div>
-        {{! Description }}
-        <span class="resource-label">{{localize 'Description'}}</span>
-        {{editor
-          this.enrichedDescription
-          target=(concat 'system.powers.' @key '.description')
-          engine='prosemirror'
-          button=true
-          editable=true
-        }}
-
-        {{! Macro }}
-        <span class="resource-label">{{localize 'DOCUMENT.Macro'}}</span>
-        <file-picker type="any" name='system.powers.{{@key}}.macro' noupload="true" value="{{this.macro}}"></file-picker>
-      </div>
-    </div>
-  {{/each}}
-
-  <div class="item-controls">
-      <a class="artifact-power-create" data-action="create" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.artifactPower")}}">
-      <i class="fas fa-plus"></i> {{localize "DOCUMENT.Create" type=(localize "TYPES.Item.artifactPower")}}
-    </a>
+    {{else}}
+      <p class="artifact-powers-empty dimmed">
+        {{localize 'WRATH_OF_DAVOKAR.Artifact.NoPowers'}}
+      </p>
+    {{/each}}
   </div>
-</div>
+
+</section>

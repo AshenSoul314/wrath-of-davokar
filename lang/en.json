@@ -17,6 +17,7 @@
     },
     "Archetype": "Archetype",
     "Armor": {
+      "Label": "Armor",
       "ArmorCategory": {
         "Label": "Armor Category",
         "Light": "Light",
@@ -37,6 +38,7 @@
       },
       "Rating": {
         "long": "Armor Rating",
+        "short": "Armor",
         "abbv": "AR",
         "Total": "Total Armor Rating"
       }
@@ -45,8 +47,14 @@
       "Label": "Artifact",
       "IsArtifact": "This is an Artifact",
       "Powers": "Artifact Powers",
-      "NewPower": "Create Artifact Power",
-      "DeletePower": "Delete Artifact Power"
+      "RemovePower": "Remove Artifact Power",
+      "SearchPowers": "Search",
+      "PowerMissing": "Cannot find linked power, most likely deleted",
+      "NoMatchingPowers": "No Results Match Search",
+      "PowerAlreadyAdded": "Power is Already Added",
+      "ArtifactPowerId": "Artifact Power ID",
+      "PowersReadOnly": "These entries are read only. To edit, find the Artifact Power item and edit it.",
+      "NoPowers": "This item has no linked artifact powers."
     },
     "Attack": {
       "Error.NoTarget": "No target selected.",
@@ -76,7 +84,7 @@
         "Description": "Description",
         "Items": "Items",
         "Effects": "Effects",
-        "Powers": "Mystical Powers",
+        "MysticalPowers": "Mystical Powers",
         "Rituals": "Rituals",
         "Boons": "Boons",
         "Burdens": "Burdens",
@@ -99,10 +107,26 @@
       "Description": "Description",
       "Height": "Height",
       "Heritage": "Heritage",
+      "Manner": "Manner",
       "Quote": "Quote",
+      "Resistance": "Resistance",
       "Shadow": "Shadow",
+      "Tactics": "Tactics",
+      "Traits": "Traits",
       "Weakness": "Weakness",
       "Weight": "Weight"
+    },
+    "Chat": {
+      "Roll": {
+        "Keep": "Keep Roll"
+      },
+      "Apply": {
+        "Label": "Apply",
+        "TooltipTargeted": "Apply this roll to the targeted token(s)",
+        "TooltipSelected": "Apply this roll to the selected token(s)",
+        "Applied": "Applied changes to {targets}",
+        "NoTargets": "No targets selected to apply changes to"
+      }
     },
     "Combat": {
       "Label": "Combat",
@@ -116,30 +140,34 @@
     "Condition": "Condition",
     "Container": {
       "NumSubSlots": "Item Capacity",
-      "MaxItemWeight": "Maximum Weight Of Any Carried Item"
+      "MaxItemWeight": "Maximum Weight"
     },
     "Corruption": {
       "Label": "Corruption",
-      "Total": "Total Corruption",
+      "Total": {
+        "long": "Total Corruption",
+        "short": "Total",
+        "abbv": "Total"
+      },
       "Max": {
         "long": "Corruption Maximum",
         "short": "Maximum",
-        "abbv": "Corr. Max"
+        "abbv": "Max"
       },
       "Threshold": {
         "long": "Corruption Threshold",
         "short": "Threshold",
-        "abbv": "Corr.Thr."
+        "abbv": "Thr"
       },
       "Temporary": {
         "long": "Temporary Corruption",
         "short": "Temporary",
-        "abbv": "Temp. Corr."
+        "abbv": "Temp"
       },
       "Permanent": {
         "long": "Permanent Corruption",
         "short": "Permanent",
-        "abbv": "Perm. Corr."
+        "abbv": "Perm"
       }
     },
     "CriticalInjury": {
@@ -150,15 +178,45 @@
         "Label": "Healing Time"
       }
     },
+    "Dialog": {
+      "ArtifactPowers": {
+        "Import": {
+          "Title": "Auto-Import Artifact Powers",
+          "Body": "Do you wish to auto-import the following artifact powers?",
+          "MissingTitle": "Error: Missing Artifact Powers in Game",
+          "Missing": "Unable to find the following artifact powers in the current game:",
+          "PermissionErrorTitle": "Error: Cannot Auto-Import Artifact Powers",
+          "PermissionErrorBody": "You do not have permission to auto-import this item's artifact powers. The following powers will need to be manually added:"
+        },
+        "Remove": {
+          "Title": "Auto-Remove Artifact Powers",
+          "Body": "This item has one or more artifact powers associated with it. Would you like to remove them as well?\nPowers that will be removed:",
+          "Shared": "The following artifact powers are being use by other artifacts and will not be removed:",
+          "PermissionErrorTitle": "Error: Cannot Auto-Remove Artifact Powers",
+          "PermissionErrorBody": "You do not have permission to auto-remove this item's artifact powers. The following powers will need to be removed manually: "
+        }
+      },
+      "Items": {
+        "Delete": {
+          "Title": "Delete: {itemName}",
+          "Body": "Do you wish to delete {itemName} from {actorName}?"
+        }
+      }
+    },
     "Effect": {
       "Source": "Source",
       "Toggle": "Toggle Effect",
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
-      "Broken": "Broken",
-      "Pain": "In Pain",
       "BlightMarked": "Blight Marked",
+      "Broken": "Broken",
+      "Concentration": "Concentrating",
+      "Duration": "Duration",
+      "Grappled": "Grappled",
+      "OverEncumbered": "Over Encumbered",
+      "Pain": "In Pain",
+      "Prone": "Prone",
       "Acid": {
         "1": "Acid: 1",
         "2": "Acid: 2",
@@ -214,33 +272,35 @@
     },
     "Heritage": "Heritage",
     "Item": {
+      "AlwaysTransferEffects": "Always transfer Active Effects even when Item is unequipped",
       "Attributes": "Attributes",
-      "ItemSlots": {
-        "label": "Weapons & Equipped Items",
-        "EmptySlot": "Empty",
-        "SlotRequired": "Requires an Open Equip Slot to be Equipped"
+      "Automation": {
+        "label": "Automation",
+        "AutomationId": "Automation ID",
+        "EditWarning": "Warning: Do not edit this field unless you know what you are doing."
       },
+      "Durability": "Durability",
       "Encumbrance": "Encumbrance",
       "EquipSettings": "Equip Settings",
       "EquipItem": "Equip {type}",
       "Equipped": "Equipped",
       "Description": "Description",
       "IsArtifact": "Artifact",
+      "ItemSlots": {
+        "label": "At-Hand Items",
+        "EmptySlot": "Empty",
+        "SlotRequired": "Requires an open At-Hand Slot to be Equipped",
+        "NoValidSlot": "No At-Hand Slots are valid for this item's weight and/or type"
+      },
       "Modifiers": "Modifiers",
-      "AlwaysTransferEffects": "Always transfer Active Effects even when Item is unequipped",
+      "Other": "Other",
+      "SupplyPoints": "Supply Points",
       "Type": "Item Type",
       "UnequipItem": "Unequip {type}",
       "Unequipped": "Unequipped",
+      "Use": "Use Item",
       "Weight": "Weight",
-      "WornItems": "Worn Items",
-      "Macro": {
-        "Label": "Item Macro",
-        "Error": {
-          "DuplicateError": "Macro {macroName} (id: {id}) is already registered, deferring to original",
-          "KeyError": "Macro (id: {id}) not found.",
-          "ValueError": "Macro {macroName} (id: {id}) did not return a function."
-        }
-      }
+      "WornItems": "Worn Items"
     },
     "Language": {
       "Label": "Languages",
@@ -251,10 +311,16 @@
     },
     "Macro": "Automation Hooks File",
     "Money": {
+      "Label": "Money",
       "Cost": "Cost",
+      "Ambrian": "Ambrian",
+      "Davokari": "Davokari",
       "Thaler": "Thaler",
       "Shilling": "Shillings",
-      "Orteg": "Ortegs"
+      "Orteg": "Ortegs",
+      "Saphire": "Saphire",
+      "Ruby": "Ruby",
+      "Obsidian": "Obsidian"
     },
     "Power": {
       "Tradition": {
@@ -274,50 +340,61 @@
       "Label": "Qualities",
       "NoQuality": "No Qualities",
       "AcidCoated": "Acid Coated",
+      "Balanced": "Balanced",
       "BaneWeapon": "Bane Weapon",
+      "Bastard": "Bastard Weapon",
+      "BlackMarket": "Black Market",
+      "BloodLetting": "Blood Letting",
+      "Blunt": "Blunt",
       "Chain": "Chain",
       "Concealed": "Concealed",
       "Concentration": "Concentration",
       "DeathRune": "Death Rune",
+      "DeepImpact": "Deep Impact",
       "Desecrated": "Desecrated",
+      "Ensnaring": "Ensnaring",
       "Flaming": "Flaming",
       "Hallowed": "Hallowed",
-      "Natural": "Natural",
-      "Retributive": "Retributive",
-      "Balanced": "Balanced",
-      "BloodLetting": "Blood Letting",
-      "DeepImpact": "Deep Impact",
-      "Ensnaring": "Ensnaring",
       "Jointed": "Jointed",
       "Long": "Long",
       "Massive": "Massive",
       "MechanicalReload": "Mechanical Reload",
+      "Natural": "Natural",
+      "Piercing": "Piercing",
       "PoisonCoated": "Poison Coated",
       "Precise": "Precise",
-      "Piercing": "Piercing",
+      "RangedDeployment": "Ranged Deployment",
+      "Rearming": "Rearming",
+      "Reinforced": "Reinforced",
+      "Retributive": "Retributive",
       "Returning": "Returning",
       "Short": "Short",
+      "Sundering": "Sundering",
       "Thundering": "Thundering",
       "Unstable": "Unstable",
       "Unwieldy": "Unwieldy"
     },
     "Range": {
       "Label": "Range",
-      "Engaged": "Engaged"
+      "Engaged": "Engaged",
+      "Self": "Self"
     },
     "Rank": {
       "Label": "Rank",
       "One": {
+        "Lang": "Smattering",
         "Talent": "Novice",
         "Trait": "I",
         "abbv": "N"
       },
       "Two": {
+        "Lang": "Knowledgeable",
         "Talent": "Adept",
         "Trait": "II",
         "abbv": "A"
       },
       "Three": {
+        "Lang": "Fluent",
         "Talent": "Master",
         "Trait": "III",
         "abbv": "M"
@@ -325,6 +402,7 @@
     },
     "Roll": {
       "Label": "Roll",
+      "Title": "Title",
       "Dice": {
         "Bane": "Bane",
         "Success": "Success",
@@ -335,9 +413,34 @@
       "Push": "Push",
       "Error.UnknownTerm": "Unknown die term used in actor roll builder: {term}. Skipping unknown term"
     },
-    "SheetLabels": {
-      "Actor": "WrathOfDavokar Actor Sheet",
-      "Item": "WrathOfDavokar Item Sheet"
+    "SheetLabel": {
+      "Actor":          "Wrath Of Davokar - Actor Sheet",
+      "Character":      "Wrath Of Davokar - Character Sheet",
+      "NPC":            "Wrath Of Davokar - NPC Sheet",
+
+      "Item":           "Wrath Of Davokar - Item Sheet",
+      "AlchemicalItem": "Wrath Of Davokar - Alchemical Item Sheet",
+      "ArmorBody":      "Wrath Of Davokar - Armor Sheet",
+      "ArmorHead":      "Wrath Of Davokar - Helmet Sheet",
+      "ArmorShield":    "Wrath Of Davokar - Shield Sheet",
+      "ArtifactPower":  "Wrath Of Davokar - Artifact Power Sheet",
+      "Boon":           "Wrath Of Davokar - Boon Sheet",
+      "Burden":         "Wrath Of Davokar - Burden Sheet",
+      "Condition":      "Wrath Of Davokar - Condition Sheet",
+      "CriticalInjury": "Wrath Of Davokar - Critical Injury Sheet",
+      "Equipment":      "Wrath Of Davokar - Equipment Sheet",
+      "Gear":           "Wrath Of Davokar - Gear Sheet",
+      "Language":       "Wrath Of Davokar - Language Sheet",
+      "MonsterTrait":   "Wrath Of Davokar - Monster Trait Sheet",
+      "MysticalPower":  "Wrath Of Davokar - Mystical Power Sheet",
+      "Ritual":         "Wrath Of Davokar - Ritual Sheet",
+      "Supply":         "Wrath Of Davokar - Supply Sheet",
+      "Talent":         "Wrath Of Davokar - Talent Sheet",
+      "Trap":           "Wrath Of Davokar - Trap Sheet",
+      "Weapon":         "Wrath Of Davokar - Weapon Sheet",
+
+      "Edit": "Edit Sheet",
+      "LockSheet": "Lock Editing"
     },
     "Skills": {
       "Label": "Skill",
@@ -364,7 +467,7 @@
       },
       "Marksmanship": {
         "long": "Marksmanship",
-        "abbr": "Mrk"
+        "abbr": "Mar"
       },
       "Mobility": {
         "long": "Mobility",
@@ -372,7 +475,7 @@
       },
       "Crafting": {
         "long": "Crafting",
-        "abbr": "Crf"
+        "abbr": "Cra"
       },
       "Medicus": {
         "long": "Medicus",
@@ -384,7 +487,7 @@
       },
       "Survival": {
         "long": "Survival",
-        "abbr": "Srv"
+        "abbr": "Sur"
       },
       "Vigilance": {
         "long": "Vigilance",
@@ -392,11 +495,11 @@
       },
       "Insight": {
         "long": "Insight",
-        "abbr": "Isi"
+        "abbr": "Ins"
       },
       "Instinct": {
-        "long": "Instinct",
-        "abbr": "Ist"
+        "long": "Impulse",
+        "abbr": "Imp"
       },
       "Persuasion": {
         "long": "Persuasion",
@@ -408,8 +511,14 @@
       },
       "Spellcasting": {
         "long": "Spellcasting",
-        "abbr": "Spl"
+        "abbr": "Spell"
       }
+    },
+    "Tokens": {
+      "NoneSelected": "No Tokens Selected",
+      "NoneTargeted": "No Tokens Targeted",
+      "Selected": "Selected",
+      "Targeted": "Targeted"
     },
     "Time": {
       "Rounds": "Rounds",
@@ -490,16 +599,18 @@
         "Push": "Push",
         "Corruption": "Temporary Corruption",
         "Wrath": "Wrath",
-        "WodWillpower": "Willpower"
+        "WodWillpower": "Willpower",
+        "WodRuleFlavor": "Minimum of one Skill"
       },
       "Successes": "Successes"
     },
     "DIETERMS": {
-      "BaseDie": "Skill Dice",
+      "BaseDie": "Base Dice",
       "DavokarSkillDie": "Skill Dice",
       "D8DavokarDie": "D8 Artifact Dice",
       "D10DavokarDie": "D10 Artifact Dice",
-      "D12DavokarDie": "D12 Artifact Dice"
+      "D12DavokarDie": "D12 Artifact Dice",
+      "DavokarArmorDie": "Armor Dice"
     }
   },
   "TYPES": {
@@ -519,11 +630,14 @@
       "container": "Container",
       "criticalInjury": "Critical Injury",
       "equipment": "Equipment",
+      "gear": "Gear",
       "item": "Item",
       "itemEffect": "Item Effect",
+      "language": "Language",
       "monsterTrait": "Monstrous Trait",
       "mysticalPower": "Mystical Power",
       "ritual": "Ritual",
+      "supply": "Supply",
       "talent": "Talent",
       "trap": "Trap",
       "weapon": "Weapon"

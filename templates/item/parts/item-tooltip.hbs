@@ -1,0 +1,161 @@
+
+<div class="tooltip-header">
+  <img src="{{item.img}}" width="24" height="24" />
+  <strong>{{item.name}}</strong>
+</div>
+
+<div class="tooltip-body">
+  <div class="tooltip-desc">
+    {{{enrichedDescription}}}
+  </div>
+  <hr>
+  {{#if item.system.rank includeZero=true}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Rank.Label'}}</span>
+      {{#if (isIn  item.type "talent" "mysticalPower" "ritual")}}
+        <span>{{localizeRankTalent item.system.rank.value}}</span>
+      {{else}}
+        <span>{{localizeRankTrait item.system.rank.value}}</span>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if item.system.xpCost includeZero=true}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Experience.Cost.long'}}</span>
+      <span>{{item.system.xpCost}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.tradition}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Power.Tradition.Label'}}</span>
+      <span>{{localizeTraditions item.system.tradition}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.corruption}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}</span>
+      <span>{{item.system.corruption}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.component}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Power.Component'}}</span>
+      <span>{{item.system.component}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.action}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</span>
+      <span>{{localizeActions item.system.action}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.weight includeZero=true}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Item.Weight'}}</span>
+      <span>{{item.system.weight}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.range}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Range.Label'}}</span>
+      <span>{{localizeRange item.system.range area=system.area}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.damage}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.BaseDamage.long'}}</span>
+      <span>{{item.system.damage}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.grip}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.Label'}}</span>
+      {{#if (eq item.system.grip 'oneHand')}}
+        <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long'}}</span>
+      {{else if (eq item.system.grip 'twoHand')}}
+        <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.TwoHand.long'}}</span>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if item.system.rating}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Armor.Rating.long'}}</span>
+      <span>{{item.system.rating.value}} / {{item.system.rating.max}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.impeding}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Armor.Impeding.long'}}</span>
+      <span>{{item.system.impeding}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.visionPenalty}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Armor.VisionPenalty.long'}}</span>
+      <span>{{item.system.visionPenalty}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.parryBonus}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Armor.ParryBonus.long'}}</span>
+      <span>+{{item.system.parryBonus}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.deathMod}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.DeathMod'}}</span>
+      <span>{{item.system.deathMod}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.healingTime}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime'}}</span>
+      <span>{{item.system.healingTime.value}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.durability}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Item.Durability'}}</span>
+      <span>{{item.system.durability.value}} / {{item.system.durability.max}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.supply}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Item.Supply'}}</span>
+      <span>{{item.system.supply}}</span>
+    </div>
+  {{/if}}
+
+  {{#if item.system.qualities}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</span>
+      <div class='flex-row flex-align-center flex-wrap flex-gap'>
+        {{generateQualities item.system.qualities includeNoQuality=true}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if item.system.cost}}
+    <div class="tooltip-row">
+      <span>{{localize 'WRATH_OF_DAVOKAR.Money.Cost'}}</span>
+      <span>{{localizeCost item.system.cost}}</span>
+    </div>
+  {{/if}}
+</div>

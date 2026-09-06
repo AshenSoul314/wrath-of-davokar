@@ -1,79 +1,139 @@
 {{! Settings Tab }}
-<div class='tab settings' data-group='primary' data-tab='settings'>
+<section class='tab sheet-body item-settings settings {{tab.cssClass}}' data-group='primary' data-tab='settings'>
+
+  {{!-- Automation Settings  --}}
+  {{#if system.automationId}}
+    <div class="panel flex-column flex-group-center flex-align-stretch">
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.Automation.label'}}</div>
+      <p class="panel-like-item notification warning">
+        {{localize 'WRATH_OF_DAVOKAR.Item.Automation.EditWarning'}}
+      </p>
+      <div class="panel-content align-left resource-grid-3">
+        <label for="system.automationId">{{localize 'WRATH_OF_DAVOKAR.Item.Automation.AutomationId'}}</label>
+        <input id="system.automationId" name='system.automationId' type='text' value='{{item.system.automationId}}'/>
+      </div>
+    </div>
+  {{/if}}
 
   {{!-- Actions Settings  --}}
-  {{#if (hasProperty system "action")}}
+  {{#if system.action}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}</div>
-      <div class="panel-content align-left resource-grid">
+      <div class="panel-content align-left resource-grid-3">
         {{#each system.action}}
           <label for="system.action.{{@key}}">{{localizeSingleAction @key}}</label>
-          <input id="system.action.{{@key}}" name="system.action.{{@key}}" type="checkbox" value="true" {{checked this}}/>
+          <input id="system.action.{{@key}}" name="system.action.{{@key}}" type="checkbox" data-dtype="Boolean" {{checked this}}/>
         {{/each}}
       </div>
     </div>
   {{/if}}
 
   {{!-- Artifact Settings  --}}
-  {{#if (hasProperty system "isArtifact")}}
+  {{!-- Items cannot be both an artifact and an artifact power, that would cause circular references --}}
+  {{#if (hasProperty system 'artifactPowerId')}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Artifact.Label'}}</div>
       <div class="panel-content">
-        <label for="system.isArtifact">{{localize 'WRATH_OF_DAVOKAR.Artifact.IsArtifact'}}</label>
-        <input id="system.isArtifact" name="system.isArtifact" type="checkbox" value="true" {{checked system.isArtifact}}/>
+
+        {{!-- Artifact Power ID --}}
+        <div>
+          <label for="system.artifactPowerId">{{localize 'WRATH_OF_DAVOKAR.Artifact.ArtifactPowerId'}}</label>
+          <input type='text' name='system.artifactPowerId' value='{{system.artifactPowerId}}'/>
+        </div>
       </div>
     </div>
-  {{/if}}
-
-  {{!-- Macro Settings  --}}
-  {{#if (hasProperty system "macro")}}
+  {{else if (hasProperty system 'isArtifact')}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
-      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Macro'}}</div>
+      <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Artifact.Label'}}</div>
       <div class="panel-content">
-        <file-picker type="any" name='system.macro' noupload="true" value="{{system.macro}}"></file-picker>
+
+      {{!-- Is Artifact Toggle --}}
+      <div>
+        <label for="system.isArtifact">{{localize 'WRATH_OF_DAVOKAR.Artifact.IsArtifact'}}</label>
+        <input id="system.isArtifact" name="system.isArtifact" type="checkbox" data-dtype="Boolean" {{checked system.isArtifact}}/>
+      </div>
+
+      {{!-- Artifact Powers List --}}
+        <div class="artifact-powers-settings flex-column">
+          <label class="resource-label">{{localize 'WRATH_OF_DAVOKAR.Artifact.Powers'}}</label>
+
+          {{!-- Existing power entries --}}
+          <ul class="artifact-power-list flex-column">
+            {{#each artifactPowerEntries}}
+              <li class="artifact-power-entry flex-row flex-gap flex-align-center" data-power-id="{{this.artifactPowerId}}">
+                {{#if this.missing}}
+                  <i class="fas fa-triangle-exclamation artifact-power-warning"
+                      data-tooltip="{{localize 'WRATH_OF_DAVOKAR.Artifact.PowerMissing'}}"></i>
+                {{/if}}
+                <span class="artifact-power-name flex-grow">
+                  {{this.name}}
+                  <span class="artifact-power-id dimmed">({{this.artifactPowerId}})</span>
+                </span>
+                <a data-action="removeArtifactPower"
+                    data-power-id="{{this.artifactPowerId}}"
+                    title="{{localize 'WRATH_OF_DAVOKAR.Artifact.RemovePower'}}">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </li>
+            {{/each}}
+          </ul>
+
+          {{!-- Search / Add new power --}}
+          <div class="artifact-power-search">
+            <div class="flex-row flex-gap">
+              <input
+                type="text"
+                class="artifact-power-search-input"
+                placeholder="{{localize 'WRATH_OF_DAVOKAR.Artifact.SearchPowers'}}"
+                autocomplete="off"
+              />
+            </div>
+            <ul class="artifact-power-dropdown hidden flex-column"></ul>
+          </div>
+        </div>
       </div>
     </div>
   {{/if}}
 
   {{!-- Equipment Slot Settings  --}}
-  {{#if (hasProperty system "equip")}}
+  {{#if system.equip}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Item.EquipSettings'}}</div>
       <div class="panel-content align-left flex-column">
         <div>
           <label for="system.equip.requiresEquipSlot">{{localize 'WRATH_OF_DAVOKAR.Item.ItemSlots.SlotRequired'}}</label>
-          <input id="system.equip.requiresEquipSlot" name="system.equip.requiresEquipSlot" type="checkbox" value="true" {{checked system.equip.requiresEquipSlot}}/>
+          <input id="system.equip.requiresEquipSlot" name="system.equip.requiresEquipSlot" type="checkbox" data-dtype="Boolean" {{checked system.equip.requiresEquipSlot}}/>
         </div>
         <div>
           <label for="system.equip.alwaysTransferEffects">{{localize 'WRATH_OF_DAVOKAR.Item.AlwaysTransferEffects'}}</label>
-          <input id="system.equip.alwaysTransferEffects" name="system.equip.alwaysTransferEffects" type="checkbox" value="true" {{checked system.equip.alwaysTransferEffects}}/>
+          <input id="system.equip.alwaysTransferEffects" name="system.equip.alwaysTransferEffects" type="checkbox" data-dtype="Boolean" {{checked system.equip.alwaysTransferEffects}}/>
         </div>
       </div>
     </div>
   {{/if}}
 
   {{!-- Weapon Type --}}
-  {{#if (hasProperty  system "weaponType")}}
+  {{#if system.weaponType}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Weapon.Type.Label'}}</div>
-      <div class="panel-content align-left resource-grid-2">
+      <div class="panel-content align-left resource-grid-3">
         {{#each system.weaponType}}
-          <label for="system.weaponType.{{@key}}.value">{{localize this.localize}}</label>
-          <input id="system.weaponType.{{@key}}.value" name="system.weaponType.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+          <label for="system.weaponType.{{@key}}">{{localizeWeaponType @key}}</label>
+          <input id="system.weaponType.{{@key}}" name="system.weaponType.{{@key}}" type="checkbox" data-dtype="Boolean" {{checked this}}/>
         {{/each}}
       </div>
     </div>
   {{/if}}
 
   {{!-- Qualities --}}
-  {{#if (hasProperty  system "qualities")}}
+  {{#if system.qualities}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}</div>
-      <div class="panel-content align-left resource-grid-2">
+      <div class="panel-content align-left resource-grid-3">
         {{#each system.qualities}}
           {{#unless (eq @key 'noQuality')}}
-            <label for="system.qualities.{{@key}}.value">{{this.label}}</label>
-            <input id="system.qualities.{{@key}}.value" name="system.qualities.{{@key}}.value" type="checkbox" value="true" {{checked this.value}}/>
+            <label for="system.qualities.{{@key}}">{{localizeQuality @key}}</label>
+            <input id="system.qualities.{{@key}}" name="system.qualities.{{@key}}" type="checkbox" data-dtype="Boolean" {{checked this}}/>
           {{/unless}}
         {{/each}}
       </div>
@@ -81,7 +141,7 @@
   {{/if}}
 
   {{!-- Effects --}}
-  {{#if (hasProperty  system "effectData")}}
+  {{#if system.effectData}}
     <div class="panel flex-column flex-group-center flex-align-stretch">
       <div class="panel-header">{{localize "TYPES.Item.itemEffect"}} </div>
       <div class="panel-content">
@@ -95,7 +155,7 @@
               </div>
               <input type='text' name='system.effectData.{{@key}}.name' value='{{this.name}}'/>
 
-              <a class='item-control item-effect-delete' data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
+              <a class='item-control' data-action="effectDelete" data-effect-id="{{@key}}" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}'>
                 <i class='fas fa-trash'></i>
               </a>
             </div>
@@ -132,11 +192,11 @@
 
       </div>
       <div class="item-controls">
-          <a class="item-effect-create" data-action="create" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}">
+          <a class="item-effect-create" data-action="effectCreate" title="{{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}">
           <i class="fas fa-plus"></i> {{localize "DOCUMENT.Create" type=(localize "TYPES.Item.itemEffect")}}
         </a>
       </div>
     </div>
   {{/if}}
 
-</div>
+</section>

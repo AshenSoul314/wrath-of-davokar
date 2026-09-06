@@ -1,205 +1,32 @@
- {{!-- Sheet Tab Navigation --}}
-  <nav class="talents-tabs sheet-tabs  tabs" data-group="talents">
-    {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="talents">{{localize "WRATH_OF_DAVOKAR.Base.Tabs.Talents"}}</a>
-    {{#unless (isEmpty traits)}}
-      <a class="item" data-tab="traits">{{localize "WRATH_OF_DAVOKAR.Base.Tabs.MonstrousTraits"}}</a>
-    {{/unless}}
-    <a class="item" data-tab="boons">{{localize "WRATH_OF_DAVOKAR.Base.Tabs.Boons"}}</a>
-    <a class="item" data-tab="burdens">{{localize "WRATH_OF_DAVOKAR.Base.Tabs.Burdens"}}</a>
-  </nav>
+<section class="tab {{tab.cssClass}} talents-tab " data-group="primary" data-tab="talents">
 
-  {{!-- Sheet Body --}}
-  <section class="talents-body sheet-body">
+  <div class="sticky">
+    {{> "templates/generic/tab-navigation.hbs" tabs=talentTabs}}
 
-    {{!-- Talents Tab --}}
-    <div class="tab talents " data-group="talents" data-tab="talents">
-      <div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
-        {{#each talents}}
-          <div class="talent-card  item flexgrow" data-item-id="{{this._id}}">
-            <div class="talent-header flex-row flex-group-center flex-gap">
-              <div class='item-image'>
-                <a class='rollable interactive' data-roll-type='item'>
-                  <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
-                </a>
-              </div>
-              <span class="flexgrow">{{this.name}}</span>
-              <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.talent")}}' >
-                <i class='fas fa-edit'></i>
-              </a>
-              <a class='item-control item-delete' title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.talent")}}'>
-                <i class='fas fa-trash'></i>
-              </a>
-            </div>
-            <div class="talent-content">
-              <div class="talent-text">
-                {{editor
-                  this.enrichedDescription
-                  target=this.system.description
-                  engine='prosemirror'
-                  button=false
-                  editable=false
-                }}
-              </div>
-              <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
-                <span>
-                  {{~#each system.action}}
-                    {{~#if this.value}}{{~localize this.localize}},  {{/if~}}
-                  {{/each~}}
-                </span>
-                <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
-                <span>
-                  {{#if (eq this.system.rank.value '1')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.One.Talent"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '2')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Two.Talent"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '3')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Three.Talent"}}
-                  {{/if}}
-                </span>
-              </div>
-            </div>
-          </div>
-        {{/each}}
-      </div>
+    {{!-- Search Bar --}}
+    <div class='search-bar flex-row'>
+      <i class='fa-solid fa-magnifying-glass search-icon'></i>
+      <input class="search-input" type='text'>
     </div>
+  </div>
 
-    {{!-- Monster Traits Tab --}}
-    <div class="tab traits " data-group="talents" data-tab="traits">
-      <div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
-        {{#each traits}}
-          <div class="talent-card item flexgrow" data-item-id="{{this._id}}">
-            <div class="talent-header flex-row flex-group-center flex-gap">
-              <div class='item-image'>
-                <a class='rollable interactive' data-roll-type='item'>
-                  <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
-                </a>
-              </div>
-              <span class="flexgrow">{{this.name}}</span>
-              <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.talent")}}' >
-                <i class='fas fa-edit'></i>
-              </a>
-              <a class='item-control item-delete' title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.talent")}}'>
-                <i class='fas fa-trash'></i>
-              </a>
-            </div>
-            <div class="talent-content">
-              <div class="talent-text">
-                {{editor
-                  this.enrichedDescription
-                  target=this.system.description
-                  engine='prosemirror'
-                  button=false
-                  editable=false
-                }}
-              </div>
-              <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
-                <span>{{localizeActions this.system.action}}</span>
-                <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
-                <span>
-                  {{#if (eq this.system.rank.value '1')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.One.Trait"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '2')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Two.Trait"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '3')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Three.Trait"}}
-                  {{/if}}
-                </span>
-              </div>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-    </div>
+  <div class="talents-body">
 
-    {{!-- Boons Tab --}}
-    <div class="tab boons" data-group="talents" data-tab="boons">
-      <div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
-        {{#each boons}}
-          <div class="talent-card  item flexgrow" data-item-id="{{this._id}}">
-            <div class="talent-header flex-row flex-group-center flex-gap">
-              <div class='item-image'>
-                <a class='rollable interactive' data-roll-type='item'>
-                  <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
-                </a>
-              </div>
-              <span class="flexgrow">{{this.name}}</span>
-              <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.talent")}}' >
-                <i class='fas fa-edit'></i>
-              </a>
-              <a class='item-control item-delete' title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.talent")}}'>
-                <i class='fas fa-trash'></i>
-              </a>
-            </div>
-            <div class="talent-content">
-              <div class="talent-text">
-                {{editor
-                  this.enrichedDescription
-                  target=this.system.description
-                  engine='prosemirror'
-                  button=false
-                  editable=false
-                }}
-              </div>
-              <div class="resource-grid  talent-bottom-row">
-                <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
-                <span>
-                  {{#if (eq this.system.rank.value '1')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.One.Trait"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '2')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Two.Trait"}}
-                  {{/if}}
-                  {{#if (eq this.system.rank.value '3')}}
-                    {{localize "WRATH_OF_DAVOKAR.Rank.Three.Trait"}}
-                  {{/if}}
-                </span>
-              </div>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-    </div>
+    <section class="tab {{subTabs.talents.cssClass}}" data-group="talents" data-tab="talents">
+      {{> "systems/wrath-of-davokar/templates/actor/parts/talents/talents-talents.hbs"}}
+    </section>
 
-    {{!-- Burden Tab --}}
-    <div class="tab burdens" data-group="talents" data-tab="burdens">
-      <div class="flex-row flex-wrap flex-gap flex-group-left flex-align-stretch">
-        {{#each burdens}}
-          <div class="talent-card  item flexgrow" data-item-id="{{this._id}}">
-            <div class="talent-header flex-row flex-group-center flex-gap">
-              <div class='item-image'>
-                <a class='rollable interactive' data-roll-type='item'>
-                  <img src='{{this.img}}' title='{{this.name}}' width='32' height='32' />
-                </a>
-              </div>
-              <span class="flexgrow">{{this.name}}</span>
-              <a class='item-control item-edit' title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.talent")}}' >
-                <i class='fas fa-edit'></i>
-              </a>
-              <a class='item-control item-delete' title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.talent")}}'>
-                <i class='fas fa-trash'></i>
-              </a>
-            </div>
-            <div class="talent-content">
-              <div class="talent-text">
-                {{editor
-                  this.enrichedDescription
-                  target=this.system.description
-                  engine='prosemirror'
-                  button=false
-                  editable=false
-                }}
-              </div>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-    </div>
+    <section class="tab {{subTabs.traits.cssClass}}" data-group="talents" data-tab="traits">
+      {{> "systems/wrath-of-davokar/templates/actor/parts/talents/talents-traits.hbs"}}
+    </section>
 
-  </section>
+    <section class="tab {{subTabs.boons.cssClass}}" data-group="talents" data-tab="boons">
+      {{> "systems/wrath-of-davokar/templates/actor/parts/talents/talents-boons.hbs"}}
+    </section>
+
+    <section class="tab {{subTabs.burdens.cssClass}}" data-group="talents" data-tab="burdens">
+      {{> "systems/wrath-of-davokar/templates/actor/parts/talents/talents-burdens.hbs"}}
+    </section>
+
+  </div>
+</section>

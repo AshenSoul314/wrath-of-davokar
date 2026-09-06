@@ -9,9 +9,34 @@
 }
 
 .indent {
-  padding-left: 10%;
+  padding-left: 2em !important;
 }
 
+.hidden {
+  display: none;
+}
+
+.wrath-of-davokar.sheet {
+  .window-content {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .tab {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .tab.items-tab {
+    padding: 1em;
+  }
+}
 
 // .rollable {
 //   &:hover,

@@ -1,0 +1,102 @@
+
+<section>
+  <div class="dice-roll">
+    {{#if flavor}}
+    <div class="dice-flavor">{{flavor}}</div>
+    {{/if}}
+    <div class="dice-result">
+      <div class="dice-formula">{{formula}}</div>
+
+      {{!-- Dice Rolls --}}
+      <div class="dice-tooltip">
+        {{#each parts}}
+        <section class="tooltip-part {{this.type}}">
+          <div class="dice">
+            <header class="part-header flex-row">
+              <span class="part-formula">{{this.formula}}</span>
+              {{#if this.flavor}}<span class="part-flavor">{{this.flavor}}</span>{{/if}}
+              <span class="part-total">{{this.total}}</span>
+            </header>
+            <ol class="dice-rolls">
+              {{!-- Show each push as a separate line --}}
+              {{#if ../pushed}}
+                {{#each this.rolls as | lineRolls |}}
+                <div class="dice-rolls" style="margin-top: 0; margin-bottom: 0;">
+                  {{#each lineRolls}}
+                    {{#if this}}
+                    <span class="roll {{this.classes}}">{{{this.result}}}</span>
+                    {{else}}
+                    <span class="roll discarded" style="background-image: none;">&nbsp;</span>
+                    {{/if}}
+                  {{/each}}
+                </div>
+                {{/each}}
+              {{else}}
+                {{#each this.rolls}}
+                <li class="roll {{this.classes}}">{{{this.result}}}</li>
+                {{/each}}
+              {{/if}}
+            </ol>
+          </div>
+        </section>
+        {{/each}}
+      </div>
+      <h4 class="dice-total">{{total}}</h4>
+      {{#if (gt success 0)}}
+        <h4 class="dice-total success">{{localize "YZUR.CHAT.Successes"}} : {{success}}</h4>
+      {{else if (eq success 0)}}
+        <h4 class="dice-total failure"> {{localize "YZUR.CHAT.Successes"}} : {{success}}</h4>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- Extra info added for Year Zero rolls --}}
+  {{#if showInfos}}
+    <div class="dice-infos">
+      {{!-- Wod — WP, Corruption, and Wrath Gain --}}
+      {{#if (eq roll.game 'wod')}}
+        {{#if roll.pushed}}
+          {{#if roll.wrath}}
+          <div class="dice-info">
+            <span class="label">{{localize "YZUR.CHAT.ROLL.Wrath"}}</span>
+            <span class="result">+{{roll.wrath}}</span>
+          </div>
+          {{/if}}
+          {{#if roll.corruption}}
+          <div class="dice-info">
+            <span class="label">{{localize "YZUR.CHAT.ROLL.Corruption"}}</span>
+            <span class="result">+{{roll.corruption}}</span>
+          </div>
+          {{/if}}
+          {{#if roll.wodWillpower}}
+          <div class="dice-info">
+            <span class="label">{{localize "YZUR.CHAT.ROLL.WodWillpower"}}</span>
+            <span class="result">+{{roll.wodWillpower}}</span>
+          </div>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if pushable}}
+    {{!-- Push button --}}
+    <div class="dice-buttons">
+      <button class="dice-button accept" data-action="accept" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.Accept"}}</button>
+      <button class="dice-button push" data-action="push" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.Push"}}</button>
+    </div>
+  {{else if roll.wrath}}
+    <div class="dice-info">
+      <span class="label">{{localize "YZUR.CHAT.ROLL.Wrath"}}</span>
+      <span class="result">+{{roll.wrath}}</span>
+    </div>
+  {{else if roll.corruption}}
+    <div class="dice-buttons">
+      <button class="dice-button apply-effects" data-action="apply" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.ApplyEffects"}}</button>
+    </div>
+  {{else if roll.wodWillpower}}
+    <div class="dice-buttons">
+      <button class="dice-button apply-effects" data-action="apply" data-owner-id="{{roll.owner}}">{{localize "YZUR.CHAT.ROLL.ApplyEffects"}}</button>
+    </div>
+  {{/if}}
+</section>

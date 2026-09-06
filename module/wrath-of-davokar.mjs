@@ -1,50 +1,77 @@
-import { WrathOfDavokarActor } from './documents/actor.mjs';
-import { WrathOfDavokarItem } from './documents/item.mjs';
-import { WrathOfDavokarActorSheet } from './sheets/actor-sheet.mjs';
-import { WrathOfDavokarItemSheet } from './sheets/item-sheet.mjs';
+import { WoDActorDocument } from './documents/wod-actor-document.mjs';
+import { WoDItemDocument } from './documents/wod-item-document.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { WRATH_OF_DAVOKAR } from './helpers/config.mjs';
 import { STATUS_EFFECTS, handleEffectCreation } from './helpers/effects.mjs';
 import { YearZeroRollManager } from '../lib/yzur.js';
 import { initWrathTracker, updateWrathSettings } from './helpers/wrath-tracker.mjs';
-import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons } from './helpers/chat.mjs';
-import { wrapDrawBars } from './helpers/token.mjs';
+import { addWrathWrapperToMessage, applyMessageHeader, linkEffectButtons, initApplySection } from './helpers/chat.mjs';
+import {ApplyData} from './applications/apply-changes-element.mjs'
+// import { wrapDrawBars } from './helpers/token.mjs';
 import './helpers/handlebars-helpers.mjs'
+
+import { WoDItemSheet } from './sheets/wod-item-sheet.mjs';
+
+import {
+  WoDCharacterSheet,
+  WoDNPCSheet
+} from './sheets/wod-actor-sheet.mjs';
+
+import {WoDTokenDocument} from './documents/wod-token-document.mjs'
+import {WoDToken} from './canvas/wod-token.mjs'
+import {registerTokenHUDHooks} from './hooks/tokenHUD.mjs'
+
+import {HOOKS, getHandlers, registerHook} from './automation/hooks.mjs';
+import {
+  onSkillTestPipelineKeep,
+  onSkillTestPipelinePush,
+  onSkillTestPipelineDelete
+} from './automation/skill-test-pipeline.mjs'
+
+// Exports for module development
+export {HOOKS, registerHook, getHandlers} from "./automation/hooks.mjs";
 
 const Actors = foundry.documents.collections.Actors;
 const Items = foundry.documents.collections.Items;
-const ActorSheet = foundry.appv1.sheets.ActorSheet;
-const ItemSheet = foundry.appv1.sheets.ItemSheet;
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
 Hooks.once('init', function () {
-  // Add utility classes to the global game object so that they're more easily
-  // accessible in global contexts.
+  // ---------------------------
+  // Setup Global Context
+  // ---------------------------
   game.wrathofdavokar = {
-    WrathOfDavokarActor,
-    WrathOfDavokarItem,
+    WoDActorDocument,
+    WoDItemDocument,
     rollItemMacro,
+    hookRegistry: new Map(),
+    reactionAutomationIds: new Set(),
+    sceneReactionCache:    new Map(),
+    registerHook,
+    getHandlers,
+    pendingSkillTestPipelineRolls: new Map(),
   };
+
+  // ---------------------------
+  // Override CONFIG
+  // ---------------------------
 
   // Add custom constants for configuration.
   CONFIG.WRATH_OF_DAVOKAR = WRATH_OF_DAVOKAR;
 
-
-  /**
-   * Set an initiative formula for the system
-   * @type {String}
-   */
+  // Set an initiative formula for the system
   CONFIG.Combat.initiative = {
     formula: '@dexterity + @instinct',
     decimals: 2,
   };
 
   // Define custom Document classes
-  CONFIG.Actor.documentClass = WrathOfDavokarActor;
-  CONFIG.Item.documentClass = WrathOfDavokarItem;
+  CONFIG.Actor.documentClass = WoDActorDocument;
+  CONFIG.Item.documentClass = WoDItemDocument;
+  CONFIG.Token.documentClass = WoDTokenDocument;
+  CONFIG.Token.objectClass = WoDToken;
 
   // // Initiative Deck
   // CONFIG.Cards.presets = {
@@ -60,16 +87,140 @@ Hooks.once('init', function () {
   // if the transfer property on the Active Effect is true.
   CONFIG.ActiveEffect.legacyTransferral = false;
 
-  // Register sheet application classes
-  Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('wrath-of-davokar', WrathOfDavokarActorSheet, {
+  // ---------------------------
+  // Register Sheets
+  // ---------------------------
+  // Register Actor sheet application classes
+  Actors.registerSheet('wrath-of-davokar', WoDCharacterSheet, {
+    types: ['character'],
     makeDefault: true,
-    label: 'WRATH_OF_DAVOKAR.SheetLabels.Actor',
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Character',
   });
-  Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('wrath-of-davokar', WrathOfDavokarItemSheet, {
+  Actors.registerSheet('wrath-of-davokar', WoDNPCSheet, {
+    types: ['npc'],
     makeDefault: true,
-    label: 'WRATH_OF_DAVOKAR.SheetLabels.Item',
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.NPC',
+  });
+
+  // Register Item sheet application classes
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['alchemicalItem'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.AlchemicalItem',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['armorBody'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorBody',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['armorHead'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorHead',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['armorShield'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.ArmorShield',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['artifactPower'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.ArtifactPower',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['boon'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Boon',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['burden'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Burden',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['condition'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Condition',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['container'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Container',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['criticalInjury'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.CriticalInjury',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['equipment'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Equipment',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['gear'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Gear',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['language'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Language',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['monsterTrait'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.MonsterTrait',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['mysticalPower'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.MysticalPower',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['ritual'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Ritual',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['supply'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Supply',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['talent'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Talent',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['trap'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Trap',
+  });
+
+  Items.registerSheet('wrath-of-davokar', WoDItemSheet, {
+    types: ['weapon'],
+    makeDefault: true,
+    label: 'WRATH_OF_DAVOKAR.SheetLabel.Weapon',
   });
 
   // Register the YZE Dice Roller
@@ -120,22 +271,27 @@ Hooks.once('init', function () {
     default: 30,
   });
 
-  // Performance Mode
-  game.settings.register('wrath-of-davokar', 'performance-mode', {
-    name: "Performance Mode",
-    hint: "If checked, Wrath of Davokar will use fewer performance intensive graphics and switch to lighter-weight alternatives",
-    scope: 'client',
-    config: true,
-    type: Boolean,
-    default: false,
-  });
 
+  // ---------------------------
+  // Setup Hooks
+  // ---------------------------
+  registerTokenHUDHooks()
 
-  // Preload Handlebars templates.
+  // ---------------------------
+  // Handlebars Templates
+  // ---------------------------]
   return preloadHandlebarsTemplates();
 });
 
+/* -------------------------------------------- */
+/*  Setup Hook                                  */
+/* -------------------------------------------- */
+Hooks.once('setup', () => {
 
+  // Let others know they can register their automation hooks
+  Hooks.callAll('wodAutomationReady', game.wrathofdavokar.registerHook);
+
+});
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
@@ -154,27 +310,87 @@ Hooks.once('ready', async () => {
   await initWrathTracker();
 
   // Wrap the Draw Bars Function
-  wrapDrawBars()
+  //wrapDrawBars()
 });
 
+
+/* -------------------------------------------- */
+/*  Migrations                                  */
+/* -------------------------------------------- */
+Hooks.once('ready', async () => {
+  for (const actor of game.actors) {
+    const updates = {};
+
+    // Migrate legacy corruption scalar fields to objects
+    const corruption = actor.system?.corruption;
+    if (typeof corruption?.threshold === "number") {
+      updates["system.corruption.threshold"] = { value: corruption.threshold, bonus: 0 };
+    }
+
+    // Migrate legacy actors missing attribute max — default it to the
+    // attribute's current value
+    const attributes = actor.system?.attributes;
+    if (attributes) {
+      for (const [key, attribute] of Object.entries(attributes)) {
+        if (attribute.max === undefined) {
+          updates[`system.attributes.${key}.max`] = attribute.value;
+        }
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      console.log(`WoD | Migrating actor data for actor: ${actor.name}`);
+      await actor.update(updates);
+    }
+  }
+});
 
 /* -------------------------------------------- */
 /*  YZUR Hooks                                  */
 /* -------------------------------------------- */
-
 Hooks.on('renderChatMessageHTML', (message, html, context) => {
-  html.querySelectorAll('.dice-button.push').forEach(button => {
-    button.addEventListener('click', _onPush);
-  });
+
+  // Link Dice roll buttons
+  if (!message.getFlag('wrath-of-davokar', 'pendingRollPipeline')) {
+    // Normal Dice Rolls
+    html.querySelectorAll('.dice-button.dice-push').forEach(button => {
+      button.addEventListener('click', _onDicePush);
+    });
+    html.querySelectorAll('.dice-button.dice-keep').forEach(button => {
+      button.addEventListener('click', _onDiceKeep);
+    });
+  } else {
+    // Skill Test Pipeline Enabled Dice Rolls
+    html.querySelectorAll('.dice-button.dice-push').forEach(button => {
+      button.addEventListener('click', onSkillTestPipelinePush);
+    });
+    html.querySelectorAll('.dice-button.dice-keep').forEach(button => {
+      button.addEventListener('click', onSkillTestPipelineKeep);
+    });
+  }
+
+  // Apply Section
+  const apply_section = html.querySelector('.apply-section');
+  if (apply_section) {
+    initApplySection(apply_section, message);
+  }
 });
 
-async function _onPush(event) {
+Hooks.on('deleteChatMessage', (message) => {
+
+  // Cancel Pipeline rolls when their message is deleted before a response is given
+  if (message.getFlag('wrath-of-davokar', 'pendingRollPipeline')) {
+    onSkillTestPipelineDelete(message)
+  }
+});
+
+async function _onDicePush(event) {
   event.preventDefault();
 
   // Get the message.
-  let chatCard = event.currentTarget.closest('.chat-message');
-  let messageId = chatCard.dataset.messageId;
-  let message = game.messages.get(messageId);
+  const chatCard = event.currentTarget.closest('.chat-message');
+  const messageId = chatCard.dataset.messageId;
+  const message = game.messages.get(messageId);
 
   // Copy the roll.
   let roll = message.rolls[0].duplicate();
@@ -184,7 +400,36 @@ async function _onPush(event) {
 
   // Push the roll and send it.
   await roll.push({ async: true });
-  await roll.toMessage();
+
+  let applyData = new ApplyData()
+  applyData.deltaTempCorruption = 1;
+  applyData.deltaWP = 1;
+  roll.options.applyData = applyData;
+
+  // Capture the tokens targeted at push time so the "Targeted" apply mode has something to show.
+  const targets = Array.from(game.user.targets)
+    .filter(t => t.actor)
+    .map(t => ({ uuid: t.actor.uuid, name: t.name }));
+
+  await roll.toMessage({
+    // Foundry's flags field rejects non-plain-object values (it silently replaces them with {}),
+    // so the ApplyData class instance has to be flattened to a plain object before being stored.
+    flags: { 'wrath-of-davokar': { applyData: { ...applyData }, targets: targets } }
+  });
+}
+
+async function _onDiceKeep(event) {
+  event.preventDefault();
+
+  // Get the message.
+  const chatCard = event.currentTarget.closest('.chat-message');
+  const messageId = chatCard.dataset.messageId;
+  const message = game.messages.get(messageId);
+
+  // Copy the roll and update the message.
+  let roll = message.rolls[0].duplicate();
+  roll.options.keep = true;
+  await message.update({ rolls: [roll.toJSON()] });
 }
 
 Hooks.on('preCreateActiveEffect', (effect, options, userId) => {
@@ -327,3 +572,34 @@ async function rollItemMacro(itemUuid, powerId) {
     }
   });
 }
+
+/* -------------------------------------------- */
+/*  Active Effect Injection                     */
+/* -------------------------------------------- */
+
+Hooks.on("renderActiveEffectConfig", (app, html, context, options) => {
+
+  const effect = app.document;
+  const checked = effect.getFlag("wrath-of-davokar", "transferOnEquipOverride");
+
+  const field = document.createElement("div");
+  field.classList.add("form-group");
+
+  field.innerHTML = `
+    <label for="wod-transferOnEquipOverride">Transfer on Equip Override</label>
+    <div class="form-fields">
+      <input type="checkbox" name="flags.wrath-of-davokar.transferOnEquipOverride" id="wod-transferOnEquipOverride" ${checked ? "checked" : ""}>
+    </div>
+    <p class="hint">Always transfer this effect when the parent item is equipped.</p>
+  `;
+
+  let detailsTab = html.querySelector('.tab[data-tab="details"]');
+  
+  if (detailsTab) {
+    detailsTab.appendChild(field);
+  } else {
+    // last-resort fallback
+    html.querySelector("section.window-content")?.appendChild(field);
+  }
+
+});

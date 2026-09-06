@@ -14,3 +14,30 @@ export function getCssColor(varName) {
   if (!hex) return 0x000000;
   return parseInt(hex.replace(/^#/, '0x'), 16);
 }
+
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * Sorts items by their base name and then by their system.rank.value
+ *
+ * @param {Array<Item>} items - Array of Foundry Items
+ * @returns {Array<Item>} - A sorted array of items
+ */
+export function sortRankedItems(items) {
+  return items.sort((a, b) => {
+    // Base name = everything before ":" or full name if no colon
+    const baseA = a.name.split(":")[0].trim();
+    const baseB = b.name.split(":")[0].trim();
+
+    if (baseA < baseB) return -1;
+    if (baseA > baseB) return 1;
+
+    // Get rank values safely
+    const getRank = (item) => {
+      return foundry.utils.getProperty(item, "system.rank.value") ?? 0;
+    };
+    return getRank(a) - getRank(b);
+  });
+}

@@ -1,66 +1,82 @@
 @use "../utils" as utils;
 
-.wrath-of-davokar.wrath-orb-container {
+
+@keyframes wod-wave-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+
+.wrath-of-davokar.wrath-container {
   width: clamp(80px, 15vmin, 100px);
   height: auto;
-  position: relative;
-  margin: clamp(20px, 4vmin, 30px) auto; ;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  .wrath-orb {
-    width: 100%;
+  .wrath-tracker {
+    width: 4rem;
     aspect-ratio: 1/1;
-    border-radius: 50%;
-    position: relative;
     z-index: 10;
+    overflow: hidden;
+    transform: rotate(45deg);
+    margin: 1rem;
+    border: 0.2rem black solid;
+    box-shadow: 0rem 0rem 1rem black;
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.25);
+    pointer-events: all;
 
-    .wrath-border {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      height: auto;
-      z-index: 13;
-    }
-
-    .wrath-liquid-container {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      height: 86%;
-      width: auto;
-      aspect-ratio: 1/1;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 10%;
-      overflow: hidden;
-      background: radial-gradient(ellipse at center, rgba(17, 17, 17, 0.2) 0%, rgba(255, 255, 255, 0.3333333333) 100%);
-      
-      .wrath-liquid {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: auto;
-        transform: translateY(0%);
-        transition: transform 0.4s ease-in-out;
-        z-index: 11;
-        object-fit: cover;
-      }
-    }
     .wrath-points {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -44%);
-      color: utils.$c-gold-light;
-      font-size: clamp(1rem, 3.5vmin, 2rem);
+      transform: translate(-50%, -44%) rotate(-45deg);
+      color: #daa520;
+      font-size: clamp(1rem, 5vmin, 2rem);
       font-family: "Cinzel", serif;
       z-index: 12;
       text-shadow: 0 0 5px #000;
     }
+
+    .wrath-wave {
+      position: absolute;
+      left: -50%;
+      top: -25%;
+      width: 200%;
+      height: 150%;
+      z-index: 11;
+      pointer-events: none;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(.18,.89,.32,1.28);
+      will-change: transform;
+    }
+
+    .wave-layer {
+      animation: wod-wave-scroll linear infinite;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .wave-back {
+      animation-duration: 31s;
+    }
+
+    .wave-mid {
+      animation-duration: 17s;
+    }
+
+    .wave-front {
+      animation-duration: 7s;
+    }
+
+
+
   }
 
   .wrath-controls {

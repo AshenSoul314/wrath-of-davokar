@@ -9,8 +9,8 @@
     border-radius: 3px 3px 0 0;
 
     .message-sender {
-      align-items: center; 
-      gap: 6px; 
+      align-items: center;
+      gap: 6px;
       flex:2;
       .message-speaker {
         font-weight: bold;
@@ -34,6 +34,124 @@
       border-bottom: 1px solid utils.$c-border;
     }
 
+    .dice-buttons {
+      width: 100%;
+      margin-top: 1em;
+      flex-direction: column;
+      gap: 10px;
+
+      .dice-button {
+        width: 100%;
+      }
+    }
+
+    .apply-section {
+      margin-top: 1em;
+
+      wod-apply-changes .card-tray {
+        border: 1px solid utils.$c-border;
+        border-radius: 4px;
+
+        > label {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 8px;
+          cursor: pointer;
+          user-select: none;
+
+          span {
+            flex: 1;
+          }
+
+          .fa-caret-down {
+            transition: transform 0.15s ease;
+          }
+        }
+
+        &.collapsed {
+          > label .fa-caret-down {
+            transform: rotate(-90deg);
+          }
+
+          .collapsible-content {
+            display: none;
+          }
+        }
+
+        .collapsible-content {
+          padding: 8px;
+          border-top: 1px solid utils.$c-border;
+
+          .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+        }
+
+        .target-source-control {
+          display: flex;
+          gap: 10px;
+
+          button {
+            flex: 1;
+            padding: 4px 8px;
+            border: 1px solid utils.$c-border;
+            border-radius: 3px;
+            opacity: 0.6;
+            transition: opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+
+            // Give the active mode the same look Foundry's own buttons use on hover - those
+            // colors are already tuned per theme, so this stays legible in both light and dark.
+            &[aria-pressed="true"] {
+              opacity: 1;
+              background: var(--button-hover-background-color);
+              color: var(--button-hover-text-color);
+              border-color: var(--button-hover-border-color);
+              font-weight: bold;
+            }
+
+            &:not([aria-pressed="true"]):hover {
+              opacity: 0.85;
+              cursor: pointer;
+            }
+          }
+        }
+
+        .targets {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .target {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            .gold-icon {
+              width: 1.5em;
+              height: 1.5em;
+              border-radius: 50%;
+            }
+
+            .name-stacked {
+              flex: 1;
+            }
+          }
+
+          .none {
+            font-style: italic;
+            opacity: 0.75;
+          }
+        }
+
+        .apply-changes {
+          width: 100%;
+        }
+      }
+    }
+
     .applyItemEffectButton {
       display: flex;
       justify-content: center;
@@ -49,5 +167,3 @@
   }
 
 }
-
-

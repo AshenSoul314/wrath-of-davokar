@@ -47,7 +47,7 @@
 
   {{#if system.grip}}
     <div>
-      <b>{{ localize "WRATH_OF_DAVOKAR.Grip.Label" }}:</b>
+      <b>{{ localize "WRATH_OF_DAVOKAR.Weapon.Grip.Label" }}:</b>
       {{#if (eq system.grip "oneHanded")}}
         {{localize "WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long"}}
       {{else}}
@@ -97,10 +97,10 @@
     <div>
       <b>{{ localize "WRATH_OF_DAVOKAR.Qualities.Label" }}:</b>
       {{#if system.qualities.noQuality}}
-        <label class='class=flexshrink'>{{localize 'WRATH_OF_DAVOKAR.Qualities.NoQuality'}}</label>
+        <label class='class=flex-shrink'>{{localize 'WRATH_OF_DAVOKAR.Qualities.NoQuality'}}</label>
       {{else}}
         {{#each system.qualities}}
-          {{#if this.value}} <label class='quality flexshrink'>{{localize this.localize}}</label>{{/if}}
+          {{#if this.value}} <label class='quality flex-shrinkk'>{{localize this.localize}}</label>{{/if}}
         {{/each}}
       {{/if}}
     </div>
@@ -137,7 +137,7 @@
     {{#each system.effectData}}
       <div class="flex-row">
         <button
-          class="applyItemEffectButton flexgrow"
+          class="applyItemEffectButton flex-grow"
           type="button" data-item-id="{{../_id}}"
           {{#if ../actorId}} data-actor-id="{{../actorId}}" {{/if}}
           data-item-power-id="{{@key}}"
@@ -147,12 +147,12 @@
             {{this.name}}
         </button>
         <button
-          class="removeItemEffectButton flexshrink"
+          class="removeItemEffectButton flex-shrink"
           type="button"
           data-item-id="{{../_id}}"
           {{#if ../actorId}} data-actor-id="{{../actorId}}" {{/if}}
           data-item-effect-id="{{@key}}"
-          title="'{{localize "DOCUMENT.Delete" type=(localize "Types.Item.itemEffect")}}">
+          title="'{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.itemEffect")}}">
           <i class="fa-solid fa-trash"></i>
         </button>
       </div>

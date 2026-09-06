@@ -1,0 +1,303 @@
+
+{{! Description Tab }}
+<section class='tab sheet-body item-weapon {{tab.cssClass}}' data-group='primary' data-tab='main'>
+  <div class="resource-grid ">
+    
+    {{!-- Action(s) --}}
+    {{#if (hasProperty system "action")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Action.Label'}}:</label>
+      <span>{{localizeActions system.action}}</span>
+    {{/if}}
+
+    {{!-- Tradition --}}
+    {{#if (hasProperty system "tradition")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Power.Tradition.Label'}}:</label>
+      {{#if editMode}}
+        <div class="flex-row flex-group-left flex-align-center flex-wrap">
+          {{#each system.tradition}}
+            <div class="flex-row flex-group-left flex-align-center">
+              <label for="system.tradition.{{@key}}.value">{{this.label}}</label>
+              <input  id="system.tradition.{{@key}}.value"
+                      name="system.tradition.{{@key}}.value"
+                      type="checkbox"
+                      data-dtype="Boolean"
+                      {{checked this.value}}/>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <span>{{localizeTraditions system.tradition}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Corruption --}}
+    {{#if (hasProperty system "corruption")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Corruption.Label'}}:</label>
+      {{#if editMode}}
+        <input type='text' name='system.corruption' value='{{system.corruption}}'/>
+      {{else}}
+        <span>{{system.corruption}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Component --}}
+    {{#if (hasProperty system "component")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Power.Component'}}:</label>
+      {{#if editMode}}
+        <input type='text' name='system.component' value='{{system.component}}'/>
+      {{else}}
+        <span>{{system.component}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Container Properties --}}
+    {{#if (hasProperty system "numSubSlots")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Container.NumSubSlots'}}:</label>
+      {{#if editMode}}
+        <input type='number' step="1"  name='system.numSubSlots' value='{{system.numSubSlots}}'/>
+      {{else}}
+        <span>{{system.numSubSlots}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{#if (hasProperty system "maxItemWeight")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Container.MaxItemWeight'}}:</label>
+      {{#if editMode}}
+        <input type='number' step="0.5"  name='system.maxItemWeight' value='{{system.maxItemWeight}}'/>
+      {{else}}
+        <span>{{system.maxItemWeight}}</span>
+      {{/if}}
+    {{/if}}
+    
+    {{!-- Armor Rating --}}
+    {{#if (hasProperty system "rating")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Armor.Rating.long'}}:</label>
+      <div class='flex-row flex-align-center flex-gap'>
+        <input type='number' step='1' min='0' name='system.rating.value' data-dtype='Number' value='{{system.rating.value}}'/>
+        <span class='flex-shrink'> / </span>
+        {{#if editMode}}
+          <input type='number' step='1' min='0' name='system.rating.max' data-dtype='Number' value='{{system.rating.max}}'/>
+        {{else}}
+          <span>{{system.rating.max}}</span>
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{!-- Impeding --}}
+    {{#if (hasProperty system "impeding")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Armor.Impeding.long'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='number' step='1' min='0' name='system.impeding' data-dtype='Number' value='{{system.impeding}}'/>
+      {{else}}
+        <span>{{system.impeding}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Vision Penalty --}}
+    {{#if (hasProperty system "visionPenalty")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Armor.VisionPenalty.long'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='text' name='system.visionPenalty' value='{{system.visionPenalty}}' data-dtype='Number'/>
+      {{else}}
+        <span>{{system.visionPenalty}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Parry Bonus --}}
+    {{#if (hasProperty system "parryBonus")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Armor.ParryBonus.long'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='text' name='system.parryBonus' value='{{system.parryBonus}}' data-dtype='Number'/>
+      {{else}}
+        <span>{{system.parryBonus}}</span>
+      {{/if}}
+    {{/if}}
+
+
+    {{!-- Type --}}
+    {{#if (hasProperty system "armorCategory")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Label'}}:</label>
+      {{#if editMode}}
+        <select class="flex-shrink" name="system.armorCategory">
+          <option value="light" {{#if (eq 'light' system.armorCategory)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Light'}}</option>
+          <option value="medium" {{#if (eq 'medium' system.armorCategory)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Medium'}}</option>
+          <option value="heavy" {{#if (eq 'heavy' system.armorCategory)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Heavy'}}</option>
+        </select>
+      {{else}}
+        {{#if (eq system.armorCategory 'light')}}
+          <span>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Light'}}</span>
+        {{else if (eq system.armorCategory 'medium')}}
+          <span>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Medium'}}</span>
+        {{else if (eq system.armorCategory 'heavy')}}
+          <span>{{localize 'WRATH_OF_DAVOKAR.Armor.ArmorCategory.Heavy'}}</span>
+        {{/if}}
+      {{/if}}
+    {{/if}}
+
+    {{!-- Grip --}}
+    {{#if (hasProperty system "grip")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.Label'}}:</label>
+      {{#if editMode}}
+        <select class="flex-shrink" name="system.grip">
+          <option value="oneHand" {{#if (eq 'oneHand' system.grip)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long'}}</option>
+          <option value="twoHand" {{#if (eq 'twoHand' system.grip)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.TwoHand.long'}}</option>
+        </select>
+      {{else}}
+        {{#if (eq system.grip 'oneHand')}}
+          <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.OneHand.long'}}</span>
+        {{else if (eq system.grip 'twoHand')}}
+          <span>{{localize 'WRATH_OF_DAVOKAR.Weapon.Grip.TwoHand.long'}}</span>
+        {{/if}}
+      {{/if}}
+    {{/if}}
+
+    {{!-- Base Damage --}}
+    {{#if (hasProperty system "damage")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Weapon.BaseDamage.long'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='number' step="1" min="0" name='system.damage' value='{{system.damage}}' data-dtype='Number'/>
+      {{else}}
+        <span>{{system.damage}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Bite --}}
+    {{#if (hasProperty system "bite")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Trap.Bite'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='number' step="1" min="0" name='system.bite' value='{{system.bite}}' data-dtype='Number'/>
+      {{else}}
+        <span>{{system.bite}}</span>
+      {{/if}}
+      {{!-- Qualities --}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}:</label>
+      <div class='flex-row flex-align-center flex-wrap flex-gap'>
+        {{#each system.qualities}}
+          {{#if this}} <span class='quality'>{{localizeQuality @key}}</span>{{/if}}
+        {{/each}}
+      </div>
+    {{/if}}
+    
+    {{!-- Range --}}
+    {{#if (hasProperty system "range")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Range.Label'}}:</label>
+      {{#if editMode}}
+        <div class='align-left flex-column flex-shrink'>
+          <select name="system.range" data-dtype="Number">
+            <option value=-1 {{#if (eq -1 system.range)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Range.Self'}}</option>
+            <option value=0 {{#if (eq 0 system.range)}}selected{{/if}}>{{localize 'WRATH_OF_DAVOKAR.Range.Engaged'}}</option>
+            <option value=1 {{#if (eq 1 system.range)}}selected{{/if}}>1 {{localize 'WRATH_OF_DAVOKAR.Action.Move.long'}}</option>
+            <option value=2 {{#if (eq 2 system.range)}}selected{{/if}}>2 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=3 {{#if (eq 3 system.range)}}selected{{/if}}>3 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=4 {{#if (eq 4 system.range)}}selected{{/if}}>4 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+            <option value=5 {{#if (eq 5 system.range)}}selected{{/if}}>5 {{localize 'WRATH_OF_DAVOKAR.Action.Move.plural'}}</option>
+          </select>
+
+          {{!-- Area --}}
+          {{radioBoxes 'system.area.type' system.area.radio checked=system.area.type localize=true}}
+        </div>
+      {{else}}
+        <span>{{localizeRange system.range area=system.area}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Weapon Types --}}
+    {{#if (hasProperty system "weaponType")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Weapon.Type.Label'}}:</label>
+      <span>{{localizeWeaponTypes system.weaponType}}</span>
+    {{/if}}
+
+    {{!-- Durability --}}
+    {{#if (hasProperty system "durability")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.Durability'}}:</label>
+      <div class='flex-row flex-align-center flex-gap'>
+        <input type='number' step='1' min='0' name='system.durability.value' data-dtype='Number' value='{{system.durability.value}}'/>
+        <span class='flex-shrink'> / </span>
+        {{#if editMode}}
+          <input type='number' step='1' min='0' name='system.durability.max' data-dtype='Number' value='{{system.durability.max}}'/>
+        {{else}}
+          <span>{{system.durability.max}}</span>
+        {{/if}}
+      </div>
+    {{/if}}
+
+    
+    {{!-- Supply Points --}}
+    {{#if (hasProperty system "supply")}}
+      <label class='resource-label'>{{localize 'WRATH_OF_DAVOKAR.Item.SupplyPoints'}}:</label>
+      <input type='text' name='system.supply' value='{{system.supply}}'/>
+    {{/if}}
+
+    {{!-- Qualities --}}
+    {{#if (hasProperty system "qualities")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Qualities.Label'}}:</label>
+      <div class='flex-row flex-align-center flex-wrap flex-gap'>
+        {{#if system.qualities.noQuality}}
+          <label class='class=flex-shrink'>{{localize 'WRATH_OF_DAVOKAR.Qualities.NoQuality'}}</label>
+        {{else}}
+          {{#each system.qualities}}
+            {{#if this}} <label class='quality flex-shrink'>{{localizeQuality @key}}</label>{{/if}}
+          {{/each}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{!-- Death Mod --}}
+    {{#if (hasProperty system "deathMod")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.DeathMod'}}:</label>
+      {{#if editMode}}
+        <input type='number' step="1" name='system.deathMod' value='{{system.deathMod}}' data-dtype='Number'/>
+      {{else}}
+        <span>{{system.deathMod}}</span>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Healing Time Formula --}}
+    {{#if (hasProperty system "healingTime")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Formula'}}:</label>
+      {{#if editMode}}
+        <input class='flex-shrink' type='text' name='system.healingTime.formula' value='{{system.healingTime.formula}}'/>
+      {{else}}
+        <span>{{system.healingTime.formula}}</span>
+      {{/if}}
+      
+      {{!-- Healing Time --}}
+      {{#if system.healingTime.value includeZero=true}}
+        <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.CriticalInjury.HealingTime.Label'}}:</label>
+        <input class='flex-shrink' type='text' name='system.healingTime.value' value='{{system.healingTime.value}}'/>
+      {{/if}}
+    {{/if}}
+
+
+    {{!-- Cost --}}
+    {{#if (hasProperty system "cost")}}
+      <label class='resource-label align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Cost'}}:</label>
+      {{#if editMode}}
+        <div class='indent resource-grid'>
+          <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Thaler'}}:</label>
+          <input class='flex-shrink' type='number' step='1' min='0' name='system.cost.thaler' data-dtype='Number' value='{{system.cost.thaler}}'/>
+          <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Shilling'}}:</label>
+          <input class='flex-shrink' type='number' step='1' min='0' name='system.cost.shilling' data-dtype='Number' value='{{system.cost.shilling}}'/>
+          <label class='align-left'>{{localize 'WRATH_OF_DAVOKAR.Money.Orteg'}}:</label>
+          <input class='flex-shrink' type='number' step='1' min='0' name='system.cost.orteg' data-dtype='Number' value='{{system.cost.orteg}}'/>
+        </div>
+      {{else}}
+        <span>{{localizeCost system.cost}}</span>
+      {{/if}}
+    {{/if}}
+    
+  </div>
+  <hr>
+  {{#if editMode}}
+    <prose-mirror
+      name="system.description"
+      value="{{system.description}}"
+      button="true"
+      toggled="true"
+    >
+      {{{enrichedDescription}}}
+    </prose-mirror>
+  {{else}}
+    {{{enrichedDescription}}}
+  {{/if}}
+</section>

@@ -1,0 +1,1174 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+:root {
+  --wod-color-white: #fff;
+  --wod-color-black: #000;
+  --wod-color-dark: #191813;
+  --wod-color-beige: #b5b3a4;
+  --wod-color-tan: #444;
+  --wod-color-brown: #5a3b28;
+  --wod-color-brown-dark: #2e2a26;
+  --wod-color-brown-light: #4c3c29;
+  --wod-color-gold: #b8860b;
+  --wod-color-gold-light: #daa520;
+  --wod-color-gold-bright: #fcc200;
+  --wod-color-green: #428a32;
+  --wod-color-red: #9f1e49;
+  --wod-color-red-dark: #3F0C1D;
+  --wod-color-corruption: #630eb8;
+  --wod-color-corruption-light: #c187c2;
+  --wod-color-toughness: #9f1e49;
+  --wod-color-willpower: #00bfff;
+  --wod-color-armorRating: #85806f;
+  --wod-color-border: #7a7971;
+  --wod-color-light-text: #ddd;
+  --wod-color-background: rgba(11, 10, 19, 0.9490196078) ;
+}
+
+/* Global styles */
+.window-app {
+  font-family: "Roboto", sans-serif;
+}
+
+.max-width {
+  width: 100%;
+}
+
+.indent {
+  padding-left: 2em !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.wrath-of-davokar.sheet .window-content {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.wrath-of-davokar.sheet .sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.wrath-of-davokar.sheet .tab {
+  height: 100%;
+  overflow-y: auto;
+}
+.wrath-of-davokar.sheet .tab.items-tab {
+  padding: 1em;
+}
+
+.grid,
+.grid-2col {
+  display: grid;
+  grid-column: span 2/span 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.grid-3col {
+  grid-column: span 3/span 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4col {
+  grid-column: span 4/span 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-5col {
+  grid-column: span 5/span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-6col {
+  grid-column: span 6/span 6;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-7col {
+  grid-column: span 7/span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-8col {
+  grid-column: span 8/span 8;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-9col {
+  grid-column: span 9/span 9;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-10col {
+  grid-column: span 10/span 10;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-11col {
+  grid-column: span 11/span 11;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-12col {
+  grid-column: span 12/span 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-start-2 {
+  grid-column-start: 2;
+}
+
+.grid-start-3 {
+  grid-column-start: 3;
+}
+
+.grid-start-4 {
+  grid-column-start: 4;
+}
+
+.grid-start-5 {
+  grid-column-start: 5;
+}
+
+.grid-start-6 {
+  grid-column-start: 6;
+}
+
+.grid-start-7 {
+  grid-column-start: 7;
+}
+
+.grid-start-8 {
+  grid-column-start: 8;
+}
+
+.grid-start-9 {
+  grid-column-start: 9;
+}
+
+.grid-start-10 {
+  grid-column-start: 10;
+}
+
+.grid-start-11 {
+  grid-column-start: 11;
+}
+
+.grid-start-12 {
+  grid-column-start: 12;
+}
+
+.grid-span-2 {
+  grid-column-end: span 2;
+}
+
+.grid-span-3 {
+  grid-column-end: span 3;
+}
+
+.grid-span-4 {
+  grid-column-end: span 4;
+}
+
+.grid-span-5 {
+  grid-column-end: span 5;
+}
+
+.grid-span-6 {
+  grid-column-end: span 6;
+}
+
+.grid-span-7 {
+  grid-column-end: span 7;
+}
+
+.grid-span-8 {
+  grid-column-end: span 8;
+}
+
+.grid-span-9 {
+  grid-column-end: span 9;
+}
+
+.grid-span-10 {
+  grid-column-end: span 10;
+}
+
+.grid-span-11 {
+  grid-column-end: span 11;
+}
+
+.grid-span-12 {
+  grid-column-end: span 12;
+}
+
+.flex-row,
+.flex-row-reverse,
+.flex-column,
+.flex-column-reverse {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex-column-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-group-center,
+.flex-group-left,
+.flex-group-right {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.flex-group-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-group-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-stretch {
+  align-items: stretch;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-shrink {
+  flex: 0;
+}
+
+.flex-grow {
+  flex: 1;
+}
+
+.flexlarge {
+  flex: 2;
+}
+
+.flex-gap {
+  gap: 10px;
+}
+
+.align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+/* Styles limited to wrath-of-davokar sheets */
+.wrath-of-davokar .attributes-grid {
+  grid-template-rows: max-content;
+}
+.wrath-of-davokar .attributes-grid .attr-physique-section {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-finesse-section {
+  margin-bottom: 1em;
+  margin-left: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-wits-section {
+  margin-right: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-empathy-section {
+  margin-left: 1em;
+}
+.wrath-of-davokar .attributes-grid .attr-header {
+  border-bottom: 1px solid #7a7971;
+}
+.wrath-of-davokar .attributes-grid .text-attribute {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: left;
+  width: 80%;
+  cursor: pointer;
+}
+.wrath-of-davokar .attributes-grid .text-attribute:hover {
+  text-shadow: 0 0 4px white;
+  transition: all 0.2s ease-in-out;
+}
+.wrath-of-davokar .attributes-grid .text-skill {
+  text-align: left;
+  padding-left: 10px;
+  width: 80%;
+  cursor: pointer;
+}
+.wrath-of-davokar .attributes-grid .text-skill:hover {
+  text-shadow: 0 0 4px white;
+  transition: all 0.2s ease-in-out;
+}
+.wrath-of-davokar .attributes-grid .input-attribute,
+.wrath-of-davokar .attributes-grid .input-skill {
+  max-width: 3em;
+}
+.wrath-of-davokar .attributes-grid .input-attribute {
+  font-weight: bold;
+}
+.wrath-of-davokar .attributes-grid .skill-bonus {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30px;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-grid {
+  display: grid;
+  margin: 10px 0;
+  padding: 0;
+  text-align: center;
+  grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(min-content, 2em) minmax(min-content, 1fr) minmax(min-content, 2em) minmax(min-content, 3em) minmax(min-content, 2em) minmax(min-content, 4em);
+}
+.wrath-of-davokar .attributes-grid .spellcasting-grid .spellcasting-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  min-width: 8em;
+  cursor: pointer;
+  text-align: left;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-grid .spellcasting-title:hover {
+  text-shadow: 0 0 4px white;
+  transition: all 0.2s ease-in-out;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-grid .spellcasting-term {
+  border-top: 1px solid #7a7971;
+  padding: 10px;
+}
+.wrath-of-davokar .attributes-grid .spellcasting-grid .spellcasting-total {
+  font-weight: bold;
+}
+
+#token-hud {
+  /* Group wrapper for stacked inputs in one column slot */
+}
+#token-hud .col.middle .wrath-of-davokar.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#token-hud .wrath-of-davokar {
+  /* The input fills the wrapper */
+  /* Icon sits in the right side of the input's visual area */
+  /* Per-resource icon colors */
+}
+#token-hud .wrath-of-davokar .willpower-token-hud-input {
+  border: 1px solid #00bfff;
+}
+#token-hud .wrath-of-davokar .armorRating-token-hud-input {
+  border: 1px solid #85806f;
+}
+#token-hud .wrath-of-davokar .wod-input-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+#token-hud .wrath-of-davokar .wod-input-wrap input {
+  width: 100%;
+  box-sizing: border-box;
+}
+#token-hud .wrath-of-davokar .wod-input-icon {
+  position: absolute;
+  right: 0.5em;
+  font-size: 0.7em;
+  pointer-events: none;
+  top: 0.5em;
+}
+#token-hud .wrath-of-davokar .icon-corruption {
+  color: #630eb8;
+}
+#token-hud .wrath-of-davokar .icon-willpower {
+  color: #00bfff;
+}
+#token-hud .wrath-of-davokar .icon-toughness {
+  color: #9f1e49;
+}
+#token-hud .wrath-of-davokar .icon-armorRating {
+  color: #85806f;
+}
+
+.wrath-of-davokar .progress-bar {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #7a7971;
+  border-radius: 0.25em;
+  background-color: rgba(0, 0, 0, 0.01);
+  width: 100%;
+  height: 1em;
+  display: flex;
+  overflow-x: clip;
+  overflow-y: clip;
+  position: relative;
+}
+.wrath-of-davokar .progress-bar .bar-toughness {
+  border: none;
+  background-color: #9f1e49;
+  height: 20px;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-threshold {
+  border-width: 0px 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.7);
+  background-color: black;
+  width: 3px;
+  position: absolute;
+  height: 1em;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-permanent {
+  border: none;
+  background-color: #630eb8;
+  height: 1em;
+}
+.wrath-of-davokar .progress-bar .bar-corruption-temporary {
+  border: none;
+  background-color: #c187c2;
+  height: 1em;
+}
+.wrath-of-davokar .bar-willpower {
+  border: unset;
+  gap: 0.25em;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-filled,
+.wrath-of-davokar .bar-willpower .bar-willpower-empty {
+  border: 1px #7a7971 solid;
+  border-radius: 0.25em;
+  flex: 1;
+}
+.wrath-of-davokar .bar-willpower .bar-willpower-filled {
+  background-color: #00bfff;
+}
+
+.wrath-of-davokar .effects .item .effect-source,
+.wrath-of-davokar .effects .item .effect-duration,
+.wrath-of-davokar .effects .item .effect-controls {
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  font-size: 12px;
+}
+.wrath-of-davokar .effects .item .effect-controls {
+  border: none;
+}
+
+.wrath-of-davokar .item-form {
+  font-family: "Roboto", sans-serif;
+}
+.wrath-of-davokar .sheet-header {
+  flex: 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.wrath-of-davokar .sheet-header .profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+.wrath-of-davokar .sheet-header .header-fields {
+  flex: 1;
+}
+.wrath-of-davokar .sheet-header h1.charname {
+  padding: 0px;
+  margin: 5px 0;
+  border-bottom: 0;
+}
+.wrath-of-davokar .sheet-header h1.charname input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.wrath-of-davokar .sheet-tabs {
+  flex: 0;
+}
+.wrath-of-davokar .sheet-body,
+.wrath-of-davokar .sheet-body .editor {
+  height: 100%;
+  min-height: 5em;
+}
+.wrath-of-davokar .sheet-body {
+  overflow: scroll;
+  padding: 1em;
+}
+.wrath-of-davokar .tox .tox-editor-container {
+  background: #fff;
+}
+.wrath-of-davokar .tox .tox-edit-area {
+  padding: 0 8px;
+}
+
+.wrath-of-davokar .die-roll {
+  border: 1px solid #191813;
+  border-radius: 20px;
+  padding: 5px;
+  width: fit-content;
+  background: #191813;
+  color: #ddd;
+  transition: box-shadow 0.3s ease, font-weight 0.3 ease;
+}
+.wrath-of-davokar .die-roll:hover, .wrath-of-davokar .die-roll:focus, .wrath-of-davokar .interactive:hover, .wrath-of-davokar .interactive:focus {
+  cursor: pointer;
+  box-shadow: 0 0 10px 0 white;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+.wrath-of-davokar .search-bar {
+  position: relative;
+  padding: 1em 0;
+}
+.wrath-of-davokar .search-bar .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  padding: 0.5em;
+  pointer-events: none;
+}
+.wrath-of-davokar .search-bar .search-input {
+  padding: 0.5em 0.5em 0.5em 2em;
+}
+
+.wrath-of-davokar .quality {
+  background: #9f1e49;
+  color: #ddd;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding: 0.1em 0.5em;
+  text-align: center;
+  border-radius: 1vh;
+}
+.wrath-of-davokar .item-send-to-chat {
+  flex: 0;
+  font-size: 1.5em;
+  aspect-ratio: 1/1;
+  margin-right: 5px;
+}
+.wrath-of-davokar .artifact-power-warning {
+  color: #3F0C1D;
+}
+.wrath-of-davokar .artifact-power-list .dimmed {
+  color: #b5b3a4;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown {
+  border: #7a7971 1px solid;
+  border-top-width: 0;
+  border-radius: 0 0 1em 1em;
+  margin-top: 0;
+  margin-left: 1em;
+  margin-right: 1em;
+  padding: 1em;
+  background-color: #191813;
+  list-style-type: none;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown .artifact-power-dropdown-item {
+  text-align: left;
+  cursor: pointer;
+}
+.wrath-of-davokar .artifact-power-search .artifact-power-dropdown .already-added {
+  color: #428a32;
+  cursor: default;
+}
+.wrath-of-davokar .items-title {
+  font-size: 1.25em;
+  margin-top: 15px;
+}
+.wrath-of-davokar .items-header {
+  height: fit-content;
+  font-weight: bold;
+  background-image: linear-gradient(to right, #3F0C1D, #9f1e49);
+  color: #ddd;
+}
+.wrath-of-davokar .items-header > * {
+  text-align: center;
+  color: #ddd;
+}
+.wrath-of-davokar .items-header .item-name {
+  font-weight: bold;
+  text-align: left;
+  display: flex;
+}
+.wrath-of-davokar .container-list {
+  border-left: #7a7971 2px solid;
+}
+.wrath-of-davokar .items-list {
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 0;
+}
+.wrath-of-davokar .items-list .item-name {
+  flex: 2;
+  overflow: hidden;
+  text-align: left;
+  align-items: center;
+  display: flex;
+}
+.wrath-of-davokar .items-list .item-name h3,
+.wrath-of-davokar .items-list .item-name h4 {
+  margin: 0;
+  white-space: wrap;
+}
+.wrath-of-davokar .items-list .item-control {
+  cursor: pointer;
+  transition: text-shadow 0.3s ease;
+}
+.wrath-of-davokar .items-list .item-control:hover, .wrath-of-davokar .items-list .item-control:focus {
+  transform: scale(1.01);
+  transition: all 0.2s ease-in-out;
+}
+.wrath-of-davokar .items-list .item-controls {
+  display: flex;
+  flex: 0 0 60px;
+  justify-content: flex-end;
+  padding: 5px;
+}
+.wrath-of-davokar .items-list .item-controls.edit-mode {
+  flex: 0 0 110px;
+}
+.wrath-of-davokar .items-list .item-controls a {
+  font-size: 12px;
+  text-align: center;
+  margin: 0 6px;
+}
+.wrath-of-davokar .items-list .item {
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 1px solid #7a7971;
+}
+.wrath-of-davokar .items-list .item:last-child {
+  border-bottom: none;
+}
+.wrath-of-davokar .items-list .item .item-image {
+  flex: 0 0 30px;
+  height: 30px;
+  background-size: 30px;
+  border: none;
+  margin-right: 5px;
+}
+.wrath-of-davokar .items-list .item .item-attribute {
+  flex: 0 0 8em;
+  padding: 5px;
+  text-align: center;
+}
+.wrath-of-davokar .items-list .item .item-attribute.base-damage,
+.wrath-of-davokar .items-list .item .item-attribute.armor-rating,
+.wrath-of-davokar .items-list .item .item-attribute.impeding,
+.wrath-of-davokar .items-list .item .item-attribute.parry-bonus,
+.wrath-of-davokar .items-list .item .item-attribute.vision-penalty,
+.wrath-of-davokar .items-list .item .item-attribute.type {
+  flex: 0 0 8em;
+}
+.wrath-of-davokar .items-list .item .item-attribute.grip {
+  flex: 0 0 4em;
+}
+.wrath-of-davokar .items-list .item .item-attribute.range,
+.wrath-of-davokar .items-list .item .item-attribute.weight {
+  flex: 0 0 5em;
+}
+.wrath-of-davokar .items-list .item .item-armor-rating {
+  width: 2em;
+}
+.wrath-of-davokar .items-list .item .quality-list-row {
+  width: 100%;
+  justify-content: start;
+  gap: 10px;
+  padding-left: 30px;
+  padding-bottom: 10px;
+}
+
+@keyframes wodRedPulse {
+  0% {
+    text-shadow: 0 0 2px rgba(255, 0, 0, 0.6), 0 0 6px rgba(255, 0, 0, 0.5), 0 0 12px rgba(255, 0, 0, 0.4), 0 0 20px rgba(255, 0, 0, 0.25);
+  }
+  50% {
+    text-shadow: 0 0 4px rgb(255, 0, 0), 0 0 10px rgb(255, 0, 0), 0 0 20px rgb(255, 0, 0), 0 0 32px rgb(255, 0, 0);
+  }
+  100% {
+    text-shadow: 0 0 2px rgba(255, 0, 0, 0.6), 0 0 6px rgba(255, 0, 0, 0.5), 0 0 12px rgba(255, 0, 0, 0.4), 0 0 20px rgba(255, 0, 0, 0.25);
+  }
+}
+.wrath-of-davokar hr {
+  border: 1px solid #7a7971;
+}
+.wrath-of-davokar img.icon {
+  border: none;
+}
+.wrath-of-davokar .tab.items-tab {
+  padding: 2em;
+}
+.wrath-of-davokar .red-pulse {
+  color: red;
+  font-weight: bold;
+  animation: wodRedPulse 3s infinite ease-in-out;
+}
+.wrath-of-davokar .tab .sticky,
+.wrath-of-davokar .tab .mid-sticky {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  background: var(--background);
+  border-bottom: 1px solid #7a7971;
+  backdrop-filter: blur(10px);
+}
+.wrath-of-davokar .tab .mid-sticky {
+  top: calc(-1em - 1px);
+  padding-top: 0.5em;
+  border-top: 1px solid #7a7971;
+}
+body.theme-light .wrath-of-davokar .tab .sticky,
+body.theme-light .wrath-of-davokar .tab .mid-sticky {
+  background: url(../../../ui/parchment.jpg) repeat;
+  backdrop-filter: unset;
+}
+
+.wrath-of-davokar .panel-like-item {
+  margin: 1em 0;
+}
+.wrath-of-davokar .panel,
+.wrath-of-davokar .panel-no-flex {
+  border: 1px solid #7a7971;
+  margin: 1em;
+  min-width: 200px;
+}
+.wrath-of-davokar .panel .panel-header,
+.wrath-of-davokar .panel-no-flex .panel-header {
+  background-image: linear-gradient(to right, #3F0C1D, #9f1e49);
+  color: #ddd;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+.wrath-of-davokar .panel .panel-header input,
+.wrath-of-davokar .panel-no-flex .panel-header input {
+  color: #ddd;
+}
+.wrath-of-davokar .panel .panel-content,
+.wrath-of-davokar .panel-no-flex .panel-content {
+  margin: 10px;
+}
+.wrath-of-davokar .panel {
+  flex: 1;
+}
+
+.wrath-of-davokar .resource-label,
+.wrath-of-davokar .resource-title {
+  font-weight: bold;
+}
+.wrath-of-davokar .resource-title,
+.wrath-of-davokar .resource-title-small {
+  text-transform: uppercase;
+  text-align: left;
+}
+.wrath-of-davokar .resource-title-small {
+  font-weight: normal;
+}
+.wrath-of-davokar .resource-text {
+  font-weight: normal;
+  white-space: nowrap;
+}
+.wrath-of-davokar .resource-indent {
+  padding-left: 1em;
+}
+.wrath-of-davokar .resource-grid,
+.wrath-of-davokar .resource-grid-2,
+.wrath-of-davokar .resource-grid-3,
+.wrath-of-davokar .resource-grid-4 {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+  align-items: center;
+}
+.wrath-of-davokar .resource-grid {
+  grid-template-columns: max-content minmax(min-content, 1fr);
+}
+.wrath-of-davokar .resource-grid-2 {
+  grid-template-columns: repeat(2, max-content minmax(min-content, 1fr));
+}
+.wrath-of-davokar .resource-grid-3 {
+  grid-template-columns: repeat(3, max-content minmax(min-content, 1fr));
+}
+.wrath-of-davokar .resource-grid-4 {
+  grid-template-columns: repeat(4, max-content minmax(min-content, 1fr));
+}
+
+.wrath-of-davokar .talent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+  gap: 1em;
+  padding: 1em;
+}
+.wrath-of-davokar .talent-card {
+  border: 1px solid #7a7971;
+  display: flex;
+  flex-direction: column;
+}
+.wrath-of-davokar .talent-card .item-image {
+  margin: -5px;
+}
+.wrath-of-davokar .talent-card .talent-header {
+  background-image: linear-gradient(to right, #3F0C1D, #9f1e49);
+  color: #ddd;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+.wrath-of-davokar .talent-card .talent-text {
+  flex: 1;
+  padding: 0 1em;
+  max-height: 15em;
+  overflow-y: scroll;
+  overflow-x: clip;
+  text-wrap: wrap;
+}
+.wrath-of-davokar .talent-card .talent-content {
+  margin: 1em;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.wrath-of-davokar .talent-card .talent-bottom-row {
+  text-align: left;
+  border-top: 1px solid #7a7971;
+  padding-top: 1em;
+}
+
+.wrath-of-davokar.item-tooltip {
+  position: fixed;
+  z-index: 9999;
+  min-width: 230px;
+  max-width: 360px;
+  max-height: 500px;
+  overflow-y: scroll;
+  border: 1px solid #7a7971;
+  border-radius: 0.5em;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  background: var(--color-cool-5-90);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+.wrath-of-davokar.item-tooltip:hover {
+  border: 2px solid #7a7971;
+  padding: calc(0.5rem - 1px);
+}
+.wrath-of-davokar.item-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid #7a7971;
+  padding-bottom: 0.4rem;
+}
+.wrath-of-davokar.item-tooltip .tooltip-header strong {
+  font-size: 1rem;
+}
+.wrath-of-davokar.item-tooltip .tooltip-desc {
+  margin-bottom: 0.4rem;
+}
+.wrath-of-davokar.item-tooltip .tooltip-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.1rem 0;
+}
+body.theme-light .wrath-of-davokar.item-tooltip {
+  background: url(../../../ui/parchment.jpg) repeat;
+  backdrop-filter: unset;
+}
+
+@keyframes wod-wave-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+.wrath-of-davokar.wrath-container {
+  width: clamp(80px, 15vmin, 100px);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker {
+  width: 4rem;
+  aspect-ratio: 1/1;
+  z-index: 10;
+  overflow: hidden;
+  transform: rotate(45deg);
+  margin: 1rem;
+  border: 0.2rem black solid;
+  box-shadow: 0rem 0rem 1rem black;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: all;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wrath-points {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -44%) rotate(-45deg);
+  color: #daa520;
+  font-size: clamp(1rem, 5vmin, 2rem);
+  font-family: "Cinzel", serif;
+  z-index: 12;
+  text-shadow: 0 0 5px #000;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wrath-wave {
+  position: absolute;
+  left: -50%;
+  top: -25%;
+  width: 200%;
+  height: 150%;
+  z-index: 11;
+  pointer-events: none;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  will-change: transform;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wave-layer {
+  animation: wod-wave-scroll linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wave-back {
+  animation-duration: 31s;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wave-mid {
+  animation-duration: 17s;
+}
+.wrath-of-davokar.wrath-container .wrath-tracker .wave-front {
+  animation-duration: 7s;
+}
+.wrath-of-davokar.wrath-container .wrath-controls {
+  margin-top: clamp(4px, 1vmin, 12px);
+  display: flex;
+  gap: clamp(2px, 0.5vmin, 8px);
+  pointer-events: all;
+}
+.wrath-of-davokar.wrath-container .wrath-controls button {
+  background: #191813;
+  border: 1px solid #b8860b;
+  color: #daa520;
+  font-size: clamp(0.8rem, 2vmin, 1rem);
+  font-weight: bold;
+  width: clamp(20px, 4vmin, 1.2rem);
+  aspect-ratio: 1/1;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: serif;
+}
+.wrath-of-davokar.wrath-container .wrath-controls button:hover {
+  border: 1px solid #b8860b;
+  background: #444;
+  color: white;
+  box-shadow: 0 0 5px #daa520;
+}
+.wrath-of-davokar.wrath-container .wrath-controls button:focus {
+  border: 1px solid #b8860b;
+  box-shadow: 0 0 5px #daa520;
+  outline: unset;
+}
+
+/* Hud Styles */
+.wp-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-shadow: 0 0 4px black;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 2px 4px;
+  transition: all 0.2s ease;
+}
+.wp-hud .wp-count {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Chat Message Styles */
+.wrath-of-davokar.chat-message {
+  padding: 0px;
+}
+.wrath-of-davokar.chat-message .message-header {
+  padding: 5px;
+  border-radius: 3px 3px 0 0;
+}
+.wrath-of-davokar.chat-message .message-header .message-sender {
+  align-items: center;
+  gap: 6px;
+  flex: 2;
+}
+.wrath-of-davokar.chat-message .message-header .message-sender .message-speaker {
+  font-weight: bold;
+}
+.wrath-of-davokar.chat-message .message-header .message-sender .message-user {
+  font-size: 0.75em;
+}
+.wrath-of-davokar.chat-message .message-content {
+  padding: 5px;
+}
+.wrath-of-davokar.chat-message .message-content .item-card-header {
+  align-content: end;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid #7a7971;
+}
+.wrath-of-davokar.chat-message .message-content .dice-buttons {
+  width: 100%;
+  margin-top: 1em;
+  flex-direction: column;
+  gap: 10px;
+}
+.wrath-of-davokar.chat-message .message-content .dice-buttons .dice-button {
+  width: 100%;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section {
+  margin-top: 1em;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray {
+  border: 1px solid #7a7971;
+  border-radius: 4px;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray > label span {
+  flex: 1;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray > label .fa-caret-down {
+  transition: transform 0.15s ease;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray.collapsed > label .fa-caret-down {
+  transform: rotate(-90deg);
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray.collapsed .collapsible-content {
+  display: none;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .collapsible-content {
+  padding: 8px;
+  border-top: 1px solid #7a7971;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .collapsible-content .wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control {
+  display: flex;
+  gap: 10px;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #7a7971;
+  border-radius: 3px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button[aria-pressed=true] {
+  opacity: 1;
+  background: var(--button-hover-background-color);
+  color: var(--button-hover-text-color);
+  border-color: var(--button-hover-border-color);
+  font-weight: bold;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .target-source-control button:not([aria-pressed=true]):hover {
+  opacity: 0.85;
+  cursor: pointer;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets .target {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets .target .gold-icon {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets .target .name-stacked {
+  flex: 1;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .targets .none {
+  font-style: italic;
+  opacity: 0.75;
+}
+.wrath-of-davokar.chat-message .message-content .apply-section wod-apply-changes .card-tray .apply-changes {
+  width: 100%;
+}
+.wrath-of-davokar.chat-message .message-content .applyItemEffectButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.wrath-of-davokar.chat-message .message-content .applyItemEffectButton .effect-icon {
+  width: 1.5em;
+  height: 1.5em;
+}

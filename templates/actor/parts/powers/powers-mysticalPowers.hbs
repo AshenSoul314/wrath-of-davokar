@@ -1,0 +1,42 @@
+<div class="talent-grid">
+  {{#each mysticalPowers}}
+    <div class="talent-card item flex-grow draggable" data-item-id="{{this._id}}">
+      <div class="talent-header flex-row flex-group-center flex-gap">
+        <div class='item-image'>
+          <img src='{{this.img}}' title='{{this.name}}' width='40' height='40'/>
+        </div>
+        <span class="flex-grow">{{this.name}}</span>
+        <a class='item-control' data-action="itemRoll"   title='{{localize "WRATH_OF_DAVOKAR.Item.Use"}}'><i class='fa-solid fa-dice'></i></a>
+
+        {{#if ../editMode}}
+          <a class='item-control' data-action="itemEdit"   title='{{localize "DOCUMENT.Update" type=(localize "TYPES.Item.mysticalPower")}}'><i class='fas fa-edit'></i></a>
+          <a class='item-control' data-action="itemDelete" title='{{localize "DOCUMENT.Delete" type=(localize "TYPES.Item.mysticalPower")}}'><i class='fas fa-trash'></i></a>
+        {{/if}}
+      </div>
+      <div class="talent-content">
+        <div class="talent-text">
+          {{{this.enrichedDescription}}}
+        </div>
+        <div class="resource-grid talent-bottom-row">
+          <div class="flex-row quality-list-row grid-span-2">
+            {{#each this.system.qualities as |quality|}}{{#if quality}}<label class='quality'>{{localizeQuality @key}}</label>{{/if}}{{/each}}
+          </div>
+          <b>{{localize "WRATH_OF_DAVOKAR.Power.Tradition.Label"}}:</b>
+          <span>{{localizeTraditions this.system.tradition}}</span>
+          <b>{{localize "WRATH_OF_DAVOKAR.Action.Label"}}:</b>
+          <span>{{localizeActions this.system.action}}</span>
+          <b>{{localize "WRATH_OF_DAVOKAR.Rank.Label"}}:</b>
+          <span>
+            {{#if (eq this.system.rank.value '1')}}{{localize "WRATH_OF_DAVOKAR.Rank.One.Talent"}}{{/if}}
+            {{#if (eq this.system.rank.value '2')}}{{localize "WRATH_OF_DAVOKAR.Rank.Two.Talent"}}{{/if}}
+            {{#if (eq this.system.rank.value '3')}}{{localize "WRATH_OF_DAVOKAR.Rank.Three.Talent"}}{{/if}}
+          </span>
+          <b>{{localize "WRATH_OF_DAVOKAR.Corruption.Label"}}:</b>
+          <span class='die-roll rollable' data-roll="{{this.system.corruption}}" data-label="{{localize 'WRATH_OF_DAVOKAR.Corruption.Temporary.long'}}">
+            <i class="fa-solid fa-dice fa-xl-d20"></i> {{this.system.corruption}}
+          </span>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

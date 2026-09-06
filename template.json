@@ -21,10 +21,19 @@
           "threshold": 0
         },
         "corruption": {
+          "temporary": {
+            "value": 0
+          },
+          "permanent": {
+            "value": 0
+          },
           "min": 0,
-          "max": 0,
-          "value": 0,
-          "threshold": 0
+          "threshold": {
+            "value": 0
+          },
+          "thresholdMax": {
+            "value": 0
+          }
         },
         "willpower": {
           "max": 10,
@@ -34,106 +43,113 @@
         "attributes": {
           "physique": {
             "value": 0,
-            "bonus": 0
+            "max": 0
           },
           "finesse": {
             "value": 0,
-            "bonus": 0
+            "max": 0
           },
           "wits": {
             "value": 0,
-            "bonus": 0
+            "max": 0
           },
           "empathy": {
             "value": 0,
-            "bonus": 0
+            "max": 0
           }
         },
         "skills": {
           "endurance": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "force": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "melee": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "dexterity": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "discreet": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "marksmanship": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "mobility": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "crafting": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "medicus": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "lore": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "survival": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "vigilance": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "insight": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "instinct": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "persuasion": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "volition": {
-            "value": 0,
-            "bonus": 0
+            "value": 0
           },
           "spellcasting": {
             "attribute": "empathy",
-            "skill": "volition",
-            "bonus": 0
+            "skill": "volition"
           }
         },
         "experience": {
           "total": 0
         },
         "movement": {
-          "value": 30,
-          "bonus": 0
+          "value": 30
         },
         "money": {
           "thaler": 0,
           "shilling": 0,
-          "orteg": 0
+          "orteg": 0,
+          "saphire": 0,
+          "ruby": 0,
+          "obsidian": 0
         },
         "encumbrance": {
-          "max": 0
+          "physMult": 2,
+          "atHandSlots": {
+            "slot_0": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_1": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_2": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            },
+            "slot_3": {
+              "itemId": null,
+              "maxItemWeight": null,
+              "subslots": {}
+            }
+          }
         },
         "initiative": {
           "tempo": 1,
@@ -141,6 +157,16 @@
         },
         "speed": {
           "value": 30
+        },
+        "dodge": {
+          "value": 0,
+          "attribute": "finesse",
+          "skill": "mobility"
+        },
+        "parry": {
+          "value": 0,
+          "attribute": "physique",
+          "skill": "melee"
         }
       }
     },
@@ -168,18 +194,6 @@
         "max": 10,
         "min": 0,
         "value": 0
-      },
-      "languages": {
-        "langOne": {"name": "", "rank": "" },
-        "langTwo": {"name": "", "rank": "" },
-        "langThree": {"name": "", "rank": "" },
-        "langFour": {"name": "", "rank": "" },
-        "langFive": {"name": "", "rank": "" },
-        "langSix": {"name": "", "rank": "" },
-        "langSeven": {"name": "", "rank": "" },
-        "langEight": {"name": "", "rank": "" },
-        "langNine": {"name": "", "rank": "" },
-        "langTen": {"name": "", "rank": "" }
       }
     },
     "npc": {
@@ -199,15 +213,19 @@
       "armorBody",
       "armorHead",
       "armorShield",
+      "artifactPower",
       "boon",
       "burden",
       "condition",
       "container",
       "criticalInjury",
       "equipment",
+      "gear",
+      "language",
       "monsterTrait",
       "mysticalPower",
       "ritual",
+      "supply",
       "talent",
       "trap",
       "weapon"
@@ -215,8 +233,8 @@
     "templates": {
       "base": {
         "description": "",
-        "macro": "",
         "formula": "",
+        "automationId": "",
         "effectData": {}
       },
       "action": {
@@ -236,6 +254,13 @@
           "value": 0
         }
       },
+      "artifact": {
+        "isArtifact": false,
+        "artifactPowers": []
+      },
+      "corruption": {
+        "corruption": "1"
+      },
       "cost": {
         "cost": {
           "thaler": 0,
@@ -250,15 +275,22 @@
           "alwaysTransferEffects": false
         }
       },
-      "weight": {
-        "weight": 0.0
-      },
-      "artifact": {
-        "isArtifact": false,
-        "powers": {}
+      "range": {
+        "range": 0,
+        "area": {
+          "hasArea": false,
+          "type": "none"
+        }
       },
       "rank": {
         "rank": { "value": 1 }
+      },
+      "stackable": {
+        "stack": {
+          "quantity": 1,
+          "isStackable": true,
+          "numEquipped": 0
+        }
       },
       "tradition": {
         "tradition": {
@@ -271,11 +303,11 @@
           "wizardry": {"value": false}
         }
       },
+      "weight": {
+        "weight": 0.0
+      },
       "xpCost": {
         "xpCost": 10
-      },
-      "corruption": {
-        "corruption": "1"
       }
     },
     "alchemicalItem": {
@@ -285,7 +317,11 @@
         "equip",
         "rank",
         "cost"
-      ]
+      ],
+      "qualities": {
+        "blackMarket": false,
+        "unstable": false
+      }
     },
     "armorBody": {
       "templates": [
@@ -298,13 +334,14 @@
       ],
       "impeding": 0,
       "qualities": {
-        "concealed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Concealed" },
-        "desecrated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Desecrated" },
-        "hallowed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Hallowed" },
-        "retributive": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Retributive" },
-        "natural": {"value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Natural"}
+        "blackMarket": false,
+        "concealed": false,
+        "desecrated": false,
+        "hallowed": false,
+        "retributive": false,
+        "natural": false
       },
-      "armorCategory": ""
+      "armorCategory": "light"
     },
     "armorHead": {
       "templates": [
@@ -315,7 +352,10 @@
         "equip",
         "weight"
       ],
-      "visionPenalty": 0
+      "visionPenalty": 0,
+      "qualities": {
+        "natural": false
+      }
     },
     "armorShield": {
       "templates": [
@@ -327,6 +367,14 @@
         "weight"
       ],
       "parryBonus": 0
+    },
+    "artifactPower": {
+      "templates": [
+        "base",
+        "action",
+        "corruption"
+      ],
+      "artifactPowerId": ""
     },
     "boon": {
       "templates": [
@@ -375,6 +423,60 @@
         "cost",
         "equip",
         "weight"
+      ],
+      "qualities": {
+        "blackMarket": false,
+        "bloodLetting": false,
+        "blunt": false,
+        "concealed": false,
+        "deepImpact": false,
+        "ensnaring": false,
+        "jointed": false,
+        "long": false,
+        "massive": false,
+        "mechanicalReload": false,
+        "natural": false,
+        "precise": false,
+        "piercing": false,
+        "rangedDeployment": false,
+        "rearming": false,
+        "reinforced": false,
+        "returning": false,
+        "short": false,
+        "sundering": false,
+        "unstable": false,
+        "unwieldy": false,
+        "acidCoated": false,
+        "baneWeapon": false,
+        "deathRune": false,
+        "desecrated": false,
+        "flaming": false,
+        "hallowed": false,
+        "poisonCoated": false,
+        "retributive": false,
+        "thundering": false
+      }
+    },
+    "gear": {
+      "templates": [
+        "base",
+        "artifact",
+        "cost",
+        "equip",
+        "weight"
+      ],
+      "durability": {
+        "value": 0,
+        "max": 0
+      },
+      "qualities": {
+        "blackMarket": false
+      }
+    },
+    "language": {
+      "templates" : [
+        "base",
+        "rank"
       ]
     },
     "monsterTrait": {
@@ -390,13 +492,14 @@
         "base",
         "action",
         "corruption",
+        "range",
         "rank",
         "tradition",
         "xpCost"
       ],
       "qualities": {
-        "chain": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Chain" },
-        "concentration": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Concentration" }
+        "chain": false,
+        "concentration": false
       },
       "component": ""
     },
@@ -410,6 +513,19 @@
       ],
       "component": ""
     },
+    "supply": {
+      "templates": [
+        "base",
+        "artifact",
+        "cost",
+        "equip",
+        "weight"
+      ],
+      "supply": 0,
+      "qualities": {
+        "blackMarket": false
+      }
+    },
     "talent": {
       "templates": [
         "base",
@@ -422,67 +538,78 @@
       "templates": [
         "base",
         "artifact",
+        "range",
         "rank",
         "equip"
       ],
-      "bite": 0
-
+      "bite": 0,
+      "qualities": {
+        "blackMarket": false,
+        "bloodLetting": false,
+        "blunt": false,
+        "concealed": false,
+        "deepImpact": false,
+        "precise": false,
+        "piercing": false,
+        "rangedDeployment": false,
+        "rearming": false,
+        "sundering": false,
+        "unstable": false
+      }
     },
     "weapon": {
       "templates": [
         "base",
         "artifact",
-        "armor",
         "cost",
         "equip",
+        "range",
         "weight"
       ],
       "damage": 0,
-      "range": 0,
-      "area": {
-        "hasArea": false,
-        "type": "none"
-      },
       "grip": "",
       "qualities": {
-        "balanced": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Balanced" },
-        "bloodLetting": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.BloodLetting" },
-        "concealed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Concealed" },
-        "deepImpact": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.DeepImpact" },
-        "ensnaring": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Ensnaring" },
-        "jointed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Jointed" },
-        "long": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Long" },
-        "massive": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Massive" },
-        "mechanicalReload": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.MechanicalReload" },
-        "precise": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Precise" },
-        "piercing": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Piercing" },
-        "returning": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Returning" },
-        "short": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Short" },
-        "unstable": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Unstable" },
-        "unwieldy": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Unwieldy" },
-        "acidCoated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.AcidCoated" },
-        "baneWeapon": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.BaneWeapon" },
-        "deathRune":{ "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.DeathRune" },
-        "desecrated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Desecrated" },
-        "flaming": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Flaming" },
-        "hallowed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Hallowed" },
-        "poisonCoated": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.PoisonCoated" },
-        "thundering": { "value": false, "localize": "WRATH_OF_DAVOKAR.Qualities.Thundering" }
+        "balanced": false,
+        "blackMarket": false,
+        "bloodLetting": false,
+        "blunt": false,
+        "concealed": false,
+        "deepImpact": false,
+        "ensnaring": false,
+        "jointed": false,
+        "long": false,
+        "massive": false,
+        "mechanicalReload": false,
+        "precise": false,
+        "piercing": false,
+        "returning": false,
+        "short": false,
+        "sundering": false,
+        "unstable": false,
+        "unwieldy": false,
+        "acidCoated": false,
+        "baneWeapon": false,
+        "deathRune": false,
+        "desecrated": false,
+        "flaming": false,
+        "hallowed": false,
+        "poisonCoated": false,
+        "thundering": false
       },
       "weaponType": {
-        "axe": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Axe" },
-        "bow": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Bow" },
-        "crossbow": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Crossbow" },
-        "flail": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Flail" },
-        "hammer": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Hammer" },
-        "knife": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Knife" },
-        "mace": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Mace" },
-        "polearm": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Polearm" },
-        "staff": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Staff" },
-        "sword": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Sword" },
-        "throwing": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Throwing" },
-        "unarmed": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Unarmed" },
-        "whip": { "value": false, "localize": "WRATH_OF_DAVOKAR.Weapon.Type.Whip" }
+        "axe": false,
+        "bow": false,
+        "crossbow": false,
+        "flail": false,
+        "hammer": false,
+        "knife": false,
+        "mace": false,
+        "polearm": false,
+        "staff": false,
+        "sword": false,
+        "throwing": false,
+        "unarmed": false,
+        "whip": false
       }
     }
   }
